@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:dotenv/dotenv.dart';
+import 'package:oh_snap_server/src/upload/sdrive_api.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:puppeteer/puppeteer.dart';
 
@@ -11,6 +14,9 @@ import 'package:puppeteer/puppeteer.dart';
 // After adding or modifying an endpoint, you will need to run
 // `serverpod generate` to update the server and client code.
 class ExampleEndpoint extends Endpoint {
+
+  var dotenv = DotEnv(includePlatformEnvironment: true);
+
   // You create methods in your endpoint which are accessible from the client by
   // creating a public method with `Session` as its first parameter. Supported
   // parameter types are `bool`, `int`, `double`, `String`, `DateTime`, and any
@@ -20,14 +26,16 @@ class ExampleEndpoint extends Endpoint {
   // passwords, and information about the request being made to the server.
   Future<String> hello(Session session, String url, String walletAddress, bool removeButtons) async {
     session.log('Snap the $url and send it to $walletAddress');
+    dotenv.load();
 
-    await _takeScreenshot(url, removeButtons);
+    final screenshot = await _takeScreenshot(url, removeButtons);
+    final permalink = await upload(session, screenshot);
 
-    session.log('Done with the screenshotting...');
+    session.log('Done...');
     return 'Snap the $url and send it to $walletAddress';
   }
 
-  Future<void> _takeScreenshot(String url, bool removeButtons) async {
+  Future<List<int>> _takeScreenshot(String url, bool removeButtons) async {
     var browser = await puppeteer.launch();
     var page = await browser.newPage();
     
@@ -53,8 +61,21 @@ class ExampleEndpoint extends Endpoint {
     var element = await page.$(selector);
     
     var screenshot = await element.screenshot();
-    await File('/tmp/screenshot.png').writeAsBytes(screenshot);
-    
+
     await browser.close();
+
+    return screenshot;
+  }
+
+  Future<String> upload(Session session, List<int> screenshot) async {
+    final file = await File('/tmp/screenshot.png').writeAsBytes(screenshot);
+    final username = dotenv['sdrive_username']!;
+    final apikey = dotenv['sdrive_apikey']!;
+
+    final dio = Dio(); // Provide a dio instance
+    final sdrive = SDriveApi(dio);
+    final result = await sdrive.upload(file, username, apikey);
+    session.log('Upload result: $result');
+    return result.permalink;
   }
 }

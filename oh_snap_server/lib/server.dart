@@ -1,4 +1,5 @@
 import 'package:serverpod/serverpod.dart';
+import 'package:dotenv/dotenv.dart';
 
 import 'package:oh_snap_server/src/web/routes/root.dart';
 
@@ -10,6 +11,7 @@ import 'src/generated/endpoints.dart';
 // configuring Relic (Serverpod's web-server), or need custom setup work.
 
 void run(List<String> args) async {
+
   // Initialize Serverpod and connect it with your generated code.
   final pod = Serverpod(
     args,
