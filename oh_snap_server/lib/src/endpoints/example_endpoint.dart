@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dotenv/dotenv.dart';
+import 'package:oh_snap_server/src/underdog/create_nft.dart';
+import 'package:oh_snap_server/src/underdog/nft_attributes.dart';
+import 'package:oh_snap_server/src/underdog/underdog_api.dart';
 import 'package:oh_snap_server/src/upload/sdrive_api.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:puppeteer/puppeteer.dart';
@@ -15,7 +18,8 @@ import 'package:puppeteer/puppeteer.dart';
 // `serverpod generate` to update the server and client code.
 class ExampleEndpoint extends Endpoint {
 
-  var dotenv = DotEnv(includePlatformEnvironment: true);
+  final dio = Dio(); // Provide a dio instance
+  final dotenv = DotEnv(includePlatformEnvironment: true);
 
   // You create methods in your endpoint which are accessible from the client by
   // creating a public method with `Session` as its first parameter. Supported
@@ -28,8 +32,10 @@ class ExampleEndpoint extends Endpoint {
     session.log('Snap the $url and send it to $walletAddress');
     dotenv.load();
 
-    final screenshot = await _takeScreenshot(url, removeButtons);
-    final permalink = await upload(session, screenshot);
+    //final screenshot = await _takeScreenshot(url, removeButtons);
+    //final permalink = await upload(session, screenshot);
+    var imageUrl = 'https://dev.updg8.com/imgdata/2K3y8GUCwazTCtSyqZo8vKx8j7xddLtULgui4JFdMoK9';
+    await createNft(session, 'name', imageUrl, url);
 
     session.log('Done...');
     return 'Snap the $url and send it to $walletAddress';
@@ -72,10 +78,24 @@ class ExampleEndpoint extends Endpoint {
     final username = dotenv['sdrive_username']!;
     final apikey = dotenv['sdrive_apikey']!;
 
-    final dio = Dio(); // Provide a dio instance
     final sdrive = SDriveApi(dio);
     final result = await sdrive.upload(file, username, apikey);
     session.log('Upload result: $result');
     return result.permalink;
+  }
+
+  Future<void> createNft(Session session, String nftName, String imageUrl, String source) async {
+    final apikey = dotenv['underdog_apikey']!;
+
+    final underdog = UnderdogApi(dio);
+    //final result = await underdog.fetchProject('Bearer $apikey', 1);
+    final result = await underdog.createNft('Bearer $apikey', 1, CreateNft(
+      name: nftName,
+      image: imageUrl,
+      attributes: NftAttributes(
+        source: source,
+      ),
+    ));
+    session.log('underdog: $result');
   }
 }
