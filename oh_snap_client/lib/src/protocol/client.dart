@@ -20,6 +20,7 @@ class _EndpointExample extends _i1.EndpointRef {
   _i2.Future<String> hello(
     String url,
     String walletAddress,
+    bool removeButtons,
   ) =>
       caller.callServerEndpoint<String>(
         'example',
@@ -27,6 +28,7 @@ class _EndpointExample extends _i1.EndpointRef {
         {
           'url': url,
           'walletAddress': walletAddress,
+          'removeButtons': removeButtons,
         },
       );
 }
