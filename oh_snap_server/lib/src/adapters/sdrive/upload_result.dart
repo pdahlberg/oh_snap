@@ -4,20 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
-part 'sdrive_api.g.dart';
-
-@RestApi(baseUrl: "https://sdrive.app/api/v3")
-abstract class SDriveApi {
-  factory SDriveApi(Dio dio, {String baseUrl}) = _SDriveApi;
-
-  @POST("/upload")
-  @MultiPart()
-  Future<UploadResult> upload(
-    @Part() File fileupload,
-    @Part() String username,
-    @Part() String apikey,
-  );
-}
+part 'upload_result.g.dart';
 
 @JsonSerializable()
 class UploadResult {

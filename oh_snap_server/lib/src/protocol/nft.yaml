@@ -8,7 +8,7 @@
 
 
 # Name of the class to generate.
-class: Example
+class: Nft
 
 # Add the table key, if this class represents a row in the database.
 #table: example
@@ -19,4 +19,4 @@ class: Example
 # for null safety. Eg. `List<int>?` or `List<MyOtherClass?>`.
 fields:
   name: String
-  data: int
+  imageUrl: String

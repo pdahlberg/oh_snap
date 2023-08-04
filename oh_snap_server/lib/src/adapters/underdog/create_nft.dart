@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:oh_snap_server/src/underdog/nft_attributes.dart';
+import 'package:oh_snap_server/src/adapters/underdog/nft_attributes.dart';
 
 part 'create_nft.g.dart';
 

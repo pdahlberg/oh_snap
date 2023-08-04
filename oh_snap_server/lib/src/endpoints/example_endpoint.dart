@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dotenv/dotenv.dart';
-import 'package:oh_snap_server/src/underdog/create_nft.dart';
-import 'package:oh_snap_server/src/underdog/nft_attributes.dart';
-import 'package:oh_snap_server/src/underdog/underdog_api.dart';
-import 'package:oh_snap_server/src/upload/sdrive_api.dart';
+import 'package:oh_snap_server/src/adapters/sdrive/sdrive_api.dart';
+import 'package:oh_snap_server/src/adapters/underdog/create_nft.dart';
+import 'package:oh_snap_server/src/adapters/underdog/nft_attributes.dart';
+import 'package:oh_snap_server/src/adapters/underdog/underdog_api.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:puppeteer/puppeteer.dart';
 

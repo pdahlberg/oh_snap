@@ -8,31 +8,32 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 
-class Example extends _i1.SerializableEntity {
-  Example({
+class Nft extends _i1.SerializableEntity {
+  Nft({
     required this.name,
-    required this.data,
+    required this.imageUrl,
   });
 
-  factory Example.fromJson(
+  factory Nft.fromJson(
     Map<String, dynamic> jsonSerialization,
     _i1.SerializationManager serializationManager,
   ) {
-    return Example(
+    return Nft(
       name: serializationManager.deserialize<String>(jsonSerialization['name']),
-      data: serializationManager.deserialize<int>(jsonSerialization['data']),
+      imageUrl: serializationManager
+          .deserialize<String>(jsonSerialization['imageUrl']),
     );
   }
 
   String name;
 
-  int data;
+  String imageUrl;
 
   @override
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'data': data,
+      'imageUrl': imageUrl,
     };
   }
 
@@ -40,7 +41,7 @@ class Example extends _i1.SerializableEntity {
   Map<String, dynamic> allToJson() {
     return {
       'name': name,
-      'data': data,
+      'imageUrl': imageUrl,
     };
   }
 }

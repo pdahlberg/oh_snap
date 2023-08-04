@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:oh_snap_server/src/underdog/create_nft.dart';
-import 'package:oh_snap_server/src/underdog/nft_created.dart';
-import 'package:oh_snap_server/src/underdog/underdog_project.dart';
+import 'package:oh_snap_server/src/adapters/underdog/create_nft.dart';
+import 'package:oh_snap_server/src/adapters/underdog/nft_created.dart';
+import 'package:oh_snap_server/src/adapters/underdog/underdog_project.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'underdog_api.g.dart';
