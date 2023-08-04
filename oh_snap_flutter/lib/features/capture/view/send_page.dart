@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:oh_snap_flutter/domain/state/snap_form_bloc.dart';
+import 'package:oh_snap_flutter/features/capture/state/snap_form_bloc.dart';
 
 class SnapPage extends StatelessWidget {
 
@@ -16,6 +16,9 @@ class SnapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(label),
+      ),
       body: FormBlocListener<SnapFormBloc, String, String>(
         onFailure: (context, state) {
           ScaffoldMessenger.of(context).showSnackBar(

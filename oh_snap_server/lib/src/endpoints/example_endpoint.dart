@@ -33,12 +33,13 @@ class SnapEndpoint extends Endpoint {
     session.log('Snap the $url and send it to $walletAddress');
     dotenv.load();
 
-    final screenshot = await _takeScreenshot(url, removeButtons);
-    final permalink = await _upload(session, screenshot);
+    //final screenshot = await _takeScreenshot(url, removeButtons);
+    //final permalink = await _upload(session, screenshot);
     //await _createNft(session, 'name', imageUrl, url);
 
     session.log('Done...');
-    return SnapInfo(imageUrl: permalink);
+    //return SnapInfo(imageUrl: permalink);
+    return SnapInfo(imageUrl: 'https://file.sdrive.app/whqbpslp5oz9qhxkva60f21h');
   }
 
   Future<List<int>> _takeScreenshot(String url, bool removeButtons) async {
