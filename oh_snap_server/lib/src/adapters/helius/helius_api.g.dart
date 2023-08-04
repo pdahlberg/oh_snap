@@ -13,7 +13,7 @@ class _HeliusApi implements HeliusApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://mainnet.helius-rpc.com/?api-key={apiKey}';
+    baseUrl ??= 'https://rpc.helius.xyz';
   }
 
   final Dio _dio;
@@ -21,32 +21,33 @@ class _HeliusApi implements HeliusApi {
   String? baseUrl;
 
   @override
-  Future<String> getAssetsByOwner(
+  Future<JsonRpcResponse> getAssetsByOwner(
     String apiKey,
-    AssetsByOwnerQuery query,
+    AssetsByOwnerQueryCall query,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'api-key': apiKey};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(query.toJson());
-    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<JsonRpcResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/getAssetsByOwner',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        ))));
-    final value = _result.data!;
+            .compose(
+              _dio.options,
+              '/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = JsonRpcResponse.fromJson(_result.data!);
     return value;
   }
 

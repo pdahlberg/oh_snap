@@ -1,10 +1,7 @@
+import 'package:oh_snap_server/src/web/routes/root.dart';
 import 'package:serverpod/protocol.dart';
 import 'package:serverpod/serverpod.dart';
-import 'package:dotenv/dotenv.dart';
 
-import 'package:oh_snap_server/src/web/routes/root.dart';
-
-import 'src/generated/protocol.dart';
 import 'src/generated/endpoints.dart';
 
 // This is the starting point of your Serverpod server. In most cases, you will

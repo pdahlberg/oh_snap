@@ -1,0 +1,6 @@
+# Would like to use generics with ListResult<T> instead... but not supported yet I think
+class: NftList
+fields:
+  items: List<Nft>
+  total: int
+  page: int

@@ -8,7 +8,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:oh_snap_client/src/protocol/nft.dart' as _i3;
+import 'package:oh_snap_client/src/protocol/nft_list.dart' as _i3;
 import 'dart:io' as _i4;
 import 'protocol.dart' as _i5;
 
@@ -18,8 +18,8 @@ class _EndpointAnnotate extends _i1.EndpointRef {
   @override
   String get name => 'annotate';
 
-  _i2.Future<_i3.Nft> fetchNfts(String walletAddress) =>
-      caller.callServerEndpoint<_i3.Nft>(
+  _i2.Future<_i3.NftList> fetchNfts(String walletAddress) =>
+      caller.callServerEndpoint<_i3.NftList>(
         'annotate',
         'fetchNfts',
         {'walletAddress': walletAddress},

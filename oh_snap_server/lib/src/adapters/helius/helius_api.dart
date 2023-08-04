@@ -1,17 +1,24 @@
 import 'package:dio/dio.dart';
 import 'package:oh_snap_server/src/adapters/helius/assets_by_owner_query.dart';
+import 'package:oh_snap_server/src/adapters/helius/nft_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'helius_api.g.dart';
 
-@RestApi(baseUrl: "https://mainnet.helius-rpc.com/?api-key={apiKey}")
+@RestApi(baseUrl: "https://rpc.helius.xyz")
 abstract class HeliusApi {
   factory HeliusApi(Dio dio, {String baseUrl}) = _HeliusApi;
 
-  @POST("/getAssetsByOwner")
-  Future<String> getAssetsByOwner(
+  @POST("/")
+  Future<JsonRpcResponse> getAssetsByOwner(
+    @Query("api-key") String apiKey,
+    @Body() AssetsByOwnerQueryCall query,
+  );
+
+  /*@POST("/")
+  Future<List<NftResponse>> jsonRpc(
     @Path("apiKey") String apiKey,
     @Body() AssetsByOwnerQuery query,
-  );
+  );*/
 }
 

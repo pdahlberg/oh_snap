@@ -51,9 +51,11 @@ class MyHomePageState extends State<MyHomePage> {
   // is successful.
   void _callHello() async {
     try {
-      final result = await client.example.hello(_textEditingController.text, 'the_address', false);
+      //final result = await client.example.hello(_textEditingController.text, 'the_address', false);
+      var list = await client.annotate.fetchNfts('AMTeJt6sBoS4wXMXuCiMJkxaSGa4Ja6G7YEDnBeN4KKt');
+
       setState(() {
-        _resultMessage = result;
+        //_resultMessage = result;
       });
     } catch (e) {
       setState(() {

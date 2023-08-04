@@ -19,3 +19,22 @@ Map<String, dynamic> _$AssetsByOwnerQueryToJson(AssetsByOwnerQuery instance) =>
       'page': instance.page,
       'limit': instance.limit,
     };
+
+AssetsByOwnerQueryCall _$AssetsByOwnerQueryCallFromJson(
+        Map<String, dynamic> json) =>
+    AssetsByOwnerQueryCall(
+      jsonrpc: json['jsonrpc'] as String? ?? '2.0',
+      id: json['id'] as String? ?? 'call_id',
+      method: json['method'] as String? ?? 'getAssetsByOwner',
+      params:
+          AssetsByOwnerQuery.fromJson(json['params'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$AssetsByOwnerQueryCallToJson(
+        AssetsByOwnerQueryCall instance) =>
+    <String, dynamic>{
+      'jsonrpc': instance.jsonrpc,
+      'id': instance.id,
+      'method': instance.method,
+      'params': instance.params.toJson(),
+    };
