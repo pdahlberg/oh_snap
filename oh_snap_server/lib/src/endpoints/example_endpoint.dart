@@ -6,6 +6,7 @@ import 'package:oh_snap_server/src/adapters/sdrive/sdrive_api.dart';
 import 'package:oh_snap_server/src/adapters/underdog/create_nft.dart';
 import 'package:oh_snap_server/src/adapters/underdog/nft_attributes.dart';
 import 'package:oh_snap_server/src/adapters/underdog/underdog_api.dart';
+import 'package:oh_snap_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:puppeteer/puppeteer.dart';
 
@@ -16,7 +17,7 @@ import 'package:puppeteer/puppeteer.dart';
 
 // After adding or modifying an endpoint, you will need to run
 // `serverpod generate` to update the server and client code.
-class ExampleEndpoint extends Endpoint {
+class SnapEndpoint extends Endpoint {
 
   final dio = Dio(); // Provide a dio instance
   final dotenv = DotEnv(includePlatformEnvironment: true);
@@ -28,17 +29,16 @@ class ExampleEndpoint extends Endpoint {
   // should return a typed future; the same types as for the parameters are
   // supported. The `session` object provides access to the database, logging,
   // passwords, and information about the request being made to the server.
-  Future<String> hello(Session session, String url, String walletAddress, bool removeButtons) async {
+  Future<SnapInfo> capture(Session session, String url, String walletAddress, bool removeButtons) async {
     session.log('Snap the $url and send it to $walletAddress');
     dotenv.load();
 
-    //final screenshot = await _takeScreenshot(url, removeButtons);
-    //final permalink = await upload(session, screenshot);
-    var imageUrl = 'https://dev.updg8.com/imgdata/2K3y8GUCwazTCtSyqZo8vKx8j7xddLtULgui4JFdMoK9';
-    await createNft(session, 'name', imageUrl, url);
+    final screenshot = await _takeScreenshot(url, removeButtons);
+    final permalink = await _upload(session, screenshot);
+    //await _createNft(session, 'name', imageUrl, url);
 
     session.log('Done...');
-    return 'Snap the $url and send it to $walletAddress';
+    return SnapInfo(imageUrl: permalink);
   }
 
   Future<List<int>> _takeScreenshot(String url, bool removeButtons) async {
@@ -73,7 +73,7 @@ class ExampleEndpoint extends Endpoint {
     return screenshot;
   }
 
-  Future<String> upload(Session session, List<int> screenshot) async {
+  Future<String> _upload(Session session, List<int> screenshot) async {
     final file = await File('/tmp/screenshot.png').writeAsBytes(screenshot);
     final username = dotenv['sdrive_username']!;
     final apikey = dotenv['sdrive_apikey']!;
@@ -84,7 +84,7 @@ class ExampleEndpoint extends Endpoint {
     return result.permalink;
   }
 
-  Future<void> createNft(Session session, String nftName, String imageUrl, String source) async {
+  Future<void> _createNft(Session session, String nftName, String imageUrl, String source) async {
     final apikey = dotenv['underdog_apikey']!;
 
     final underdog = UnderdogApi(dio);

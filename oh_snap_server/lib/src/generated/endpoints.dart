@@ -20,10 +20,10 @@ class Endpoints extends _i1.EndpointDispatch {
           'annotate',
           null,
         ),
-      'example': _i3.ExampleEndpoint()
+      'snap': _i3.SnapEndpoint()
         ..initialize(
           server,
-          'example',
+          'snap',
           null,
         ),
     };
@@ -51,12 +51,12 @@ class Endpoints extends _i1.EndpointDispatch {
         )
       },
     );
-    connectors['example'] = _i1.EndpointConnector(
-      name: 'example',
-      endpoint: endpoints['example']!,
+    connectors['snap'] = _i1.EndpointConnector(
+      name: 'snap',
+      endpoint: endpoints['snap']!,
       methodConnectors: {
-        'hello': _i1.MethodConnector(
-          name: 'hello',
+        'capture': _i1.MethodConnector(
+          name: 'capture',
           params: {
             'url': _i1.ParameterDescription(
               name: 'url',
@@ -78,61 +78,13 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['example'] as _i3.ExampleEndpoint).hello(
+              (endpoints['snap'] as _i3.SnapEndpoint).capture(
             session,
             params['url'],
             params['walletAddress'],
             params['removeButtons'],
           ),
-        ),
-        'upload': _i1.MethodConnector(
-          name: 'upload',
-          params: {
-            'screenshot': _i1.ParameterDescription(
-              name: 'screenshot',
-              type: _i1.getType<List<int>>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['example'] as _i3.ExampleEndpoint).upload(
-            session,
-            params['screenshot'],
-          ),
-        ),
-        'createNft': _i1.MethodConnector(
-          name: 'createNft',
-          params: {
-            'nftName': _i1.ParameterDescription(
-              name: 'nftName',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'imageUrl': _i1.ParameterDescription(
-              name: 'imageUrl',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'source': _i1.ParameterDescription(
-              name: 'source',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['example'] as _i3.ExampleEndpoint).createNft(
-            session,
-            params['nftName'],
-            params['imageUrl'],
-            params['source'],
-          ),
-        ),
+        )
       },
     );
   }

@@ -11,9 +11,11 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'nft.dart' as _i3;
 import 'nft_list.dart' as _i4;
-import 'protocol.dart' as _i5;
+import 'snap_info.dart' as _i5;
+import 'protocol.dart' as _i6;
 export 'nft.dart';
 export 'nft_list.dart';
+export 'snap_info.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -42,18 +44,21 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i4.NftList) {
       return _i4.NftList.fromJson(data, this) as T;
     }
+    if (t == _i5.SnapInfo) {
+      return _i5.SnapInfo.fromJson(data, this) as T;
+    }
     if (t == _i1.getType<_i3.Nft?>()) {
       return (data != null ? _i3.Nft.fromJson(data, this) : null) as T;
     }
     if (t == _i1.getType<_i4.NftList?>()) {
       return (data != null ? _i4.NftList.fromJson(data, this) : null) as T;
     }
-    if (t == List<_i5.Nft>) {
-      return (data as List).map((e) => deserialize<_i5.Nft>(e)).toList()
-          as dynamic;
+    if (t == _i1.getType<_i5.SnapInfo?>()) {
+      return (data != null ? _i5.SnapInfo.fromJson(data, this) : null) as T;
     }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
+    if (t == List<_i6.Nft>) {
+      return (data as List).map((e) => deserialize<_i6.Nft>(e)).toList()
+          as dynamic;
     }
     try {
       return _i2.Protocol().deserialize<T>(data, t);
@@ -69,6 +74,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i4.NftList) {
       return 'NftList';
     }
+    if (data is _i5.SnapInfo) {
+      return 'SnapInfo';
+    }
     return super.getClassNameForObject(data);
   }
 
@@ -79,6 +87,9 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (data['className'] == 'NftList') {
       return deserialize<_i4.NftList>(data['data']);
+    }
+    if (data['className'] == 'SnapInfo') {
+      return deserialize<_i5.SnapInfo>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

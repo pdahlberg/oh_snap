@@ -9,8 +9,9 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:oh_snap_client/src/protocol/nft_list.dart' as _i3;
-import 'dart:io' as _i4;
-import 'protocol.dart' as _i5;
+import 'package:oh_snap_client/src/protocol/snap_info.dart' as _i4;
+import 'dart:io' as _i5;
+import 'protocol.dart' as _i6;
 
 class _EndpointAnnotate extends _i1.EndpointRef {
   _EndpointAnnotate(_i1.EndpointCaller caller) : super(caller);
@@ -26,46 +27,24 @@ class _EndpointAnnotate extends _i1.EndpointRef {
       );
 }
 
-class _EndpointExample extends _i1.EndpointRef {
-  _EndpointExample(_i1.EndpointCaller caller) : super(caller);
+class _EndpointSnap extends _i1.EndpointRef {
+  _EndpointSnap(_i1.EndpointCaller caller) : super(caller);
 
   @override
-  String get name => 'example';
+  String get name => 'snap';
 
-  _i2.Future<String> hello(
+  _i2.Future<_i4.SnapInfo> capture(
     String url,
     String walletAddress,
     bool removeButtons,
   ) =>
-      caller.callServerEndpoint<String>(
-        'example',
-        'hello',
+      caller.callServerEndpoint<_i4.SnapInfo>(
+        'snap',
+        'capture',
         {
           'url': url,
           'walletAddress': walletAddress,
           'removeButtons': removeButtons,
-        },
-      );
-
-  _i2.Future<String> upload(List<int> screenshot) =>
-      caller.callServerEndpoint<String>(
-        'example',
-        'upload',
-        {'screenshot': screenshot},
-      );
-
-  _i2.Future<void> createNft(
-    String nftName,
-    String imageUrl,
-    String source,
-  ) =>
-      caller.callServerEndpoint<void>(
-        'example',
-        'createNft',
-        {
-          'nftName': nftName,
-          'imageUrl': imageUrl,
-          'source': source,
         },
       );
 }
@@ -73,26 +52,26 @@ class _EndpointExample extends _i1.EndpointRef {
 class Client extends _i1.ServerpodClient {
   Client(
     String host, {
-    _i4.SecurityContext? context,
+    _i5.SecurityContext? context,
     _i1.AuthenticationKeyManager? authenticationKeyManager,
   }) : super(
           host,
-          _i5.Protocol(),
+          _i6.Protocol(),
           context: context,
           authenticationKeyManager: authenticationKeyManager,
         ) {
     annotate = _EndpointAnnotate(this);
-    example = _EndpointExample(this);
+    snap = _EndpointSnap(this);
   }
 
   late final _EndpointAnnotate annotate;
 
-  late final _EndpointExample example;
+  late final _EndpointSnap snap;
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'annotate': annotate,
-        'example': example,
+        'snap': snap,
       };
   @override
   Map<String, _i1.ModuleEndpointCaller> get moduleLookup => {};

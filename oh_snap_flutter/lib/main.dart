@@ -1,5 +1,10 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oh_snap_client/oh_snap_client.dart';
 import 'package:flutter/material.dart';
+import 'package:oh_snap_flutter/infra/app.dart';
+import 'package:oh_snap_flutter/infra/dependencies.dart';
+import 'package:oh_snap_flutter/infra/production_environment.dart';
+import 'package:provider/provider.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 // Sets up a singleton client object that can be used to talk to the server from
@@ -7,12 +12,15 @@ import 'package:serverpod_flutter/serverpod_flutter.dart';
 // The client is set up to connect to a Serverpod running on a local server on
 // the default port. You will need to modify this to connect to staging or
 // production servers.
-var client = Client('http://localhost:8080/')
+/*var client = Client('http://localhost:8080/')
   ..connectivityMonitor = FlutterConnectivityMonitor();
-
+*/
 void main() {
-  runApp(const MyApp());
+  runApp(const ProductionEnvironment());
 }
+
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -52,7 +60,7 @@ class MyHomePageState extends State<MyHomePage> {
   void _callHello() async {
     try {
       //final result = await client.example.hello(_textEditingController.text, 'the_address', false);
-      var list = await client.annotate.fetchNfts('AMTeJt6sBoS4wXMXuCiMJkxaSGa4Ja6G7YEDnBeN4KKt');
+      //var list = await client.annotate.fetchNfts('AMTeJt6sBoS4wXMXuCiMJkxaSGa4Ja6G7YEDnBeN4KKt');
 
       setState(() {
         //_resultMessage = result;
