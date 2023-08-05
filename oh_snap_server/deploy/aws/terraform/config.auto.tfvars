@@ -15,7 +15,7 @@ project_name = "oh-snap"
 # need to update the instance_ami variable (see below) and update the region in
 # the .github/workflows/deployment-aws.yml file. In some cases you will also
 # need to update your instance_type.
-aws_region = "us-west-2"
+aws_region = "eu-west-3"
 
 # Enabling Redis may incur additional costs. You will also need to enable Redis
 # in your staging.yaml and production.yaml configuration files.
@@ -28,10 +28,10 @@ enable_redis = false
 # *.example.com to your certificate. You will need to create one certificate
 # for your main region and one for use with Cloudfront that resides in the
 # us-east-1 region.
-hosted_zone_id             = "<YOUR HOSTED ZONE ID>"
-top_domain                 = "<YOUR DOMAIN NAME>"
-certificate_arn            = "<YOUR CERTIFICATE ARN>"
-cloudfront_certificate_arn = "<YOUR CERTIFICATE ARN IN US-EAST-1>"
+hosted_zone_id             = "Z09990823VXLIDCEPQR8C"
+top_domain                 = "ohsnap.app"
+certificate_arn            = "arn:aws:acm:eu-west-3:269506199268:certificate/e55eb8da-7d1e-4867-98ac-9498e972ca2f"
+cloudfront_certificate_arn = "arn:aws:acm:us-east-1:269506199268:certificate/a206dbfe-4d69-4da1-ab07-b11ba2be6ca8"
 
 # Subdomains for different services. Default values are recommended, but you
 # may want to change the subdomain_web to www if you are using the top domain
@@ -60,7 +60,7 @@ use_top_domain_for_web = false
 # Note: For some regions the t2.micro is not available. If so, consult the AWS
 # documentation to find another instance type that suits your needs.
 instance_type                = "t2.micro"
-instance_ami                 = "ami-0ca285d4c2cda3300"
+instance_ami                 = "ami-021d41cbdefc0c994"
 autoscaling_min_size         = 1
 autoscaling_max_size         = 1
 autoscaling_desired_capacity = 1

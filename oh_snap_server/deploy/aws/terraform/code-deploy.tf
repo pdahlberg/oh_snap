@@ -85,7 +85,7 @@ resource "aws_s3_bucket" "deployment" {
   }
 }
 
-resource "aws_s3_bucket_acl" "deployment" {
+/*resource "aws_s3_bucket_acl" "deployment" {
   bucket = aws_s3_bucket.deployment.id
   acl    = "private"
-}
+}*/
