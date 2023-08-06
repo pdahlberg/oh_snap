@@ -19,8 +19,8 @@ import 'package:puppeteer/puppeteer.dart';
 // `serverpod generate` to update the server and client code.
 class SnapEndpoint extends Endpoint {
 
-  final dio = Dio(); // Provide a dio instance
-  final dotenv = DotEnv(includePlatformEnvironment: true);
+  //final dio = Dio(); // Provide a dio instance
+  //final dotenv = DotEnv(includePlatformEnvironment: true);
 
   // You create methods in your endpoint which are accessible from the client by
   // creating a public method with `Session` as its first parameter. Supported
@@ -31,7 +31,7 @@ class SnapEndpoint extends Endpoint {
   // passwords, and information about the request being made to the server.
   Future<SnapInfo> capture(Session session, String url, String walletAddress, bool removeButtons) async {
     session.log('Snap the $url and send it to $walletAddress');
-    dotenv.load();
+    //dotenv.load();
 
     //final screenshot = await _takeScreenshot(url, removeButtons);
     //final permalink = await _upload(session, screenshot);
@@ -74,7 +74,7 @@ class SnapEndpoint extends Endpoint {
     return screenshot;
   }
 
-  Future<String> _upload(Session session, List<int> screenshot) async {
+  /*Future<String> _upload(Session session, List<int> screenshot) async {
     final file = await File('/tmp/screenshot.png').writeAsBytes(screenshot);
     final username = dotenv['sdrive_username']!;
     final apikey = dotenv['sdrive_apikey']!;
@@ -98,5 +98,5 @@ class SnapEndpoint extends Endpoint {
       ),
     ));
     session.log('underdog: $result');
-  }
+  }*/
 }
