@@ -8,12 +8,12 @@ import 'package:serverpod/serverpod.dart';
 
 class AnnotateEndpoint extends Endpoint {
 
-  final dio = Dio()..interceptors.add(LogInterceptor(responseBody: true)); // Provide a dio instance
-  final dotenv = DotEnv(includePlatformEnvironment: true);
+  //final dio = Dio()..interceptors.add(LogInterceptor(responseBody: true)); // Provide a dio instance
+  //final dotenv = DotEnv(includePlatformEnvironment: true);
 
   Future<NftList> fetchNfts(Session session, String walletAddress) async {
     session.log('fetching nfts for $walletAddress');
-    dotenv.load();
+    /*dotenv.load();
 
     var apiKey = dotenv['helius_apikey']!;
 
@@ -38,7 +38,8 @@ class AnnotateEndpoint extends Endpoint {
     } catch (e) {
       session.log('getAssetsByOwner', exception: e);
       rethrow;
-    }
+    }*/
+    return NftList(items: [], total: 0, page: 1);
   }
 
   /*Future<void> annotate(Session session, String walletAddress) async {
