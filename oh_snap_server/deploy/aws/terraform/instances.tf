@@ -21,7 +21,7 @@ resource "aws_launch_configuration" "serverpod" {
   image_id    = var.instance_ami
   #   image_id = data.aws_ami.amazon-linux.id
   instance_type = var.instance_type
-  user_data     = templatefile("init-script.sh", { runmode = "development" })
+  user_data     = templatefile("init-script.sh", { runmode = "production" })
 
   security_groups = [
     aws_security_group.serverpod.id,
