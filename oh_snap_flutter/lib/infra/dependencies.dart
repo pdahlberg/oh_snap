@@ -12,7 +12,8 @@ class Dependencies {
 
   static List<Provider> common() => [
     Provider<TimeService>(create: (_) => TimeService()),
-    Provider<Client>(create: (_) => Client('http://api.ohsnap.app/')..connectivityMonitor = FlutterConnectivityMonitor()),
+    //Provider<Client>(create: (_) => Client('https://api.ohsnap.app/')..connectivityMonitor = FlutterConnectivityMonitor()),
+    Provider<Client>(create: (_) => Client('http://localhost:8080/')..connectivityMonitor = FlutterConnectivityMonitor()),
     Provider<AppRouter>(create: AppRouter.of),
   ];
 

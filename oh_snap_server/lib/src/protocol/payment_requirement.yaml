@@ -1,0 +1,5 @@
+enum: PaymentRequirement
+values:
+  - upfront
+  - later
+  - none

@@ -1,0 +1,11 @@
+class: Task
+table: task
+fields:
+  postId: int, parent=post
+  type: TaskType,
+  cost: int,
+  paid: int,
+  paymentRequirement: PaymentRequirement,
+  dependsOn: int?,
+  createdAt: DateTime,
+  modifiedAt: DateTime,

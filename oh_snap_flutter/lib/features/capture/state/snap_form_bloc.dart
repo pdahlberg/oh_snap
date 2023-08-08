@@ -31,8 +31,8 @@ class SnapFormBloc extends FormBloc<String, String> {
   @override
   Future<void> onSubmitting() async {
     try {
-      var result = await _client.snap.capture(url.value, 'Ufw2M6ojcXDcaFhU3zWXbsGEUYYADoqEz3wLQpc6dFh', false);
-      debugPrint('result: ${result.imageUrl}');
+      var result = await _client.snap.create(url.value, 'Ufw2M6ojcXDcaFhU3zWXbsGEUYYADoqEz3wLQpc6dFh', false);
+      debugPrint('result: ${result.id}');
       emitSuccess();
       _appRouter.router.push(MintPage.path, );
     } on Exception catch (e) {

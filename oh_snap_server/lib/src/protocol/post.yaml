@@ -1,0 +1,9 @@
+class: Post
+table: post
+fields:
+  url: String?
+  text: String?,
+  tasks: List<Task>?, api
+  address: String?,
+  createdAt: DateTime,
+  modifiedAt: DateTime,

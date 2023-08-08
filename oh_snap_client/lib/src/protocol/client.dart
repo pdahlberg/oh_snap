@@ -9,7 +9,7 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:oh_snap_client/src/protocol/nft_list.dart' as _i3;
-import 'package:oh_snap_client/src/protocol/snap_info.dart' as _i4;
+import 'package:oh_snap_client/src/protocol/post.dart' as _i4;
 import 'dart:io' as _i5;
 import 'protocol.dart' as _i6;
 
@@ -33,14 +33,14 @@ class _EndpointSnap extends _i1.EndpointRef {
   @override
   String get name => 'snap';
 
-  _i2.Future<_i4.SnapInfo> capture(
+  _i2.Future<_i4.Post> create(
     String url,
     String walletAddress,
     bool removeButtons,
   ) =>
-      caller.callServerEndpoint<_i4.SnapInfo>(
+      caller.callServerEndpoint<_i4.Post>(
         'snap',
-        'capture',
+        'create',
         {
           'url': url,
           'walletAddress': walletAddress,

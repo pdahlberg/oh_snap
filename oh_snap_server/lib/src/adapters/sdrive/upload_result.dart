@@ -1,8 +1,4 @@
-import 'dart:io';
-
 import 'package:json_annotation/json_annotation.dart';
-import 'package:retrofit/retrofit.dart';
-import 'package:dio/dio.dart';
 
 part 'upload_result.g.dart';
 
