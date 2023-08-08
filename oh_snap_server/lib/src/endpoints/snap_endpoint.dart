@@ -40,8 +40,10 @@ class SnapEndpoint extends Endpoint {
 
     var now = _timeService.now();
 
-    /*var post = Post(url: url, createdAt: now, modifiedAt: now);
+    var post = Post(captureUrl: url, createdAt: now, modifiedAt: now);
     await session.db.insert(post);
+
+    /*
 
     var captureTask = Task(
       postId: post.id!,
@@ -80,18 +82,37 @@ class SnapEndpoint extends Endpoint {
     await session.db.insert(previewTask);
      */
 
-    final (screenshot, content) = await _takeScreenshot(session, url, removeButtons);
+    var createNftTask = Task(
+      postId: post.id!,
+      type: TaskType.mint,
+      dependsOn: null, // todo: captureTask.id!,
+      cost: 1,
+      paid: 0,
+      paymentRequirement: PaymentRequirement.upfront,
+      createdAt: now,
+      modifiedAt: now,
+    );
+    await session.db.insert(createNftTask);
+
+    final (screenshot, textContent) = await _takeScreenshot(session, url, removeButtons);
     final (screenshotPermalinkUrl, screenshotSdriveUrl) = await _upload(session, screenshot, 'png');
+    post.imageUrl = screenshotPermalinkUrl;
+    post.text = textContent;
     session.log('Screenshot uploaded: $screenshotPermalinkUrl');
-    final summary = await _summarize(session, content);
+    final summaryForTitle = await _summarize(session, post.text!);
+    post.title = summaryForTitle;
 
     var hasImage = true;
-    String doc = _createSharablePreview(hasImage, screenshotPermalinkUrl, content, summary, url);
+    String doc = _createSharablePreview(hasImage, screenshotPermalinkUrl, post.text!, post.title!, url);
     List<int> bytes = utf8.encode(doc);
     final (sharePreviewPermalinkUrl, sharePreviewSdriveUrl) = await _upload(session, bytes, 'html');
+    post.shareUrl = sharePreviewPermalinkUrl;
+    post.shareAltUrl = sharePreviewSdriveUrl;
     session.log('Share preview uploaded: $sharePreviewPermalinkUrl');
 
-    await _createNft(
+    // move to _taskToNft
+    _taskToNft(session, post, createNftTask);
+    /*await _createNft(
       session: session,
       nftName: summary,
       permalinkImage: screenshotPermalinkUrl,
@@ -100,10 +121,28 @@ class SnapEndpoint extends Endpoint {
       permalinkSharePrev: sharePreviewPermalinkUrl,
       sdriveSharePrev: sharePreviewSdriveUrl,
       content: content,
-    );
+    );*/
 
     //return SnapInfo(imageUrl: permalink);
-    return Post(url: url, createdAt: now, modifiedAt: now);
+    return post;
+  }
+
+  Future<void> _taskToNft(Session session, Post post, Task task) async {
+    assert(post.imageUrl != null);
+    assert(post.title != null);
+    assert(post.shareUrl != null);
+    assert(post.shareAltUrl != null);
+    assert(post.text != null);
+
+    await _createNft(
+      session: session,
+      nftName: post.title!,
+      imageUrl: post.imageUrl!,
+      source: post.captureUrl!,
+      shareUrl: post.shareUrl!,
+      shareAltUrl: post.shareAltUrl!,
+      content: post.text!,
+    );
   }
 
   String _createSharablePreview(bool hasImage, String screenshotResultUrl, String content, String summary, String url) {
@@ -130,14 +169,14 @@ class SnapEndpoint extends Endpoint {
     return doc;
   }
 
-  Future<Post> _capture(Session session, String url, String walletAddress, bool removeButtons) async {
+  /*Future<Post> _capture(Session session, String url, String walletAddress, bool removeButtons) async {
     session.log('Snap the $url and send it to $walletAddress');
     //dotenv.load();
 
     var now = _timeService.now();
 
-    var post = Post(url: url, createdAt: now, modifiedAt: now);
-    session.db.insert(post);
+    //var post = Post(url: url, createdAt: now, modifiedAt: now);
+    //session.db.insert(post);
 
     //final screenshot = await _takeScreenshot(url, removeButtons);
     //final permalink = await _upload(session, screenshot);
@@ -146,7 +185,7 @@ class SnapEndpoint extends Endpoint {
     session.log('Done...');
     //return SnapInfo(imageUrl: permalink);
     return post;
-  }
+  }*/
 
   Future<(List<int>, String)> _takeScreenshot(Session session, String url, bool removeButtons) async {
     var browser = await puppeteer.launch();
@@ -218,11 +257,10 @@ class SnapEndpoint extends Endpoint {
   Future<void> _createNft({
     required Session session,
     required String nftName,
-    required String permalinkImage,
-    required String sdriveImage,
-    required String source,
-    required String permalinkSharePrev,
-    required String sdriveSharePrev,
+    required String imageUrl,
+    required String? source,
+    required String shareUrl,
+    required String shareAltUrl,
     required String content,
   }) async {
     final apikey = dotenv['underdog_apikey']!;
@@ -232,13 +270,13 @@ class SnapEndpoint extends Endpoint {
     //final result = await underdog.fetchProject('Bearer $apikey', 1);
     final result = await underdog.createNft('Bearer $apikey', 1, CreateNft(
       name: nftName,
-      image: permalinkImage,
+      image: imageUrl,
       attributes: NftAttributes(
         source: source,
         timestamp: captureTimestamp,
         content: content,
-        document1: sdriveSharePrev,
-        document2: permalinkSharePrev,
+        document1: shareAltUrl,
+        document2: shareUrl,
       ),
     ));
     session.log('underdog: $result');

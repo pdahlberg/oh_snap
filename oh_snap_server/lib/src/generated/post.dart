@@ -12,8 +12,12 @@ import 'protocol.dart' as _i2;
 class Post extends _i1.TableRow {
   Post({
     int? id,
-    this.url,
+    this.title,
     this.text,
+    this.imageUrl,
+    this.captureUrl,
+    this.shareUrl,
+    this.shareAltUrl,
     this.tasks,
     this.address,
     required this.createdAt,
@@ -26,9 +30,18 @@ class Post extends _i1.TableRow {
   ) {
     return Post(
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
-      url: serializationManager.deserialize<String?>(jsonSerialization['url']),
+      title:
+          serializationManager.deserialize<String?>(jsonSerialization['title']),
       text:
           serializationManager.deserialize<String?>(jsonSerialization['text']),
+      imageUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['imageUrl']),
+      captureUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['captureUrl']),
+      shareUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['shareUrl']),
+      shareAltUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['shareAltUrl']),
       tasks: serializationManager
           .deserialize<List<_i2.Task>?>(jsonSerialization['tasks']),
       address: serializationManager
@@ -42,9 +55,17 @@ class Post extends _i1.TableRow {
 
   static final t = PostTable();
 
-  String? url;
+  String? title;
 
   String? text;
+
+  String? imageUrl;
+
+  String? captureUrl;
+
+  String? shareUrl;
+
+  String? shareAltUrl;
 
   List<_i2.Task>? tasks;
 
@@ -60,8 +81,12 @@ class Post extends _i1.TableRow {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'url': url,
+      'title': title,
       'text': text,
+      'imageUrl': imageUrl,
+      'captureUrl': captureUrl,
+      'shareUrl': shareUrl,
+      'shareAltUrl': shareAltUrl,
       'tasks': tasks,
       'address': address,
       'createdAt': createdAt,
@@ -73,8 +98,12 @@ class Post extends _i1.TableRow {
   Map<String, dynamic> toJsonForDatabase() {
     return {
       'id': id,
-      'url': url,
+      'title': title,
       'text': text,
+      'imageUrl': imageUrl,
+      'captureUrl': captureUrl,
+      'shareUrl': shareUrl,
+      'shareAltUrl': shareAltUrl,
       'address': address,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
@@ -85,8 +114,12 @@ class Post extends _i1.TableRow {
   Map<String, dynamic> allToJson() {
     return {
       'id': id,
-      'url': url,
+      'title': title,
       'text': text,
+      'imageUrl': imageUrl,
+      'captureUrl': captureUrl,
+      'shareUrl': shareUrl,
+      'shareAltUrl': shareAltUrl,
       'tasks': tasks,
       'address': address,
       'createdAt': createdAt,
@@ -103,11 +136,23 @@ class Post extends _i1.TableRow {
       case 'id':
         id = value;
         return;
-      case 'url':
-        url = value;
+      case 'title':
+        title = value;
         return;
       case 'text':
         text = value;
+        return;
+      case 'imageUrl':
+        imageUrl = value;
+        return;
+      case 'captureUrl':
+        captureUrl = value;
+        return;
+      case 'shareUrl':
+        shareUrl = value;
+        return;
+      case 'shareAltUrl':
+        shareAltUrl = value;
         return;
       case 'address':
         address = value;
@@ -242,9 +287,17 @@ class PostTable extends _i1.Table {
   /// the id will be null.
   final id = _i1.ColumnInt('id');
 
-  final url = _i1.ColumnString('url');
+  final title = _i1.ColumnString('title');
 
   final text = _i1.ColumnString('text');
+
+  final imageUrl = _i1.ColumnString('imageUrl');
+
+  final captureUrl = _i1.ColumnString('captureUrl');
+
+  final shareUrl = _i1.ColumnString('shareUrl');
+
+  final shareAltUrl = _i1.ColumnString('shareAltUrl');
 
   final address = _i1.ColumnString('address');
 
@@ -255,8 +308,12 @@ class PostTable extends _i1.Table {
   @override
   List<_i1.Column> get columns => [
         id,
-        url,
+        title,
         text,
+        imageUrl,
+        captureUrl,
+        shareUrl,
+        shareAltUrl,
         address,
         createdAt,
         modifiedAt,

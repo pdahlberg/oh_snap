@@ -12,8 +12,12 @@ import 'protocol.dart' as _i2;
 class Post extends _i1.SerializableEntity {
   Post({
     this.id,
-    this.url,
+    this.title,
     this.text,
+    this.imageUrl,
+    this.captureUrl,
+    this.shareUrl,
+    this.shareAltUrl,
     this.tasks,
     this.address,
     required this.createdAt,
@@ -26,9 +30,18 @@ class Post extends _i1.SerializableEntity {
   ) {
     return Post(
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
-      url: serializationManager.deserialize<String?>(jsonSerialization['url']),
+      title:
+          serializationManager.deserialize<String?>(jsonSerialization['title']),
       text:
           serializationManager.deserialize<String?>(jsonSerialization['text']),
+      imageUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['imageUrl']),
+      captureUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['captureUrl']),
+      shareUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['shareUrl']),
+      shareAltUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['shareAltUrl']),
       tasks: serializationManager
           .deserialize<List<_i2.Task>?>(jsonSerialization['tasks']),
       address: serializationManager
@@ -45,9 +58,17 @@ class Post extends _i1.SerializableEntity {
   /// the id will be null.
   int? id;
 
-  String? url;
+  String? title;
 
   String? text;
+
+  String? imageUrl;
+
+  String? captureUrl;
+
+  String? shareUrl;
+
+  String? shareAltUrl;
 
   List<_i2.Task>? tasks;
 
@@ -61,8 +82,12 @@ class Post extends _i1.SerializableEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'url': url,
+      'title': title,
       'text': text,
+      'imageUrl': imageUrl,
+      'captureUrl': captureUrl,
+      'shareUrl': shareUrl,
+      'shareAltUrl': shareAltUrl,
       'tasks': tasks,
       'address': address,
       'createdAt': createdAt,

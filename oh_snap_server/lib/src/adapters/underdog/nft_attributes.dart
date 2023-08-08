@@ -4,14 +4,14 @@ part 'nft_attributes.g.dart';
 
 @JsonSerializable()
 class NftAttributes {
-  String source;
+  String? source;
   int timestamp;
   String content;
   String document1;
   String document2;
 
   NftAttributes({
-    required this.source,
+    this.source,
     required this.timestamp,
     required this.content,
     required this.document1,

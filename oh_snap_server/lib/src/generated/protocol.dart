@@ -47,13 +47,37 @@ class Protocol extends _i1.SerializationManagerServer {
           columnDefault: 'nextval(\'post_id_seq\'::regclass)',
         ),
         _i2.ColumnDefinition(
-          name: 'url',
+          name: 'title',
           columnType: _i2.ColumnType.text,
           isNullable: true,
           dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'text',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'imageUrl',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'captureUrl',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'shareUrl',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'shareAltUrl',
           columnType: _i2.ColumnType.text,
           isNullable: true,
           dartType: 'String?',

@@ -4,8 +4,12 @@
 
 CREATE TABLE "post" (
   "id" serial,
-  "url" text,
+  "title" text,
   "text" text,
+  "imageUrl" text,
+  "captureUrl" text,
+  "shareUrl" text,
+  "shareAltUrl" text,
   "address" text,
   "createdAt" timestamp without time zone NOT NULL,
   "modifiedAt" timestamp without time zone NOT NULL

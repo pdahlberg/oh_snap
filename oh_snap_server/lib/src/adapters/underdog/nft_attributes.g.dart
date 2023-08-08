@@ -8,7 +8,7 @@ part of 'nft_attributes.dart';
 
 NftAttributes _$NftAttributesFromJson(Map<String, dynamic> json) =>
     NftAttributes(
-      source: json['source'] as String,
+      source: json['source'] as String?,
       timestamp: json['timestamp'] as int,
       content: json['content'] as String,
       document1: json['document1'] as String,
