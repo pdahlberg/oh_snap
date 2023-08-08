@@ -99,8 +99,13 @@ class SnapEndpoint extends Endpoint {
     post.imageUrl = screenshotPermalinkUrl;
     post.text = textContent;
     session.log('Screenshot uploaded: $screenshotPermalinkUrl');
+
     final summaryForTitle = await _summarize(session, post.text!);
-    post.title = summaryForTitle;
+    if(summaryForTitle == null) {
+      post.title = 'Untitled $now';
+    } else {
+      post.title = summaryForTitle;
+    }
 
     var hasImage = true;
     String doc = _createSharablePreview(hasImage, screenshotPermalinkUrl, post.text!, post.title!, url);
@@ -110,8 +115,10 @@ class SnapEndpoint extends Endpoint {
     post.shareAltUrl = sharePreviewSdriveUrl;
     session.log('Share preview uploaded: $sharePreviewPermalinkUrl');
 
+    await session.db.update(post);
+
     // move to _taskToNft
-    _taskToNft(session, post, createNftTask);
+    //_taskToNft(session, post, createNftTask);
     /*await _createNft(
       session: session,
       nftName: summary,
@@ -226,7 +233,7 @@ class SnapEndpoint extends Endpoint {
     return (screenshot, str);
   }
 
-  Future<String> _summarize(Session session, String text, { int maxCharacters = 60 }) async {
+  Future<String?> _summarize(Session session, String text, { int maxCharacters = 60 }) async {
     final username = dotenv['sdrive_username'];
     final apikey = dotenv['sdrive_apikey'];
 
@@ -237,8 +244,13 @@ class SnapEndpoint extends Endpoint {
       text: text,
       length: maxCharacters,
     ));
-    session.log('Summarize result: $result');
-    return result.summary;
+
+    if(result.status == 'success') {
+      return result.summary;
+    } else {
+      session.log('Summarize failed: $result', level: LogLevel.error);
+      return null;
+    }
   }
 
   Future<(String, String)> _upload(Session session, List<int> bytes, String suffix) async {
