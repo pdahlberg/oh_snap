@@ -10,6 +10,7 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 
 enum TaskStatus with _i1.SerializableEntity {
   pending,
+  inProgress,
   completed,
   error,
   cancelled;
@@ -19,10 +20,12 @@ enum TaskStatus with _i1.SerializableEntity {
       case 0:
         return pending;
       case 1:
-        return completed;
+        return inProgress;
       case 2:
-        return error;
+        return completed;
       case 3:
+        return error;
+      case 4:
         return cancelled;
       default:
         return null;

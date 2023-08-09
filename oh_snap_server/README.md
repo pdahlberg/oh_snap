@@ -15,3 +15,6 @@
 - Task.find() and Post.find() doesn't work even though they are generated.
 - Annoying to have enums be integers in the database. 
 - Not sure what I think about using the DB for logs.
+
+## Todos
+- Probably change QueryService to be a bunch of extensions on session or session.db.

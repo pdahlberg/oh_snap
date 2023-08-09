@@ -10,6 +10,7 @@ import 'package:oh_snap_server/src/adapters/underdog/create_nft.dart';
 import 'package:oh_snap_server/src/adapters/underdog/nft_attributes.dart';
 import 'package:oh_snap_server/src/adapters/underdog/underdog_api.dart';
 import 'package:oh_snap_server/src/domain/common_extensions.dart';
+import 'package:oh_snap_server/src/domain/service/query_service.dart';
 import 'package:oh_snap_server/src/domain/service/time_service.dart';
 import 'package:oh_snap_server/src/endpoints/share_preview_template.dart';
 import 'package:oh_snap_server/src/generated/protocol.dart';
@@ -43,7 +44,7 @@ class SnapEndpoint extends Endpoint {
 
     var now = _timeService.now();
 
-    final existing = await _findPostByCaptureUrl(session, url);
+    final existing = await QueryService(session).findPostByCaptureUrl(url);
     if (existing != null) {
       session.log('Post already exists: $url');
       return existing;
@@ -80,24 +81,25 @@ class SnapEndpoint extends Endpoint {
     );
     await session.db.insert(summarizeTask);
 
+     */
     var previewTask = Task(
       postId: post.id!,
-      type: TaskType.preview,
-      dependsOn: captureTask.id!,
+      type: TaskType.share,
+      status: TaskStatus.pending,
+      dependsOn: null, // todo: summarizeTask.id!,
       cost: 1,
       paid: 0,
-      paymentRequirement: PaymentRequirement.later,
+      paymentRequirement: PaymentRequirement.upfront,
       createdAt: now,
       modifiedAt: now,
     );
     await session.db.insert(previewTask);
-     */
 
     var createNftTask = Task(
       postId: post.id!,
       type: TaskType.mint,
       status: TaskStatus.pending,
-      dependsOn: null, // todo: captureTask.id!,
+      dependsOn: previewTask.id!,
       cost: 1,
       paid: 0,
       paymentRequirement: PaymentRequirement.upfront,
@@ -155,19 +157,30 @@ class SnapEndpoint extends Endpoint {
     }
   }
 
-  Future<void> createNft(Session session, String url, String walletAddress, bool removeButtons) async {
-    var taskResult = await session.db
-      .query('''
-        SELECT * FROM task 
-        WHERE type = ${TaskType.mint.index} 
-        AND status = ${TaskStatus.pending.index}
-      ''');
+  Future<bool> _taskReady(Task task, QueryService queryService) async {
+    bool isReady = false;
+    if(task.status == TaskStatus.pending && _paymentOk(task)) {
+      if(task.dependsOn == null) {
+        isReady = true;
+      } else {
+        Task? dependency = await queryService.findTaskById(task.dependsOn!);
+        isReady = dependency?.let((entity) => entity.status == TaskStatus.completed) ?? true;
+      }
+    }
+    return isReady;
+  }
 
-    for(var row in taskResult) {
-      var task = _taskFromRow(row);
-      if(_paymentOk(task)) {
+  Future<void> createNft(Session session, String url, String walletAddress, bool removeButtons) async {
+    var queryService = QueryService(session);
+    final tasks = await queryService.findTaskByTypeAndStatus(TaskType.mint, TaskStatus.pending);
+
+    for(var task in tasks) {
+      if(await _taskReady(task, queryService)) {
+        task.status = TaskStatus.inProgress;
+        session.db.update(task);
+
         session.log('Processing task ${task.id} mint since payment is ok');
-        final post = await _findPostById2(session, task.postId);
+        final post = await queryService.findPostById(task.postId);
         await _taskToNft(session, post!, task);
       }
     }
@@ -180,112 +193,7 @@ class SnapEndpoint extends Endpoint {
     //await Post.find(session, where: (item) => item.status == PostStatus.inProgress);
   }
 
-  Future<Task?> _findTaskById(Session session, int taskId) async {
-    var taskResult = await session.db
-        .query('''
-        SELECT * FROM task 
-        WHERE id = $taskId 
-      ''');
 
-    if(taskResult.isEmpty) {
-      return null;
-    } else {
-      return _taskFromRow(taskResult[0]);
-    }
-  }
-
-  Future<Post?> _findPostById(Session session, int postId) async {
-    var postResult = await session.db
-        .query('''
-        SELECT * FROM post 
-        WHERE id = $postId 
-      ''');
-
-    if(postResult.isEmpty) {
-      return null;
-    } else {
-      return _postFromRow(postResult[0]);
-    }
-  }
-
-  Future<Post?> _findPostById2(Session session, int postId) async {
-    return _findEntityBy(
-      session: session,
-      table: 'post',
-      id: postId,
-    ).then((value) =>
-      value.map((item) => _postFromRow(item)).firstOrNull
-    );
-  }
-
-  Future<Post?> _findPostByCaptureUrl(Session session, String captureUrl) async {
-    return _findEntityBy(
-      session: session,
-      table: 'post',
-      captureUrl: captureUrl,
-    ).then((value) =>
-      value.map((item) => _postFromRow(item)).firstOrNull
-    );
-  }
-
-  Future<List<List<dynamic>>> _findEntityBy({
-    required Session session,
-    required String table,
-    int? id,
-    String? captureUrl,
-    bool logQuery = false,
-  }) async {
-    var idClause = id?.let((value) => ' AND id = $value') ?? '';
-    var captureUrlClause = id?.let((value) => ' AND captureUrl = $value') ?? '';
-
-    var query = '''
-        SELECT * FROM $table 
-        WHERE 1 = 1
-        $idClause
-        $captureUrlClause
-      ''';
-
-    if(logQuery) {
-      session.log('Query: $query');
-    }
-
-    var queryResult = await session.db.query(query);
-
-    return queryResult;
-  }
-
-  Post _postFromRow(List<dynamic> row) {
-    int column = 0;
-    return Post(
-      id: row[column++] as int,
-      title: row[column++] as String?,
-      text: row[column++] as String?,
-      imageUrl: row[column++] as String?,
-      captureUrl: row[column++] as String?,
-      shareUrl: row[column++] as String?,
-      shareAltUrl: row[column++] as String?,
-      address: row[column++] as String?,
-      transactionId: row[column++] as String?,
-      createdAt: row[column++] as DateTime,
-      modifiedAt: row[column++] as DateTime,
-    );
-  }
-
-  Task _taskFromRow(List<dynamic> row) {
-    return Task(
-      id: row[0] as int,
-      postId: row[1] as int,
-      type: TaskType.values[row[2] as int],
-      status: TaskStatus.values[row[3] as int],
-      cost: row[4] as int,
-      paid: row[5] as int,
-      paymentRequirement: PaymentRequirement.values[row[6] as int],
-      dependsOn: row[7] as int?,
-      statusMsg: row[8] as String?,
-      createdAt: row[9] as DateTime,
-      modifiedAt: row[10] as DateTime,
-    );
-  }
 
   Future<void> _taskToNft(Session session, Post post, Task task) async {
     assert(post.imageUrl != null);
