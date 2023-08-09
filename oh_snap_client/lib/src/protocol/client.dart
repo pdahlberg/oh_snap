@@ -10,9 +10,8 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:oh_snap_client/src/protocol/nft_list.dart' as _i3;
 import 'package:oh_snap_client/src/protocol/post.dart' as _i4;
-import 'package:oh_snap_client/src/protocol/task.dart' as _i5;
-import 'dart:io' as _i6;
-import 'protocol.dart' as _i7;
+import 'dart:io' as _i5;
+import 'protocol.dart' as _i6;
 
 class _EndpointAnnotate extends _i1.EndpointRef {
   _EndpointAnnotate(_i1.EndpointCaller caller) : super(caller);
@@ -63,30 +62,16 @@ class _EndpointSnap extends _i1.EndpointRef {
           'removeButtons': removeButtons,
         },
       );
-
-  _i2.Future<_i5.Task?> findTaskById(int taskId) =>
-      caller.callServerEndpoint<_i5.Task?>(
-        'snap',
-        'findTaskById',
-        {'taskId': taskId},
-      );
-
-  _i2.Future<_i4.Post?> findPostById(int postId) =>
-      caller.callServerEndpoint<_i4.Post?>(
-        'snap',
-        'findPostById',
-        {'postId': postId},
-      );
 }
 
 class Client extends _i1.ServerpodClient {
   Client(
     String host, {
-    _i6.SecurityContext? context,
+    _i5.SecurityContext? context,
     _i1.AuthenticationKeyManager? authenticationKeyManager,
   }) : super(
           host,
-          _i7.Protocol(),
+          _i6.Protocol(),
           context: context,
           authenticationKeyManager: authenticationKeyManager,
         ) {

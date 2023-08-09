@@ -9,6 +9,7 @@ import 'package:oh_snap_server/src/adapters/sdrive/summarize_request.dart';
 import 'package:oh_snap_server/src/adapters/underdog/create_nft.dart';
 import 'package:oh_snap_server/src/adapters/underdog/nft_attributes.dart';
 import 'package:oh_snap_server/src/adapters/underdog/underdog_api.dart';
+import 'package:oh_snap_server/src/domain/common_extensions.dart';
 import 'package:oh_snap_server/src/domain/service/time_service.dart';
 import 'package:oh_snap_server/src/endpoints/share_preview_template.dart';
 import 'package:oh_snap_server/src/generated/protocol.dart';
@@ -41,6 +42,14 @@ class SnapEndpoint extends Endpoint {
     session.log('Snap the $url and send it to $walletAddress');
 
     var now = _timeService.now();
+
+    final existing = await _findPostByCaptureUrl(session, url);
+    if (existing != null) {
+      session.log('Post already exists: $url');
+      return existing;
+    } else {
+      session.log('Post capture for: $url');
+    }
 
     var post = Post(captureUrl: url, createdAt: now, modifiedAt: now);
     await session.db.insert(post);
@@ -138,6 +147,14 @@ class SnapEndpoint extends Endpoint {
     return post;
   }
 
+  bool _paymentOk(Task task) {
+    switch(task.paymentRequirement) {
+      case PaymentRequirement.none:     return true;
+      case PaymentRequirement.later:    return true;
+      case PaymentRequirement.upfront:  return task.paid >= task.cost;
+    }
+  }
+
   Future<void> createNft(Session session, String url, String walletAddress, bool removeButtons) async {
     var taskResult = await session.db
       .query('''
@@ -148,9 +165,11 @@ class SnapEndpoint extends Endpoint {
 
     for(var row in taskResult) {
       var task = _taskFromRow(row);
-      session.log('Processing task ${task.id} mint');
-      final post = await findPostById(session, task.postId);
-      await _taskToNft(session, post!, task);
+      if(_paymentOk(task)) {
+        session.log('Processing task ${task.id} mint since payment is ok');
+        final post = await _findPostById2(session, task.postId);
+        await _taskToNft(session, post!, task);
+      }
     }
     
     /*final tasks = await Task.find(session, where: (item) => item.type.equals(TaskType.mint) && item.status.equals(TaskStatus.pending));
@@ -161,7 +180,7 @@ class SnapEndpoint extends Endpoint {
     //await Post.find(session, where: (item) => item.status == PostStatus.inProgress);
   }
 
-  Future<Task?> findTaskById(Session session, int taskId) async {
+  Future<Task?> _findTaskById(Session session, int taskId) async {
     var taskResult = await session.db
         .query('''
         SELECT * FROM task 
@@ -175,7 +194,7 @@ class SnapEndpoint extends Endpoint {
     }
   }
 
-  Future<Post?> findPostById(Session session, int postId) async {
+  Future<Post?> _findPostById(Session session, int postId) async {
     var postResult = await session.db
         .query('''
         SELECT * FROM post 
@@ -189,18 +208,60 @@ class SnapEndpoint extends Endpoint {
     }
   }
 
+  Future<Post?> _findPostById2(Session session, int postId) async {
+    return _findEntityBy(
+      session: session,
+      table: 'post',
+      id: postId,
+    ).then((value) =>
+      value.map((item) => _postFromRow(item)).firstOrNull
+    );
+  }
+
+  Future<Post?> _findPostByCaptureUrl(Session session, String captureUrl) async {
+    return _findEntityBy(
+      session: session,
+      table: 'post',
+      captureUrl: captureUrl,
+    ).then((value) =>
+      value.map((item) => _postFromRow(item)).firstOrNull
+    );
+  }
+
+  Future<List<List<dynamic>>> _findEntityBy({
+    required Session session,
+    required String table,
+    int? id,
+    String? captureUrl,
+  }) async {
+    var idClause = id?.let((value) => ' AND id = $value') ?? '';
+    var captureUrlClause = id?.let((value) => ' AND captureUrl = $value') ?? '';
+
+    var queryResult = await session.db
+        .query('''
+        SELECT * FROM $table 
+        WHERE 1 = 1
+        $idClause
+        $captureUrlClause
+      ''');
+
+    return queryResult;
+  }
+
   Post _postFromRow(List<dynamic> row) {
+    int column = 0;
     return Post(
-      id: row[0] as int,
-      title: row[1] as String?,
-      text: row[2] as String?,
-      imageUrl: row[3] as String?,
-      captureUrl: row[4] as String?,
-      shareUrl: row[5] as String?,
-      shareAltUrl: row[6] as String?,
-      address: row[7] as String?,
-      createdAt: row[8] as DateTime,
-      modifiedAt: row[9] as DateTime,
+      id: row[column++] as int,
+      title: row[column++] as String?,
+      text: row[column++] as String?,
+      imageUrl: row[column++] as String?,
+      captureUrl: row[column++] as String?,
+      shareUrl: row[column++] as String?,
+      shareAltUrl: row[column++] as String?,
+      address: row[column++] as String?,
+      transactionId: row[column++] as String?,
+      createdAt: row[column++] as DateTime,
+      modifiedAt: row[column++] as DateTime,
     );
   }
 
