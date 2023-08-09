@@ -233,17 +233,23 @@ class SnapEndpoint extends Endpoint {
     required String table,
     int? id,
     String? captureUrl,
+    bool logQuery = false,
   }) async {
     var idClause = id?.let((value) => ' AND id = $value') ?? '';
     var captureUrlClause = id?.let((value) => ' AND captureUrl = $value') ?? '';
 
-    var queryResult = await session.db
-        .query('''
+    var query = '''
         SELECT * FROM $table 
         WHERE 1 = 1
         $idClause
         $captureUrlClause
-      ''');
+      ''';
+
+    if(logQuery) {
+      session.log('Query: $query');
+    }
+
+    var queryResult = await session.db.query(query);
 
     return queryResult;
   }
