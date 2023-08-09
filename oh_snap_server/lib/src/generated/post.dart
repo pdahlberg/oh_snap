@@ -20,6 +20,7 @@ class Post extends _i1.TableRow {
     this.shareAltUrl,
     this.tasks,
     this.address,
+    this.transactionId,
     required this.createdAt,
     required this.modifiedAt,
   }) : super(id);
@@ -46,6 +47,8 @@ class Post extends _i1.TableRow {
           .deserialize<List<_i2.Task>?>(jsonSerialization['tasks']),
       address: serializationManager
           .deserialize<String?>(jsonSerialization['address']),
+      transactionId: serializationManager
+          .deserialize<String?>(jsonSerialization['transactionId']),
       createdAt: serializationManager
           .deserialize<DateTime>(jsonSerialization['createdAt']),
       modifiedAt: serializationManager
@@ -71,6 +74,8 @@ class Post extends _i1.TableRow {
 
   String? address;
 
+  String? transactionId;
+
   DateTime createdAt;
 
   DateTime modifiedAt;
@@ -89,6 +94,7 @@ class Post extends _i1.TableRow {
       'shareAltUrl': shareAltUrl,
       'tasks': tasks,
       'address': address,
+      'transactionId': transactionId,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -105,6 +111,7 @@ class Post extends _i1.TableRow {
       'shareUrl': shareUrl,
       'shareAltUrl': shareAltUrl,
       'address': address,
+      'transactionId': transactionId,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -122,6 +129,7 @@ class Post extends _i1.TableRow {
       'shareAltUrl': shareAltUrl,
       'tasks': tasks,
       'address': address,
+      'transactionId': transactionId,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -156,6 +164,9 @@ class Post extends _i1.TableRow {
         return;
       case 'address':
         address = value;
+        return;
+      case 'transactionId':
+        transactionId = value;
         return;
       case 'createdAt':
         createdAt = value;
@@ -301,6 +312,8 @@ class PostTable extends _i1.Table {
 
   final address = _i1.ColumnString('address');
 
+  final transactionId = _i1.ColumnString('transactionId');
+
   final createdAt = _i1.ColumnDateTime('createdAt');
 
   final modifiedAt = _i1.ColumnDateTime('modifiedAt');
@@ -315,6 +328,7 @@ class PostTable extends _i1.Table {
         shareUrl,
         shareAltUrl,
         address,
+        transactionId,
         createdAt,
         modifiedAt,
       ];

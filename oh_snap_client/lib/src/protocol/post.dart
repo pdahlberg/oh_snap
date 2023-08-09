@@ -20,6 +20,7 @@ class Post extends _i1.SerializableEntity {
     this.shareAltUrl,
     this.tasks,
     this.address,
+    this.transactionId,
     required this.createdAt,
     required this.modifiedAt,
   });
@@ -46,6 +47,8 @@ class Post extends _i1.SerializableEntity {
           .deserialize<List<_i2.Task>?>(jsonSerialization['tasks']),
       address: serializationManager
           .deserialize<String?>(jsonSerialization['address']),
+      transactionId: serializationManager
+          .deserialize<String?>(jsonSerialization['transactionId']),
       createdAt: serializationManager
           .deserialize<DateTime>(jsonSerialization['createdAt']),
       modifiedAt: serializationManager
@@ -74,6 +77,8 @@ class Post extends _i1.SerializableEntity {
 
   String? address;
 
+  String? transactionId;
+
   DateTime createdAt;
 
   DateTime modifiedAt;
@@ -90,6 +95,7 @@ class Post extends _i1.SerializableEntity {
       'shareAltUrl': shareAltUrl,
       'tasks': tasks,
       'address': address,
+      'transactionId': transactionId,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };

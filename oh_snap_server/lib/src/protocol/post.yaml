@@ -9,5 +9,6 @@ fields:
   shareAltUrl: String?
   tasks: List<Task>?, api
   address: String?,
+  transactionId: String?,
   createdAt: DateTime,
   modifiedAt: DateTime,

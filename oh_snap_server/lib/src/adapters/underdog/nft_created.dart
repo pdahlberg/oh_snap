@@ -21,6 +21,6 @@ class NftCreated {
 
   @override
   String toString() {
-    return 'NftCreated{$nftId, projectId=$projectId, tx=$transactionId, mintAddress=$mintAddress}';
+    return 'NftCreated{nftId=$nftId, projectId=$projectId, tx=$transactionId, mintAddress=$mintAddress}';
   }
 }

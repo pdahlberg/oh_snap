@@ -24,7 +24,9 @@ import 'package:puppeteer/puppeteer.dart';
 // `serverpod generate` to update the server and client code.
 class SnapEndpoint extends Endpoint {
 
-  final dio = Dio(); // Provide a dio instance
+  final dio = Dio()..interceptors.add(LogInterceptor(
+    responseBody: true,
+  )); // Provide a dio instance
   final dotenv = DotEnv(includePlatformEnvironment: true)..load();
   final TimeService _timeService = TimeService();
 
@@ -85,6 +87,7 @@ class SnapEndpoint extends Endpoint {
     var createNftTask = Task(
       postId: post.id!,
       type: TaskType.mint,
+      status: TaskStatus.pending,
       dependsOn: null, // todo: captureTask.id!,
       cost: 1,
       paid: 0,
@@ -130,8 +133,91 @@ class SnapEndpoint extends Endpoint {
       content: content,
     );*/
 
+
     //return SnapInfo(imageUrl: permalink);
     return post;
+  }
+
+  Future<void> createNft(Session session, String url, String walletAddress, bool removeButtons) async {
+    var taskResult = await session.db
+      .query('''
+        SELECT * FROM task 
+        WHERE type = ${TaskType.mint.index} 
+        AND status = ${TaskStatus.pending.index}
+      ''');
+
+    for(var row in taskResult) {
+      var task = _taskFromRow(row);
+      session.log('Processing task ${task.id} mint');
+      final post = await findPostById(session, task.postId);
+      await _taskToNft(session, post!, task);
+    }
+    
+    /*final tasks = await Task.find(session, where: (item) => item.type.equals(TaskType.mint) && item.status.equals(TaskStatus.pending));
+    for(var task in tasks) {
+      final post = await Post.findById(session, task.postId);
+      await _taskToNft(session, post!, task);
+    }*/
+    //await Post.find(session, where: (item) => item.status == PostStatus.inProgress);
+  }
+
+  Future<Task?> findTaskById(Session session, int taskId) async {
+    var taskResult = await session.db
+        .query('''
+        SELECT * FROM task 
+        WHERE id = $taskId 
+      ''');
+
+    if(taskResult.isEmpty) {
+      return null;
+    } else {
+      return _taskFromRow(taskResult[0]);
+    }
+  }
+
+  Future<Post?> findPostById(Session session, int postId) async {
+    var postResult = await session.db
+        .query('''
+        SELECT * FROM post 
+        WHERE id = $postId 
+      ''');
+
+    if(postResult.isEmpty) {
+      return null;
+    } else {
+      return _postFromRow(postResult[0]);
+    }
+  }
+
+  Post _postFromRow(List<dynamic> row) {
+    return Post(
+      id: row[0] as int,
+      title: row[1] as String?,
+      text: row[2] as String?,
+      imageUrl: row[3] as String?,
+      captureUrl: row[4] as String?,
+      shareUrl: row[5] as String?,
+      shareAltUrl: row[6] as String?,
+      address: row[7] as String?,
+      createdAt: row[8] as DateTime,
+      modifiedAt: row[9] as DateTime,
+    );
+  }
+
+  Task _taskFromRow(List<dynamic> row) {
+    return Task(
+      id: row[0] as int,
+      postId: row[1] as int,
+      type: TaskType.values[row[2] as int],
+      status: TaskStatus.values[row[3] as int],
+      cost: row[4] as int,
+      paid: row[5] as int,
+      paymentRequirement: PaymentRequirement.values[row[6] as int],
+      dependsOn: row[7] as int?,
+      statusMsg: row[8] as String?,
+      createdAt: row[9] as DateTime,
+      modifiedAt: row[10] as DateTime,
+    );
   }
 
   Future<void> _taskToNft(Session session, Post post, Task task) async {
@@ -141,7 +227,7 @@ class SnapEndpoint extends Endpoint {
     assert(post.shareAltUrl != null);
     assert(post.text != null);
 
-    await _createNft(
+    final (createResponse, txId, exception) = await _createNft(
       session: session,
       nftName: post.title!,
       imageUrl: post.imageUrl!,
@@ -150,6 +236,19 @@ class SnapEndpoint extends Endpoint {
       shareAltUrl: post.shareAltUrl!,
       content: post.text!,
     );
+
+    if(createResponse != null) {
+      task.status = TaskStatus.completed;
+      task.statusMsg = createResponse;
+      post.transactionId = txId;
+      await session.db.update(post);
+    } else {
+      task.status = TaskStatus.error;
+      task.statusMsg = exception.toString();
+      session.log('Failed to mint NFT', level: LogLevel.error, exception: exception);
+    }
+
+    await session.db.update(task);
   }
 
   String _createSharablePreview(bool hasImage, String screenshotResultUrl, String content, String summary, String url) {
@@ -266,7 +365,7 @@ class SnapEndpoint extends Endpoint {
     return (result.permalink, result.file);
   }
 
-  Future<void> _createNft({
+  Future<(String?, String?, Exception?)> _createNft({
     required Session session,
     required String nftName,
     required String imageUrl,
@@ -280,17 +379,25 @@ class SnapEndpoint extends Endpoint {
 
     final underdog = UnderdogApi(dio);
     //final result = await underdog.fetchProject('Bearer $apikey', 1);
-    final result = await underdog.createNft('Bearer $apikey', 1, CreateNft(
-      name: nftName,
-      image: imageUrl,
-      attributes: NftAttributes(
-        source: source,
-        timestamp: captureTimestamp,
-        content: content,
-        document1: shareAltUrl,
-        document2: shareUrl,
-      ),
-    ));
-    session.log('underdog: $result');
+    try {
+      final result = await underdog.createNft('Bearer $apikey', 1, CreateNft(
+        // todo: receiverAddress: ,
+        name: nftName,
+        image: imageUrl,
+        externalUrl: shareUrl,
+        attributes: NftAttributes(
+          source: source,
+          timestamp: captureTimestamp,
+          content: content,
+          document1: shareAltUrl,
+          document2: shareUrl,
+        ),
+      ));
+      session.log('_createNft with underdog result: $result');
+      var json = jsonEncode(result.toJson());
+      return (json, result.transactionId, null);
+    } on Exception catch(e) {
+      return (null, null, e);
+    }
   }
 }

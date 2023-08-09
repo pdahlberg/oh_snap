@@ -11,4 +11,7 @@
   - Credits added outside the app seems to be the way.
   - Would be nice for one credit to pay for one request, but not great as internal representation with many different steps to pay for.
 
-
+## Serverpod
+- Task.find() and Post.find() doesn't work even though they are generated.
+- Annoying to have enums be integers in the database. 
+- Not sure what I think about using the DB for logs.

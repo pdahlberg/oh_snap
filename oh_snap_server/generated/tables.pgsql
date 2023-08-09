@@ -11,6 +11,7 @@ CREATE TABLE "post" (
   "shareUrl" text,
   "shareAltUrl" text,
   "address" text,
+  "transactionId" text,
   "createdAt" timestamp without time zone NOT NULL,
   "modifiedAt" timestamp without time zone NOT NULL
 );
@@ -27,10 +28,12 @@ CREATE TABLE "task" (
   "id" serial,
   "postId" integer NOT NULL,
   "type" integer NOT NULL,
+  "status" integer NOT NULL,
   "cost" integer NOT NULL,
   "paid" integer NOT NULL,
   "paymentRequirement" integer NOT NULL,
   "dependsOn" integer,
+  "statusMsg" text,
   "createdAt" timestamp without time zone NOT NULL,
   "modifiedAt" timestamp without time zone NOT NULL
 );
