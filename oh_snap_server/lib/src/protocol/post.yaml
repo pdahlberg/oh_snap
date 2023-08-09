@@ -4,7 +4,7 @@ fields:
   title: String?,
   text: String?,
   imageUrl: String?,
-  captureUrl: String?
+  captureurl: String?
   shareUrl: String?
   shareAltUrl: String?
   tasks: List<Task>?, api

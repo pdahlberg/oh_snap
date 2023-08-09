@@ -52,7 +52,7 @@ class SnapEndpoint extends Endpoint {
       session.log('Post capture for: $url');
     }
 
-    var post = Post(captureUrl: url, createdAt: now, modifiedAt: now);
+    var post = Post(captureurl: url, createdAt: now, modifiedAt: now);
     await session.db.insert(post);
 
     /*
@@ -121,32 +121,41 @@ class SnapEndpoint extends Endpoint {
       post.title = summaryForTitle;
     }
 
+    await session.db.update(post);
+    
+    //return SnapInfo(imageUrl: permalink);
+    return post;
+  }
+
+  /*Future<void> sharePrevTask(Session session) async {
+    var queryService = QueryService(session);
+    final tasks = await queryService.findTaskByTypeAndStatus(TaskType.mint, TaskStatus.pending);
+
+    for(var task in tasks) {
+      if(await _taskReady(task, queryService)) {
+        task.status = TaskStatus.inProgress;
+        session.db.update(task);
+
+        final post = await queryService.findPostById(task.postId);
+        session.log('Processing task ${task.id} ${task.type} since payment is ok');
+        await _sharePrevTask(post!, session);
+      }
+    }
+
+  }*/
+
+  Future<void> _sharePrevTask(Post post, Task task, Session session) async {
     var hasImage = true;
-    String doc = _createSharablePreview(hasImage, screenshotPermalinkUrl, post.text!, post.title!, url);
+    String doc = _createSharablePreview(hasImage, post.imageUrl!, post.text!, post.title!, post.captureurl!);
     List<int> bytes = utf8.encode(doc);
     final (sharePreviewPermalinkUrl, sharePreviewSdriveUrl) = await _upload(session, bytes, 'html');
     post.shareUrl = sharePreviewPermalinkUrl;
     post.shareAltUrl = sharePreviewSdriveUrl;
-    session.log('Share preview uploaded: $sharePreviewPermalinkUrl');
-
     await session.db.update(post);
 
-    // move to _taskToNft
-    //_taskToNft(session, post, createNftTask);
-    /*await _createNft(
-      session: session,
-      nftName: summary,
-      permalinkImage: screenshotPermalinkUrl,
-      sdriveImage: screenshotSdriveUrl,
-      source: url,
-      permalinkSharePrev: sharePreviewPermalinkUrl,
-      sdriveSharePrev: sharePreviewSdriveUrl,
-      content: content,
-    );*/
-
-
-    //return SnapInfo(imageUrl: permalink);
-    return post;
+    session.log('Task(${task.id}) share preview uploaded: $sharePreviewPermalinkUrl');
+    task.status = TaskStatus.completed;
+    await session.db.update(task);
   }
 
   bool _paymentOk(Task task) {
@@ -170,27 +179,32 @@ class SnapEndpoint extends Endpoint {
     return isReady;
   }
 
-  Future<void> createNft(Session session, String url, String walletAddress, bool removeButtons) async {
+  Future<void> processTasks(Session session) async {
     var queryService = QueryService(session);
-    final tasks = await queryService.findTaskByTypeAndStatus(TaskType.mint, TaskStatus.pending);
+    final tasks = await queryService.findTaskByStatus(TaskStatus.pending);
 
     for(var task in tasks) {
       if(await _taskReady(task, queryService)) {
-        task.status = TaskStatus.inProgress;
-        session.db.update(task);
 
-        session.log('Processing task ${task.id} mint since payment is ok');
         final post = await queryService.findPostById(task.postId);
-        await _taskToNft(session, post!, task);
+
+        session.log('Processing task ${task.id} ${task.type}');
+        if(task.type == TaskType.mint) {
+          task.status = TaskStatus.inProgress;
+          session.db.update(task);
+          await _taskToNft(session, post!, task);
+        } else if(task.type == TaskType.share) {
+          await _sharePrevTask(post!, task, session);
+        } else {
+          session.log('Task type not implemented: ${task.type}');
+          task.status = TaskStatus.pending;
+          session.db.update(task);
+        }
+
+      } else {
+        session.log('Task ${task.id} ${task.type} not ready');
       }
     }
-    
-    /*final tasks = await Task.find(session, where: (item) => item.type.equals(TaskType.mint) && item.status.equals(TaskStatus.pending));
-    for(var task in tasks) {
-      final post = await Post.findById(session, task.postId);
-      await _taskToNft(session, post!, task);
-    }*/
-    //await Post.find(session, where: (item) => item.status == PostStatus.inProgress);
   }
 
 
@@ -206,7 +220,7 @@ class SnapEndpoint extends Endpoint {
       session: session,
       nftName: post.title!,
       imageUrl: post.imageUrl!,
-      source: post.captureUrl!,
+      source: post.captureurl!,
       shareUrl: post.shareUrl!,
       shareAltUrl: post.shareAltUrl!,
       content: post.text!,

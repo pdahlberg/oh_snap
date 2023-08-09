@@ -7,7 +7,7 @@ CREATE TABLE "post" (
   "title" text,
   "text" text,
   "imageUrl" text,
-  "captureUrl" text,
+  "captureurl" text,
   "shareUrl" text,
   "shareAltUrl" text,
   "address" text,

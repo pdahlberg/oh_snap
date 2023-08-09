@@ -15,7 +15,7 @@ class Post extends _i1.TableRow {
     this.title,
     this.text,
     this.imageUrl,
-    this.captureUrl,
+    this.captureurl,
     this.shareUrl,
     this.shareAltUrl,
     this.tasks,
@@ -37,8 +37,8 @@ class Post extends _i1.TableRow {
           serializationManager.deserialize<String?>(jsonSerialization['text']),
       imageUrl: serializationManager
           .deserialize<String?>(jsonSerialization['imageUrl']),
-      captureUrl: serializationManager
-          .deserialize<String?>(jsonSerialization['captureUrl']),
+      captureurl: serializationManager
+          .deserialize<String?>(jsonSerialization['captureurl']),
       shareUrl: serializationManager
           .deserialize<String?>(jsonSerialization['shareUrl']),
       shareAltUrl: serializationManager
@@ -64,7 +64,7 @@ class Post extends _i1.TableRow {
 
   String? imageUrl;
 
-  String? captureUrl;
+  String? captureurl;
 
   String? shareUrl;
 
@@ -89,7 +89,7 @@ class Post extends _i1.TableRow {
       'title': title,
       'text': text,
       'imageUrl': imageUrl,
-      'captureUrl': captureUrl,
+      'captureurl': captureurl,
       'shareUrl': shareUrl,
       'shareAltUrl': shareAltUrl,
       'tasks': tasks,
@@ -107,7 +107,7 @@ class Post extends _i1.TableRow {
       'title': title,
       'text': text,
       'imageUrl': imageUrl,
-      'captureUrl': captureUrl,
+      'captureurl': captureurl,
       'shareUrl': shareUrl,
       'shareAltUrl': shareAltUrl,
       'address': address,
@@ -124,7 +124,7 @@ class Post extends _i1.TableRow {
       'title': title,
       'text': text,
       'imageUrl': imageUrl,
-      'captureUrl': captureUrl,
+      'captureurl': captureurl,
       'shareUrl': shareUrl,
       'shareAltUrl': shareAltUrl,
       'tasks': tasks,
@@ -153,8 +153,8 @@ class Post extends _i1.TableRow {
       case 'imageUrl':
         imageUrl = value;
         return;
-      case 'captureUrl':
-        captureUrl = value;
+      case 'captureurl':
+        captureurl = value;
         return;
       case 'shareUrl':
         shareUrl = value;
@@ -304,7 +304,7 @@ class PostTable extends _i1.Table {
 
   final imageUrl = _i1.ColumnString('imageUrl');
 
-  final captureUrl = _i1.ColumnString('captureUrl');
+  final captureurl = _i1.ColumnString('captureurl');
 
   final shareUrl = _i1.ColumnString('shareUrl');
 
@@ -324,7 +324,7 @@ class PostTable extends _i1.Table {
         title,
         text,
         imageUrl,
-        captureUrl,
+        captureurl,
         shareUrl,
         shareAltUrl,
         address,

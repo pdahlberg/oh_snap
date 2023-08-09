@@ -15,6 +15,8 @@
 - Task.find() and Post.find() doesn't work even though they are generated.
 - Annoying to have enums be integers in the database. 
 - Not sure what I think about using the DB for logs.
+- The build in query builder doesn't seem to work. 
+- Select statements seems to have their columns forced to lowercase which makes generated tables in combination with manual queries quite annoying. 
 
 ## Todos
 - Probably change QueryService to be a bunch of extensions on session or session.db.

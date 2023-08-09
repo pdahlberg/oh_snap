@@ -14,6 +14,7 @@ class QueryService {
       session: session,
       table: 'post',
       id: postId,
+      logQuery: true,
     ).then((value) => value.map((item) => _postFromRow(item)).firstOrNull);
   }
 
@@ -25,11 +26,10 @@ class QueryService {
     ).then((value) => value.map((item) => _postFromRow(item)).firstOrNull);
   }
 
-  Future<List<Task>> findTaskByTypeAndStatus(TaskType type, TaskStatus status) async {
+  Future<List<Task>> findTaskByStatus(TaskStatus status) async {
     return _findEntityBy(
       session: session,
       table: 'task',
-      type: type.index,
       status: status.index,
     ).then((value) => value.map((item) => _taskFromRow(item)).toList());
   }
@@ -51,13 +51,13 @@ class QueryService {
     int? status,
     bool logQuery = false,
   }) async {
-    var idClause = id?.let((value) => ' AND id = $value') ?? '';
-    var captureUrlClause = id?.let((value) => " AND captureUrl = '$value'") ?? '';
-    var typeClause = type?.let((value) => ' AND type = $value') ?? '';
-    var statusClause = status?.let((value) => ' AND status = $value') ?? '';
+    var idClause = id?.let((value) => ' AND t.id = $value') ?? '';
+    var captureUrlClause = captureUrl?.let((value) => " AND t.captureurl = '$value'") ?? '';
+    var typeClause = type?.let((value) => ' AND t.type = $value') ?? '';
+    var statusClause = status?.let((value) => ' AND t.status = $value') ?? '';
 
     var query = '''
-        SELECT * FROM $table 
+        SELECT * FROM $table t
         WHERE 1 = 1
         $idClause
         $captureUrlClause
@@ -81,7 +81,7 @@ class QueryService {
       title: row[column++] as String?,
       text: row[column++] as String?,
       imageUrl: row[column++] as String?,
-      captureUrl: row[column++] as String?,
+      captureurl: row[column++] as String?,
       shareUrl: row[column++] as String?,
       shareAltUrl: row[column++] as String?,
       address: row[column++] as String?,

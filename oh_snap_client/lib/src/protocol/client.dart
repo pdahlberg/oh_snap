@@ -48,19 +48,10 @@ class _EndpointSnap extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<void> createNft(
-    String url,
-    String walletAddress,
-    bool removeButtons,
-  ) =>
-      caller.callServerEndpoint<void>(
+  _i2.Future<void> processTasks() => caller.callServerEndpoint<void>(
         'snap',
-        'createNft',
-        {
-          'url': url,
-          'walletAddress': walletAddress,
-          'removeButtons': removeButtons,
-        },
+        'processTasks',
+        {},
       );
 }
 
