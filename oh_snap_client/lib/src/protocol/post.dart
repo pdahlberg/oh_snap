@@ -12,10 +12,15 @@ import 'protocol.dart' as _i2;
 class Post extends _i1.SerializableEntity {
   Post({
     this.id,
-    this.url,
+    this.title,
     this.text,
+    this.imageUrl,
+    this.captureurl,
+    this.shareUrl,
+    this.shareAltUrl,
     this.tasks,
     this.address,
+    this.transactionId,
     required this.createdAt,
     required this.modifiedAt,
   });
@@ -26,13 +31,24 @@ class Post extends _i1.SerializableEntity {
   ) {
     return Post(
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
-      url: serializationManager.deserialize<String?>(jsonSerialization['url']),
+      title:
+          serializationManager.deserialize<String?>(jsonSerialization['title']),
       text:
           serializationManager.deserialize<String?>(jsonSerialization['text']),
+      imageUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['imageUrl']),
+      captureurl: serializationManager
+          .deserialize<String?>(jsonSerialization['captureurl']),
+      shareUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['shareUrl']),
+      shareAltUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['shareAltUrl']),
       tasks: serializationManager
           .deserialize<List<_i2.Task>?>(jsonSerialization['tasks']),
       address: serializationManager
           .deserialize<String?>(jsonSerialization['address']),
+      transactionId: serializationManager
+          .deserialize<String?>(jsonSerialization['transactionId']),
       createdAt: serializationManager
           .deserialize<DateTime>(jsonSerialization['createdAt']),
       modifiedAt: serializationManager
@@ -45,13 +61,23 @@ class Post extends _i1.SerializableEntity {
   /// the id will be null.
   int? id;
 
-  String? url;
+  String? title;
 
   String? text;
+
+  String? imageUrl;
+
+  String? captureurl;
+
+  String? shareUrl;
+
+  String? shareAltUrl;
 
   List<_i2.Task>? tasks;
 
   String? address;
+
+  String? transactionId;
 
   DateTime createdAt;
 
@@ -61,10 +87,15 @@ class Post extends _i1.SerializableEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'url': url,
+      'title': title,
       'text': text,
+      'imageUrl': imageUrl,
+      'captureurl': captureurl,
+      'shareUrl': shareUrl,
+      'shareAltUrl': shareAltUrl,
       'tasks': tasks,
       'address': address,
+      'transactionId': transactionId,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };

@@ -3,9 +3,11 @@ table: task
 fields:
   postId: int, parent=post
   type: TaskType,
+  status: TaskStatus,
   cost: int,
   paid: int,
   paymentRequirement: PaymentRequirement,
   dependsOn: int?,
+  statusMsg: String?,
   createdAt: DateTime,
   modifiedAt: DateTime,

@@ -14,10 +14,12 @@ class Task extends _i1.TableRow {
     int? id,
     required this.postId,
     required this.type,
+    required this.status,
     required this.cost,
     required this.paid,
     required this.paymentRequirement,
     this.dependsOn,
+    this.statusMsg,
     required this.createdAt,
     required this.modifiedAt,
   }) : super(id);
@@ -32,6 +34,8 @@ class Task extends _i1.TableRow {
           serializationManager.deserialize<int>(jsonSerialization['postId']),
       type: serializationManager
           .deserialize<_i2.TaskType>(jsonSerialization['type']),
+      status: serializationManager
+          .deserialize<_i2.TaskStatus>(jsonSerialization['status']),
       cost: serializationManager.deserialize<int>(jsonSerialization['cost']),
       paid: serializationManager.deserialize<int>(jsonSerialization['paid']),
       paymentRequirement:
@@ -39,6 +43,8 @@ class Task extends _i1.TableRow {
               jsonSerialization['paymentRequirement']),
       dependsOn: serializationManager
           .deserialize<int?>(jsonSerialization['dependsOn']),
+      statusMsg: serializationManager
+          .deserialize<String?>(jsonSerialization['statusMsg']),
       createdAt: serializationManager
           .deserialize<DateTime>(jsonSerialization['createdAt']),
       modifiedAt: serializationManager
@@ -52,6 +58,8 @@ class Task extends _i1.TableRow {
 
   _i2.TaskType type;
 
+  _i2.TaskStatus status;
+
   int cost;
 
   int paid;
@@ -59,6 +67,8 @@ class Task extends _i1.TableRow {
   _i2.PaymentRequirement paymentRequirement;
 
   int? dependsOn;
+
+  String? statusMsg;
 
   DateTime createdAt;
 
@@ -72,10 +82,12 @@ class Task extends _i1.TableRow {
       'id': id,
       'postId': postId,
       'type': type,
+      'status': status,
       'cost': cost,
       'paid': paid,
       'paymentRequirement': paymentRequirement,
       'dependsOn': dependsOn,
+      'statusMsg': statusMsg,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -87,10 +99,12 @@ class Task extends _i1.TableRow {
       'id': id,
       'postId': postId,
       'type': type,
+      'status': status,
       'cost': cost,
       'paid': paid,
       'paymentRequirement': paymentRequirement,
       'dependsOn': dependsOn,
+      'statusMsg': statusMsg,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -102,10 +116,12 @@ class Task extends _i1.TableRow {
       'id': id,
       'postId': postId,
       'type': type,
+      'status': status,
       'cost': cost,
       'paid': paid,
       'paymentRequirement': paymentRequirement,
       'dependsOn': dependsOn,
+      'statusMsg': statusMsg,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -126,6 +142,9 @@ class Task extends _i1.TableRow {
       case 'type':
         type = value;
         return;
+      case 'status':
+        status = value;
+        return;
       case 'cost':
         cost = value;
         return;
@@ -137,6 +156,9 @@ class Task extends _i1.TableRow {
         return;
       case 'dependsOn':
         dependsOn = value;
+        return;
+      case 'statusMsg':
+        statusMsg = value;
         return;
       case 'createdAt':
         createdAt = value;
@@ -272,6 +294,8 @@ class TaskTable extends _i1.Table {
 
   final type = _i1.ColumnEnum<_i2.TaskType>('type');
 
+  final status = _i1.ColumnEnum<_i2.TaskStatus>('status');
+
   final cost = _i1.ColumnInt('cost');
 
   final paid = _i1.ColumnInt('paid');
@@ -280,6 +304,8 @@ class TaskTable extends _i1.Table {
       _i1.ColumnEnum<_i2.PaymentRequirement>('paymentRequirement');
 
   final dependsOn = _i1.ColumnInt('dependsOn');
+
+  final statusMsg = _i1.ColumnString('statusMsg');
 
   final createdAt = _i1.ColumnDateTime('createdAt');
 
@@ -290,10 +316,12 @@ class TaskTable extends _i1.Table {
         id,
         postId,
         type,
+        status,
         cost,
         paid,
         paymentRequirement,
         dependsOn,
+        statusMsg,
         createdAt,
         modifiedAt,
       ];

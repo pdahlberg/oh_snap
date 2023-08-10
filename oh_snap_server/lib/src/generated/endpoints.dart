@@ -84,7 +84,16 @@ class Endpoints extends _i1.EndpointDispatch {
             params['walletAddress'],
             params['removeButtons'],
           ),
-        )
+        ),
+        'processTasks': _i1.MethodConnector(
+          name: 'processTasks',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['snap'] as _i3.SnapEndpoint).processTasks(session),
+        ),
       },
     );
   }

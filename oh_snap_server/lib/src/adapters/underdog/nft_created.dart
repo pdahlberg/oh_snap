@@ -7,11 +7,13 @@ class NftCreated {
   int projectId;
   String transactionId;
   int nftId;
+  String? mintAddress;
 
   NftCreated({
     required this.projectId,
     required this.transactionId,
     required this.nftId,
+    this.mintAddress,
   });
 
   factory NftCreated.fromJson(Map<String, dynamic> json) => _$NftCreatedFromJson(json);
@@ -19,6 +21,6 @@ class NftCreated {
 
   @override
   String toString() {
-    return 'NftCreated{$nftId, projectId=$projectId, tx=$transactionId}';
+    return 'NftCreated{nftId=$nftId, projectId=$projectId, tx=$transactionId, mintAddress=$mintAddress}';
   }
 }

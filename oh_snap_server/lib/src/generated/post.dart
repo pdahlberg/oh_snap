@@ -12,10 +12,15 @@ import 'protocol.dart' as _i2;
 class Post extends _i1.TableRow {
   Post({
     int? id,
-    this.url,
+    this.title,
     this.text,
+    this.imageUrl,
+    this.captureurl,
+    this.shareUrl,
+    this.shareAltUrl,
     this.tasks,
     this.address,
+    this.transactionId,
     required this.createdAt,
     required this.modifiedAt,
   }) : super(id);
@@ -26,13 +31,24 @@ class Post extends _i1.TableRow {
   ) {
     return Post(
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
-      url: serializationManager.deserialize<String?>(jsonSerialization['url']),
+      title:
+          serializationManager.deserialize<String?>(jsonSerialization['title']),
       text:
           serializationManager.deserialize<String?>(jsonSerialization['text']),
+      imageUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['imageUrl']),
+      captureurl: serializationManager
+          .deserialize<String?>(jsonSerialization['captureurl']),
+      shareUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['shareUrl']),
+      shareAltUrl: serializationManager
+          .deserialize<String?>(jsonSerialization['shareAltUrl']),
       tasks: serializationManager
           .deserialize<List<_i2.Task>?>(jsonSerialization['tasks']),
       address: serializationManager
           .deserialize<String?>(jsonSerialization['address']),
+      transactionId: serializationManager
+          .deserialize<String?>(jsonSerialization['transactionId']),
       createdAt: serializationManager
           .deserialize<DateTime>(jsonSerialization['createdAt']),
       modifiedAt: serializationManager
@@ -42,13 +58,23 @@ class Post extends _i1.TableRow {
 
   static final t = PostTable();
 
-  String? url;
+  String? title;
 
   String? text;
+
+  String? imageUrl;
+
+  String? captureurl;
+
+  String? shareUrl;
+
+  String? shareAltUrl;
 
   List<_i2.Task>? tasks;
 
   String? address;
+
+  String? transactionId;
 
   DateTime createdAt;
 
@@ -60,10 +86,15 @@ class Post extends _i1.TableRow {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'url': url,
+      'title': title,
       'text': text,
+      'imageUrl': imageUrl,
+      'captureurl': captureurl,
+      'shareUrl': shareUrl,
+      'shareAltUrl': shareAltUrl,
       'tasks': tasks,
       'address': address,
+      'transactionId': transactionId,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -73,9 +104,14 @@ class Post extends _i1.TableRow {
   Map<String, dynamic> toJsonForDatabase() {
     return {
       'id': id,
-      'url': url,
+      'title': title,
       'text': text,
+      'imageUrl': imageUrl,
+      'captureurl': captureurl,
+      'shareUrl': shareUrl,
+      'shareAltUrl': shareAltUrl,
       'address': address,
+      'transactionId': transactionId,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -85,10 +121,15 @@ class Post extends _i1.TableRow {
   Map<String, dynamic> allToJson() {
     return {
       'id': id,
-      'url': url,
+      'title': title,
       'text': text,
+      'imageUrl': imageUrl,
+      'captureurl': captureurl,
+      'shareUrl': shareUrl,
+      'shareAltUrl': shareAltUrl,
       'tasks': tasks,
       'address': address,
+      'transactionId': transactionId,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -103,14 +144,29 @@ class Post extends _i1.TableRow {
       case 'id':
         id = value;
         return;
-      case 'url':
-        url = value;
+      case 'title':
+        title = value;
         return;
       case 'text':
         text = value;
         return;
+      case 'imageUrl':
+        imageUrl = value;
+        return;
+      case 'captureurl':
+        captureurl = value;
+        return;
+      case 'shareUrl':
+        shareUrl = value;
+        return;
+      case 'shareAltUrl':
+        shareAltUrl = value;
+        return;
       case 'address':
         address = value;
+        return;
+      case 'transactionId':
+        transactionId = value;
         return;
       case 'createdAt':
         createdAt = value;
@@ -242,11 +298,21 @@ class PostTable extends _i1.Table {
   /// the id will be null.
   final id = _i1.ColumnInt('id');
 
-  final url = _i1.ColumnString('url');
+  final title = _i1.ColumnString('title');
 
   final text = _i1.ColumnString('text');
 
+  final imageUrl = _i1.ColumnString('imageUrl');
+
+  final captureurl = _i1.ColumnString('captureurl');
+
+  final shareUrl = _i1.ColumnString('shareUrl');
+
+  final shareAltUrl = _i1.ColumnString('shareAltUrl');
+
   final address = _i1.ColumnString('address');
+
+  final transactionId = _i1.ColumnString('transactionId');
 
   final createdAt = _i1.ColumnDateTime('createdAt');
 
@@ -255,9 +321,14 @@ class PostTable extends _i1.Table {
   @override
   List<_i1.Column> get columns => [
         id,
-        url,
+        title,
         text,
+        imageUrl,
+        captureurl,
+        shareUrl,
+        shareAltUrl,
         address,
+        transactionId,
         createdAt,
         modifiedAt,
       ];

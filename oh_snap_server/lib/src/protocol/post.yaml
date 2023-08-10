@@ -1,9 +1,14 @@
 class: Post
 table: post
 fields:
-  url: String?
+  title: String?,
   text: String?,
+  imageUrl: String?,
+  captureurl: String?
+  shareUrl: String?
+  shareAltUrl: String?
   tasks: List<Task>?, api
   address: String?,
+  transactionId: String?,
   createdAt: DateTime,
   modifiedAt: DateTime,

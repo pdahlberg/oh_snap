@@ -47,6 +47,12 @@ class _EndpointSnap extends _i1.EndpointRef {
           'removeButtons': removeButtons,
         },
       );
+
+  _i2.Future<void> processTasks() => caller.callServerEndpoint<void>(
+        'snap',
+        'processTasks',
+        {},
+      );
 }
 
 class Client extends _i1.ServerpodClient {

@@ -14,14 +14,16 @@ import 'payment_requirement.dart' as _i4;
 import 'post.dart' as _i5;
 import 'snap_info.dart' as _i6;
 import 'task.dart' as _i7;
-import 'task_type.dart' as _i8;
-import 'protocol.dart' as _i9;
+import 'task_status.dart' as _i8;
+import 'task_type.dart' as _i9;
+import 'protocol.dart' as _i10;
 export 'nft.dart';
 export 'nft_list.dart';
 export 'payment_requirement.dart';
 export 'post.dart';
 export 'snap_info.dart';
 export 'task.dart';
+export 'task_status.dart';
 export 'task_type.dart';
 export 'client.dart';
 
@@ -61,8 +63,11 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i7.Task) {
       return _i7.Task.fromJson(data, this) as T;
     }
-    if (t == _i8.TaskType) {
-      return _i8.TaskType.fromJson(data) as T;
+    if (t == _i8.TaskStatus) {
+      return _i8.TaskStatus.fromJson(data) as T;
+    }
+    if (t == _i9.TaskType) {
+      return _i9.TaskType.fromJson(data) as T;
     }
     if (t == _i1.getType<_i2.Nft?>()) {
       return (data != null ? _i2.Nft.fromJson(data, this) : null) as T;
@@ -82,16 +87,19 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i7.Task?>()) {
       return (data != null ? _i7.Task.fromJson(data, this) : null) as T;
     }
-    if (t == _i1.getType<_i8.TaskType?>()) {
-      return (data != null ? _i8.TaskType.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i8.TaskStatus?>()) {
+      return (data != null ? _i8.TaskStatus.fromJson(data) : null) as T;
     }
-    if (t == List<_i9.Nft>) {
-      return (data as List).map((e) => deserialize<_i9.Nft>(e)).toList()
+    if (t == _i1.getType<_i9.TaskType?>()) {
+      return (data != null ? _i9.TaskType.fromJson(data) : null) as T;
+    }
+    if (t == List<_i10.Nft>) {
+      return (data as List).map((e) => deserialize<_i10.Nft>(e)).toList()
           as dynamic;
     }
-    if (t == _i1.getType<List<_i9.Task>?>()) {
+    if (t == _i1.getType<List<_i10.Task>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i9.Task>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i10.Task>(e)).toList()
           : null) as dynamic;
     }
     return super.deserialize<T>(data, t);
@@ -117,7 +125,10 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i7.Task) {
       return 'Task';
     }
-    if (data is _i8.TaskType) {
+    if (data is _i8.TaskStatus) {
+      return 'TaskStatus';
+    }
+    if (data is _i9.TaskType) {
       return 'TaskType';
     }
     return super.getClassNameForObject(data);
@@ -143,8 +154,11 @@ class Protocol extends _i1.SerializationManager {
     if (data['className'] == 'Task') {
       return deserialize<_i7.Task>(data['data']);
     }
+    if (data['className'] == 'TaskStatus') {
+      return deserialize<_i8.TaskStatus>(data['data']);
+    }
     if (data['className'] == 'TaskType') {
-      return deserialize<_i8.TaskType>(data['data']);
+      return deserialize<_i9.TaskType>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

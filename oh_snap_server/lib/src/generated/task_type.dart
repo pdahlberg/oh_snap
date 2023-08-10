@@ -10,8 +10,8 @@ import 'package:serverpod/serverpod.dart' as _i1;
 
 enum TaskType with _i1.SerializableEntity {
   capture,
-  upload,
   summarize,
+  share,
   mint;
 
   static TaskType? fromJson(int index) {
@@ -19,9 +19,9 @@ enum TaskType with _i1.SerializableEntity {
       case 0:
         return capture;
       case 1:
-        return upload;
-      case 2:
         return summarize;
+      case 2:
+        return share;
       case 3:
         return mint;
       default:

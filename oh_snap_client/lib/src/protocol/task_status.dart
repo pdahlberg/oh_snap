@@ -8,22 +8,25 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 
-enum TaskType with _i1.SerializableEntity {
-  capture,
-  summarize,
-  share,
-  mint;
+enum TaskStatus with _i1.SerializableEntity {
+  pending,
+  inProgress,
+  completed,
+  error,
+  cancelled;
 
-  static TaskType? fromJson(int index) {
+  static TaskStatus? fromJson(int index) {
     switch (index) {
       case 0:
-        return capture;
+        return pending;
       case 1:
-        return summarize;
+        return inProgress;
       case 2:
-        return share;
+        return completed;
       case 3:
-        return mint;
+        return error;
+      case 4:
+        return cancelled;
       default:
         return null;
     }

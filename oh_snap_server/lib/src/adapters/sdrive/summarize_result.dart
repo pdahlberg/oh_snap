@@ -9,14 +9,15 @@ part 'summarize_result.g.dart';
 @JsonSerializable()
 class SummarizeResult {
   String status;
-  String summary;
-  int length;
+  String? summary;
+  int? length;
   int creditsUsed;
   int remainingCredits;
+  String? error;
 
   SummarizeResult({
     required this.status,
-    required this.summary,
+    this.summary,
     required this.length,
     required this.creditsUsed,
     required this.remainingCredits,
@@ -27,7 +28,7 @@ class SummarizeResult {
 
   @override
   String toString() {
-    return 'SummarizeResult{status: $status, summary: $summary, length: $length, creditsUsed: $creditsUsed, remainingCredits: $remainingCredits}';
+    return 'SummarizeResult{status: $status, summary: $summary, length: $length, creditsUsed: $creditsUsed, remainingCredits: $remainingCredits, error: $error}';
   }
 }
 
