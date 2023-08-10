@@ -26,9 +26,7 @@ import 'package:puppeteer/puppeteer.dart';
 // `serverpod generate` to update the server and client code.
 class SnapEndpoint extends Endpoint {
 
-  final dio = Dio()..interceptors.add(LogInterceptor(
-    responseBody: true,
-  )); // Provide a dio instance
+  final dio = Dio(); //..interceptors.add(LogInterceptor(responseBody: true)); // Provide a dio instance
   final dotenv = DotEnv(includePlatformEnvironment: true)..load();
   final TimeService _timeService = TimeService();
 
