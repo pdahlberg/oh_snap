@@ -26,7 +26,7 @@ import 'package:puppeteer/puppeteer.dart';
 // `serverpod generate` to update the server and client code.
 class SnapEndpoint extends Endpoint {
 
-  final dio = Dio(); //..interceptors.add(LogInterceptor(responseBody: true)); // Provide a dio instance
+  final dio = Dio()..interceptors.add(LogInterceptor(responseBody: true)); // Provide a dio instance
   final dotenv = DotEnv(includePlatformEnvironment: true)..load();
   final TimeService _timeService = TimeService();
 
@@ -53,11 +53,10 @@ class SnapEndpoint extends Endpoint {
     var post = Post(captureurl: url, createdAt: now, modifiedAt: now);
     await session.db.insert(post);
 
-    /*
-
-    var captureTask = Task(
+    final captureTask = Task(
       postId: post.id!,
       type: TaskType.capture,
+      status: TaskStatus.pending,
       dependsOn: null,
       cost: 1,
       paid: 0,
@@ -67,82 +66,112 @@ class SnapEndpoint extends Endpoint {
     );
     await session.db.insert(captureTask);
 
-    var summarizeTask = Task(
+    final summarizeTask = Task(
       postId: post.id!,
-      type: TaskType.capture,
+      type: TaskType.summarize,
+      status: TaskStatus.pending,
       dependsOn: captureTask.id!,
       cost: 1,
       paid: 0,
-      paymentRequirement: PaymentRequirement.later,
+      paymentRequirement: PaymentRequirement.none,
       createdAt: now,
       modifiedAt: now,
     );
     await session.db.insert(summarizeTask);
 
-     */
-    var previewTask = Task(
+    final previewTask = Task(
       postId: post.id!,
       type: TaskType.share,
       status: TaskStatus.pending,
-      dependsOn: null, // todo: summarizeTask.id!,
+      dependsOn: summarizeTask.id!,
       cost: 1,
       paid: 0,
-      paymentRequirement: PaymentRequirement.upfront,
+      paymentRequirement: PaymentRequirement.none,
       createdAt: now,
       modifiedAt: now,
     );
     await session.db.insert(previewTask);
 
-    var createNftTask = Task(
+    final createNftTask = Task(
       postId: post.id!,
       type: TaskType.mint,
       status: TaskStatus.pending,
       dependsOn: previewTask.id!,
       cost: 1,
       paid: 0,
-      paymentRequirement: PaymentRequirement.upfront,
+      paymentRequirement: PaymentRequirement.none,
       createdAt: now,
       modifiedAt: now,
     );
     await session.db.insert(createNftTask);
 
-    final (screenshot, textContent) = await _takeScreenshot(session, url, removeButtons);
-    final (screenshotPermalinkUrl, screenshotSdriveUrl) = await _upload(session, screenshot, 'png');
-    post.imageUrl = screenshotPermalinkUrl;
-    post.text = textContent;
-    session.log('Screenshot uploaded: $screenshotPermalinkUrl');
 
-    final summaryForTitle = await _summarize(session, post.text!);
-    if(summaryForTitle == null) {
-      post.title = 'Untitled $now';
-    } else {
-      post.title = summaryForTitle;
-    }
-
-    await session.db.update(post);
-    
     //return SnapInfo(imageUrl: permalink);
     return post;
   }
 
-  /*Future<void> sharePrevTask(Session session) async {
-    var queryService = QueryService(session);
-    final tasks = await queryService.findTaskByTypeAndStatus(TaskType.mint, TaskStatus.pending);
-
-    for(var task in tasks) {
-      if(await _taskReady(task, queryService)) {
-        task.status = TaskStatus.inProgress;
-        session.db.update(task);
-
-        final post = await queryService.findPostById(task.postId);
-        session.log('Processing task ${task.id} ${task.type} since payment is ok');
-        await _sharePrevTask(post!, session);
-      }
+  Future<void> _validate({
+    required Session session,
+    required bool test,
+    required Task task,
+    required String msg,
+  }) async {
+    if(!test) {
+      task.status = TaskStatus.error;
+      task.statusMsg = msg;
+      await session.db.update(task);
     }
+    assert(test, msg);
+  }
 
-  }*/
+  Future<void> _captureTask(Post post, Task task, Session session) async {
+    await _validate(
+      session: session,
+      test: post.captureurl != null,
+      task: task,
+      msg: 'post.captureurl is null',
+    );
+
+    final (screenshot, textContent) = await _takeScreenshot(session, post.captureurl!, false);
+    final (screenshotPermalinkUrl, screenshotSdriveUrl) = await _upload(session, screenshot, 'png');
+    post.imageUrl = screenshotPermalinkUrl;
+    post.text = textContent;
+    session.log('Screenshot uploaded: $screenshotPermalinkUrl');
+    await session.db.update(post);
+
+    session.log('Task(${task.id}) captured');
+    task.status = TaskStatus.completed;
+    await session.db.update(task);
+  }
+
+  Future<void> _summarizeTask(Post post, Task task, Session session) async {
+    await _validate(
+      session: session,
+      test: post.text != null,
+      task: task,
+      msg: 'post.text is null',
+    );
+
+    var now = _timeService.now();
+    final summaryForTitle = await _summarize(session, post.text!);
+    if(summaryForTitle == null) {
+      post.title = 'Untitled $now';
+    } else {
+      post.title = summaryForTitle.trim().substring(0, 32); // 32 is the NFT max name length
+    }
+    await session.db.update(post);
+
+    session.log('Task(${task.id}) summarized');
+    task.status = TaskStatus.completed;
+    await session.db.update(task);
+  }
 
   Future<void> _sharePrevTask(Post post, Task task, Session session) async {
+    await _validate(session: session, test: post.imageUrl != null, task: task, msg: 'post.imageUrl is null');
+    await _validate(session: session, test: post.text != null, task: task, msg: 'post.text is null');
+    await _validate(session: session, test: post.title != null, task: task, msg: 'post.title is null');
+    await _validate(session: session, test: post.captureurl != null, task: task, msg: 'post.captureurl is null');
+
     var hasImage = true;
     String doc = _createSharablePreview(hasImage, post.imageUrl!, post.text!, post.title!, post.captureurl!);
     List<int> bytes = utf8.encode(doc);
@@ -183,16 +212,20 @@ class SnapEndpoint extends Endpoint {
 
     for(var task in tasks) {
       if(await _taskReady(task, queryService)) {
-
         final post = await queryService.findPostById(task.postId);
 
+        task.status = TaskStatus.inProgress;
+        session.db.update(task);
         session.log('Processing task ${task.id} ${task.type}');
+
         if(task.type == TaskType.mint) {
-          task.status = TaskStatus.inProgress;
-          session.db.update(task);
-          await _taskToNft(session, post!, task);
+          await _mintTask(session, post!, task);
+        } else if(task.type == TaskType.capture) {
+          await _captureTask(post!, task, session);
         } else if(task.type == TaskType.share) {
           await _sharePrevTask(post!, task, session);
+        } else if(task.type == TaskType.summarize) {
+          await _summarizeTask(post!, task, session);
         } else {
           session.log('Task type not implemented: ${task.type}');
           task.status = TaskStatus.pending;
@@ -207,14 +240,14 @@ class SnapEndpoint extends Endpoint {
 
 
 
-  Future<void> _taskToNft(Session session, Post post, Task task) async {
+  Future<void> _mintTask(Session session, Post post, Task task) async {
     assert(post.imageUrl != null);
     assert(post.title != null);
     assert(post.shareUrl != null);
     assert(post.shareAltUrl != null);
     assert(post.text != null);
 
-    final (createResponse, txId, exception) = await _createNft(
+    final (jsonResponse, txId, exception) = await _createNft(
       session: session,
       nftName: post.title!,
       imageUrl: post.imageUrl!,
@@ -224,15 +257,15 @@ class SnapEndpoint extends Endpoint {
       content: post.text!,
     );
 
-    if(createResponse != null) {
+    if(exception != null) {
+      task.status = TaskStatus.error;
+      task.statusMsg = '$exception with body: $jsonResponse';
+      session.log('Failed to mint NFT', level: LogLevel.error, exception: exception);
+    } else {
       task.status = TaskStatus.completed;
-      task.statusMsg = createResponse;
+      task.statusMsg = jsonResponse;
       post.transactionId = txId;
       await session.db.update(post);
-    } else {
-      task.status = TaskStatus.error;
-      task.statusMsg = exception.toString();
-      session.log('Failed to mint NFT', level: LogLevel.error, exception: exception);
     }
 
     await session.db.update(task);
@@ -383,8 +416,13 @@ class SnapEndpoint extends Endpoint {
       session.log('_createNft with underdog result: $result');
       var json = jsonEncode(result.toJson());
       return (json, result.transactionId, null);
+    } on DioException catch(e) {
+      session.log('_createNft with underdog error: ${e.message} / ${e.response}', exception: e, level: LogLevel.error);
+      var json = e.response?.toString();
+      return (json, null, e);
     } on Exception catch(e) {
       return (null, null, e);
     }
   }
 }
+

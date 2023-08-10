@@ -14,7 +14,7 @@ class QueryService {
       session: session,
       table: 'post',
       id: postId,
-      logQuery: true,
+      logQuery: false,
     ).then((value) => value.map((item) => _postFromRow(item)).firstOrNull);
   }
 

@@ -1,5 +1,6 @@
 enum: TaskType
 values:
   - capture
+  - summarize
   - share
   - mint

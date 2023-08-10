@@ -10,6 +10,7 @@ import 'package:serverpod/serverpod.dart' as _i1;
 
 enum TaskType with _i1.SerializableEntity {
   capture,
+  summarize,
   share,
   mint;
 
@@ -18,8 +19,10 @@ enum TaskType with _i1.SerializableEntity {
       case 0:
         return capture;
       case 1:
-        return share;
+        return summarize;
       case 2:
+        return share;
+      case 3:
         return mint;
       default:
         return null;
