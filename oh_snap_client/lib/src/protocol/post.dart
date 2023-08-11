@@ -16,6 +16,7 @@ class Post extends _i1.SerializableEntity {
     this.text,
     this.imageUrl,
     this.captureurl,
+    required this.filename,
     this.shareUrl,
     this.shareAltUrl,
     this.tasks,
@@ -39,6 +40,8 @@ class Post extends _i1.SerializableEntity {
           .deserialize<String?>(jsonSerialization['imageUrl']),
       captureurl: serializationManager
           .deserialize<String?>(jsonSerialization['captureurl']),
+      filename: serializationManager
+          .deserialize<String>(jsonSerialization['filename']),
       shareUrl: serializationManager
           .deserialize<String?>(jsonSerialization['shareUrl']),
       shareAltUrl: serializationManager
@@ -69,6 +72,8 @@ class Post extends _i1.SerializableEntity {
 
   String? captureurl;
 
+  String filename;
+
   String? shareUrl;
 
   String? shareAltUrl;
@@ -91,6 +96,7 @@ class Post extends _i1.SerializableEntity {
       'text': text,
       'imageUrl': imageUrl,
       'captureurl': captureurl,
+      'filename': filename,
       'shareUrl': shareUrl,
       'shareAltUrl': shareAltUrl,
       'tasks': tasks,

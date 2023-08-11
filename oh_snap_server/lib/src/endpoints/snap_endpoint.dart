@@ -16,6 +16,8 @@ import 'package:oh_snap_server/src/endpoints/share_preview_template.dart';
 import 'package:oh_snap_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:puppeteer/puppeteer.dart';
+import 'package:http_parser/http_parser.dart' as http_parser;
+import 'package:http/http.dart' as http;
 
 // This is an example endpoint of your server. It's best practice to use the
 // `Endpoint` ending of the class name, but it will be removed when accessing
@@ -50,7 +52,11 @@ class SnapEndpoint extends Endpoint {
       session.log('Post capture for: $url');
     }
 
-    var post = Post(captureurl: url, createdAt: now, modifiedAt: now);
+    String filename = url
+        .replaceAll('https://twitter.com/', 'twitter_')
+        .replaceAll('/', '_');
+
+    var post = Post(filename: filename, captureurl: url, createdAt: now, modifiedAt: now);
     await session.db.insert(post);
 
     final captureTask = Task(
@@ -105,7 +111,6 @@ class SnapEndpoint extends Endpoint {
     );
     await session.db.insert(createNftTask);
 
-
     //return SnapInfo(imageUrl: permalink);
     return post;
   }
@@ -133,7 +138,8 @@ class SnapEndpoint extends Endpoint {
     );
 
     final (screenshot, textContent) = await _takeScreenshot(session, post.captureurl!, false);
-    final (screenshotPermalinkUrl, screenshotSdriveUrl) = await _upload(session, screenshot, 'png');
+    //String filename = '${_textToFilename(post.title!)}.png';
+    final (screenshotPermalinkUrl, screenshotSdriveUrl) = await _upload(session, screenshot, 'png', 'image/png', post.filename);
     post.imageUrl = screenshotPermalinkUrl;
     post.text = textContent;
     session.log('Screenshot uploaded: $screenshotPermalinkUrl');
@@ -152,12 +158,13 @@ class SnapEndpoint extends Endpoint {
       msg: 'post.text is null',
     );
 
-    var now = _timeService.now();
     final summaryForTitle = await _summarize(session, post.text!);
-    if(summaryForTitle == null) {
-      post.title = 'Untitled $now';
-    } else {
-      post.title = summaryForTitle.trim().substring(0, 32); // 32 is the NFT max name length
+    if(summaryForTitle != null) {
+      if(summaryForTitle.length < 32) {
+        post.title = summaryForTitle.trim(); // 32 is the NFT max name length
+      } else {
+        post.title = summaryForTitle.trim().substring(0, 32); // 32 is the NFT max name length
+      }
     }
     await session.db.update(post);
 
@@ -175,7 +182,7 @@ class SnapEndpoint extends Endpoint {
     var hasImage = true;
     String doc = _createSharablePreview(hasImage, post.imageUrl!, post.text!, post.title!, post.captureurl!);
     List<int> bytes = utf8.encode(doc);
-    final (sharePreviewPermalinkUrl, sharePreviewSdriveUrl) = await _upload(session, bytes, 'html');
+    final (sharePreviewPermalinkUrl, sharePreviewSdriveUrl) = await _upload(session, bytes, 'html', 'text/html', post.filename);
     post.shareUrl = sharePreviewPermalinkUrl;
     post.shareAltUrl = sharePreviewSdriveUrl;
     await session.db.update(post);
@@ -212,26 +219,32 @@ class SnapEndpoint extends Endpoint {
 
     for(var task in tasks) {
       if(await _taskReady(task, queryService)) {
-        final post = await queryService.findPostById(task.postId);
+        try {
+          final post = await queryService.findPostById(task.postId);
 
-        task.status = TaskStatus.inProgress;
-        session.db.update(task);
-        session.log('Processing task ${task.id} ${task.type}');
-
-        if(task.type == TaskType.mint) {
-          await _mintTask(session, post!, task);
-        } else if(task.type == TaskType.capture) {
-          await _captureTask(post!, task, session);
-        } else if(task.type == TaskType.share) {
-          await _sharePrevTask(post!, task, session);
-        } else if(task.type == TaskType.summarize) {
-          await _summarizeTask(post!, task, session);
-        } else {
-          session.log('Task type not implemented: ${task.type}');
-          task.status = TaskStatus.pending;
+          task.status = TaskStatus.inProgress;
           session.db.update(task);
-        }
+          session.log('Processing task ${task.id} ${task.type}');
 
+          if(task.type == TaskType.mint) {
+            await _mintTask(session, post!, task);
+          } else if(task.type == TaskType.capture) {
+            await _captureTask(post!, task, session);
+          } else if(task.type == TaskType.share) {
+            await _sharePrevTask(post!, task, session);
+          } else if(task.type == TaskType.summarize) {
+            await _summarizeTask(post!, task, session);
+          } else {
+            session.log('Task type not implemented: ${task.type}');
+            task.status = TaskStatus.pending;
+            session.db.update(task);
+          }
+        } catch (e) {
+          task.status = TaskStatus.error;
+          task.statusMsg = e.toString();
+          session.db.update(task);
+          session.log('Processing task error: ${task.id} ${task.type} => $e');
+        }
       } else {
         session.log('Task ${task.id} ${task.type} not ready');
       }
@@ -372,16 +385,20 @@ class SnapEndpoint extends Endpoint {
     }
   }
 
-  Future<(String, String)> _upload(Session session, List<int> bytes, String suffix) async {
-    final timestamp = _timeService.now().millisecond.toString();
-    var tempDir = Directory.systemTemp.path;
-    File file = File('$tempDir/share_preview_$timestamp.$suffix')..writeAsBytesSync(bytes);
+  Future<(String, String)> _upload(Session session, List<int> bytes, String suffix, String contentType, String filename) async {
     final username = dotenv['sdrive_username']!;
     final apikey = dotenv['sdrive_apikey']!;
 
     final sdrive = SDriveApi(dio);
-    final result = await sdrive.upload(file, username, apikey);
-    session.log('Upload result: $result');
+    final result = await sdrive.dioUpload(
+      dio: dio,
+      bytes: bytes,
+      filename: filename,
+      contentType: contentType,
+      username: username,
+      apikey: apikey,
+    );
+
     return (result.permalink, result.file);
   }
 

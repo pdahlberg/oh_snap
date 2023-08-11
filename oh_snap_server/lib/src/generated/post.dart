@@ -16,6 +16,7 @@ class Post extends _i1.TableRow {
     this.text,
     this.imageUrl,
     this.captureurl,
+    required this.filename,
     this.shareUrl,
     this.shareAltUrl,
     this.tasks,
@@ -39,6 +40,8 @@ class Post extends _i1.TableRow {
           .deserialize<String?>(jsonSerialization['imageUrl']),
       captureurl: serializationManager
           .deserialize<String?>(jsonSerialization['captureurl']),
+      filename: serializationManager
+          .deserialize<String>(jsonSerialization['filename']),
       shareUrl: serializationManager
           .deserialize<String?>(jsonSerialization['shareUrl']),
       shareAltUrl: serializationManager
@@ -66,6 +69,8 @@ class Post extends _i1.TableRow {
 
   String? captureurl;
 
+  String filename;
+
   String? shareUrl;
 
   String? shareAltUrl;
@@ -90,6 +95,7 @@ class Post extends _i1.TableRow {
       'text': text,
       'imageUrl': imageUrl,
       'captureurl': captureurl,
+      'filename': filename,
       'shareUrl': shareUrl,
       'shareAltUrl': shareAltUrl,
       'tasks': tasks,
@@ -108,6 +114,7 @@ class Post extends _i1.TableRow {
       'text': text,
       'imageUrl': imageUrl,
       'captureurl': captureurl,
+      'filename': filename,
       'shareUrl': shareUrl,
       'shareAltUrl': shareAltUrl,
       'address': address,
@@ -125,6 +132,7 @@ class Post extends _i1.TableRow {
       'text': text,
       'imageUrl': imageUrl,
       'captureurl': captureurl,
+      'filename': filename,
       'shareUrl': shareUrl,
       'shareAltUrl': shareAltUrl,
       'tasks': tasks,
@@ -155,6 +163,9 @@ class Post extends _i1.TableRow {
         return;
       case 'captureurl':
         captureurl = value;
+        return;
+      case 'filename':
+        filename = value;
         return;
       case 'shareUrl':
         shareUrl = value;
@@ -306,6 +317,8 @@ class PostTable extends _i1.Table {
 
   final captureurl = _i1.ColumnString('captureurl');
 
+  final filename = _i1.ColumnString('filename');
+
   final shareUrl = _i1.ColumnString('shareUrl');
 
   final shareAltUrl = _i1.ColumnString('shareAltUrl');
@@ -325,6 +338,7 @@ class PostTable extends _i1.Table {
         text,
         imageUrl,
         captureurl,
+        filename,
         shareUrl,
         shareAltUrl,
         address,

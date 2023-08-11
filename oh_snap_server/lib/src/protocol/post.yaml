@@ -5,6 +5,7 @@ fields:
   text: String?,
   imageUrl: String?,
   captureurl: String?
+  filename: String,
   shareUrl: String?
   shareAltUrl: String?
   tasks: List<Task>?, api

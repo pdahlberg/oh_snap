@@ -8,6 +8,7 @@ CREATE TABLE "post" (
   "text" text,
   "imageUrl" text,
   "captureurl" text,
+  "filename" text NOT NULL,
   "shareUrl" text,
   "shareAltUrl" text,
   "address" text,

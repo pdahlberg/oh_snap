@@ -82,6 +82,7 @@ class QueryService {
       text: row[column++] as String?,
       imageUrl: row[column++] as String?,
       captureurl: row[column++] as String?,
+      filename: row[column++] as String,
       shareUrl: row[column++] as String?,
       shareAltUrl: row[column++] as String?,
       address: row[column++] as String?,

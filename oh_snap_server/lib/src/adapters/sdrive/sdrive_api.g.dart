@@ -21,53 +21,6 @@ class _SDriveApi implements SDriveApi {
   String? baseUrl;
 
   @override
-  Future<UploadResult> upload(
-    File fileupload,
-    String username,
-    String apikey,
-  ) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.files.add(MapEntry(
-      'fileupload',
-      MultipartFile.fromFileSync(
-        fileupload.path,
-        filename: fileupload.path.split(Platform.pathSeparator).last,
-      ),
-    ));
-    _data.fields.add(MapEntry(
-      'username',
-      username,
-    ));
-    _data.fields.add(MapEntry(
-      'apikey',
-      apikey,
-    ));
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<UploadResult>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-      contentType: 'multipart/form-data',
-    )
-            .compose(
-              _dio.options,
-              '/upload',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = UploadResult.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
   Future<SummarizeResult> summarize(SummarizeRequest request) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
