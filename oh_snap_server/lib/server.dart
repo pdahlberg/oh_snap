@@ -21,7 +21,7 @@ void run(List<String> args) async {
   // If you are using any future calls, they need to be registered here.
   // pod.registerFutureCall(ExampleFutureCall(), 'exampleFutureCall');
 
-  pod.webServer.addRoute(MatricaAuthRoute(), '/auth/*');
+  pod.webServer.addRoute(MatricaAuthRoute(), '/some/*');
 
   // Setup a default page at the web root.
   pod.webServer.addRoute(RouteRoot(), '/');
