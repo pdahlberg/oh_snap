@@ -21,6 +21,8 @@ void run(List<String> args) async {
   // If you are using any future calls, they need to be registered here.
   // pod.registerFutureCall(ExampleFutureCall(), 'exampleFutureCall');
 
+  pod.webServer.addRoute(MatricaAuthRoute(), '/auth/*');
+  
   // Setup a default page at the web root.
   pod.webServer.addRoute(RouteRoot(), '/');
   pod.webServer.addRoute(RouteRoot(), '/index.html');
@@ -30,7 +32,6 @@ void run(List<String> args) async {
     '/*',
   );
 
-  pod.webServer.addRoute(MatricaAuthRoute(), '/auth/callback');
 
   // Start the server.
   await pod.start();
