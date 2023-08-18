@@ -1,0 +1,7 @@
+class: User
+table: user
+fields:
+  address: String,
+  credits: int,
+  createdAt: DateTime,
+  modifiedAt: DateTime,

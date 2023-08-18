@@ -48,3 +48,19 @@ ALTER TABLE ONLY "task"
       REFERENCES post(id)
         ON DELETE CASCADE;
 
+--
+-- Class User as table user
+--
+
+CREATE TABLE "user" (
+  "id" serial,
+  "address" text NOT NULL,
+  "credits" integer NOT NULL,
+  "createdAt" timestamp without time zone NOT NULL,
+  "modifiedAt" timestamp without time zone NOT NULL
+);
+
+ALTER TABLE ONLY "user"
+  ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+
+
