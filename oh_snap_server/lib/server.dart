@@ -22,7 +22,7 @@ void run(List<String> args) async {
   // pod.registerFutureCall(ExampleFutureCall(), 'exampleFutureCall');
 
   pod.webServer.addRoute(MatricaAuthRoute(), '/auth/*');
-  
+
   // Setup a default page at the web root.
   pod.webServer.addRoute(RouteRoot(), '/');
   pod.webServer.addRoute(RouteRoot(), '/index.html');
