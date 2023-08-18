@@ -16,7 +16,9 @@ import 'snap_info.dart' as _i6;
 import 'task.dart' as _i7;
 import 'task_status.dart' as _i8;
 import 'task_type.dart' as _i9;
-import 'protocol.dart' as _i10;
+import 'user.dart' as _i10;
+import 'protocol.dart' as _i11;
+import 'package:serverpod_auth_client/module.dart' as _i12;
 export 'nft.dart';
 export 'nft_list.dart';
 export 'payment_requirement.dart';
@@ -25,6 +27,7 @@ export 'snap_info.dart';
 export 'task.dart';
 export 'task_status.dart';
 export 'task_type.dart';
+export 'user.dart';
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -69,6 +72,9 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i9.TaskType) {
       return _i9.TaskType.fromJson(data) as T;
     }
+    if (t == _i10.User) {
+      return _i10.User.fromJson(data, this) as T;
+    }
     if (t == _i1.getType<_i2.Nft?>()) {
       return (data != null ? _i2.Nft.fromJson(data, this) : null) as T;
     }
@@ -93,20 +99,31 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i9.TaskType?>()) {
       return (data != null ? _i9.TaskType.fromJson(data) : null) as T;
     }
-    if (t == List<_i10.Nft>) {
-      return (data as List).map((e) => deserialize<_i10.Nft>(e)).toList()
+    if (t == _i1.getType<_i10.User?>()) {
+      return (data != null ? _i10.User.fromJson(data, this) : null) as T;
+    }
+    if (t == List<_i11.Nft>) {
+      return (data as List).map((e) => deserialize<_i11.Nft>(e)).toList()
           as dynamic;
     }
-    if (t == _i1.getType<List<_i10.Task>?>()) {
+    if (t == _i1.getType<List<_i11.Task>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i10.Task>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i11.Task>(e)).toList()
           : null) as dynamic;
     }
+    try {
+      return _i12.Protocol().deserialize<T>(data, t);
+    } catch (_) {}
     return super.deserialize<T>(data, t);
   }
 
   @override
   String? getClassNameForObject(Object data) {
+    String? className;
+    className = _i12.Protocol().getClassNameForObject(data);
+    if (className != null) {
+      return 'serverpod_auth.$className';
+    }
     if (data is _i2.Nft) {
       return 'Nft';
     }
@@ -131,11 +148,18 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i9.TaskType) {
       return 'TaskType';
     }
+    if (data is _i10.User) {
+      return 'User';
+    }
     return super.getClassNameForObject(data);
   }
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
+    if (data['className'].startsWith('serverpod_auth.')) {
+      data['className'] = data['className'].substring(15);
+      return _i12.Protocol().deserializeByClassName(data);
+    }
     if (data['className'] == 'Nft') {
       return deserialize<_i2.Nft>(data['data']);
     }
@@ -159,6 +183,9 @@ class Protocol extends _i1.SerializationManager {
     }
     if (data['className'] == 'TaskType') {
       return deserialize<_i9.TaskType>(data['data']);
+    }
+    if (data['className'] == 'User') {
+      return deserialize<_i10.User>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
