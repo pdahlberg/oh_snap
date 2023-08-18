@@ -1,3 +1,4 @@
+import 'package:oh_snap_server/src/web/routes/matrica_auth_route.dart';
 import 'package:oh_snap_server/src/web/routes/root.dart';
 import 'package:serverpod/protocol.dart';
 import 'package:serverpod/serverpod.dart';
@@ -28,6 +29,8 @@ void run(List<String> args) async {
     RouteStaticDirectory(serverDirectory: 'static', basePath: '/'),
     '/*',
   );
+
+  pod.webServer.addRoute(MatricaAuthRoute(), '/auth/callback');
 
   // Start the server.
   await pod.start();
