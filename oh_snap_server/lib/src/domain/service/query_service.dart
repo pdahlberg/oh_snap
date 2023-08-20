@@ -9,6 +9,15 @@ class QueryService {
 
   QueryService(this.session);
 
+  Future<User?> findUserByMatricaId(String matricaId) async {
+    return _findEntityBy(
+      session: session,
+      table: 'app_user',
+      matricaId: matricaId,
+      logQuery: false,
+    ).then((value) => value.map((item) => _userFromRow(item)).firstOrNull);
+  }
+
   Future<Post?> findPostById(int postId) async {
     return _findEntityBy(
       session: session,
@@ -49,12 +58,14 @@ class QueryService {
     String? captureUrl,
     int? type,
     int? status,
+    String? matricaId,
     bool logQuery = false,
   }) async {
     var idClause = id?.let((value) => ' AND t.id = $value') ?? '';
     var captureUrlClause = captureUrl?.let((value) => " AND t.captureurl = '$value'") ?? '';
     var typeClause = type?.let((value) => ' AND t.type = $value') ?? '';
     var statusClause = status?.let((value) => ' AND t.status = $value') ?? '';
+    var matricaIdClause = matricaId?.let((value) => ' AND t.matricaId = $value') ?? '';
 
     var query = '''
         SELECT * FROM $table t
@@ -63,6 +74,7 @@ class QueryService {
         $captureUrlClause
         $typeClause
         $statusClause
+        $matricaIdClause
       ''';
 
     if(logQuery) {
@@ -105,6 +117,19 @@ class QueryService {
       statusMsg: row[8] as String?,
       createdAt: row[9] as DateTime,
       modifiedAt: row[10] as DateTime,
+    );
+  }
+
+  User _userFromRow(List<dynamic> row) {
+    int column = 0;
+    return User(
+      id: row[column++] as int,
+      username: row[column++] as String,
+      matricaId: row[column++] as String,
+      matricaAccessToken: row[column++] as String,
+      matricaRefreshToken: row[column++] as String,
+      createdAt: row[column++] as DateTime,
+      modifiedAt: row[column++] as DateTime,
     );
   }
 

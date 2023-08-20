@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:oh_snap_server/src/adapters/matrica/matrica_api.dart';
+import 'package:oh_snap_server/src/domain/service/query_service.dart';
 import 'package:oh_snap_server/src/domain/service/time_service.dart';
+import 'package:oh_snap_server/src/generated/protocol.dart';
 import 'package:pkce/pkce.dart';
 import 'package:serverpod/serverpod.dart';
 
@@ -24,15 +26,12 @@ class MatricaAuthRoute extends WidgetRoute {
 */
     final clientId = session.passwords['matricaClientId'];
     final clientSecret = session.passwords['matricaClientSecret'];
-    final codeVerifier = session.passwords['matricaCodeVerifier'];
-    final database = session.passwords['database'];
-    final test = session.passwords['test'];
+    final codeVerifier = session.passwords['matricaCodeVerifier']; // Obviously not the right way, but for now wtf
     final code = request.uri.queryParameters['code'];
     final state = request.uri.queryParameters['state'];
-    final dog = session.passwords['underdogApikey'];
 
-    session.log('clientId: $clientId, clientSecret: $clientSecret, code: $code, '
-        'codeVerifier: $codeVerifier, database: $database, test value: $test, 2, dog: $dog');
+    //session.log('clientId: $clientId, clientSecret: $clientSecret, code: $code, '
+    //    'codeVerifier: $codeVerifier, database: $database, test value: $test, 2, dog: $dog');
 
     assert(clientId != null, 'Matrica client ID is null');
     var clientId2 = clientId!;
@@ -59,6 +58,47 @@ class MatricaAuthRoute extends WidgetRoute {
 
     session.log('fetchAccessToken result: $accessTokenResult');
 
+    final userResponse = await matrica.fetchUserProfile(authorization: 'Bearer ${accessTokenResult.access_token}');
+    final matricaId = userResponse.id;
+
+    session.log('fetchUserProfile result: $userResponse');
+
+    var user = await QueryService(session).findUserByMatricaId(matricaId);
+    if(user == null) {
+      user = User(
+        username: userResponse.username,
+        matricaId: matricaId,
+        matricaAccessToken: accessTokenResult.access_token,
+        matricaRefreshToken: accessTokenResult.refresh_token,
+        modifiedAt: _timeService.now(),
+        createdAt: _timeService.now(),
+      );
+
+      session.db.insert(user);
+    } else {
+      var changed = false;
+
+      if(user.username != userResponse.username) {
+        user.username = userResponse.username;
+        changed = true;
+      }
+
+      if(user.matricaAccessToken != accessTokenResult.access_token) {
+        user.matricaAccessToken = accessTokenResult.access_token;
+        changed = true;
+      }
+
+      if(user.matricaRefreshToken != accessTokenResult.refresh_token) {
+        user.matricaRefreshToken = accessTokenResult.refresh_token;
+        changed = true;
+      }
+
+      if(changed) {
+        user.modifiedAt = _timeService.now();
+        session.db.update(user);
+      }
+    }
+
     /*final refreshedToken = await matrica.refreshAccessToken(
       refreshToken: accessTokenResult.refresh_token,
       clientId: clientId2,
@@ -70,7 +110,7 @@ class MatricaAuthRoute extends WidgetRoute {
 
     final widget = WidgetJson(
       object: {
-        'message': 'Welcome!',
+        'message': 'Welcome ${user.username}!',
       },
     );
 

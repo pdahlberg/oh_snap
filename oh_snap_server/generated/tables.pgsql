@@ -1,4 +1,22 @@
 --
+-- Class User as table app_user
+--
+
+CREATE TABLE "app_user" (
+  "id" serial,
+  "username" text NOT NULL,
+  "matricaId" text NOT NULL,
+  "matricaAccessToken" text NOT NULL,
+  "matricaRefreshToken" text NOT NULL,
+  "createdAt" timestamp without time zone NOT NULL,
+  "modifiedAt" timestamp without time zone NOT NULL
+);
+
+ALTER TABLE ONLY "app_user"
+  ADD CONSTRAINT app_user_pkey PRIMARY KEY (id);
+
+
+--
 -- Class Post as table post
 --
 
