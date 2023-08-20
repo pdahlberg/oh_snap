@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:oh_snap_server/src/adapters/matrica/token_response.dart';
+import 'package:oh_snap_server/src/adapters/matrica/access_token_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'matrica_api.g.dart';
@@ -9,8 +9,7 @@ abstract class MatricaApi {
   factory MatricaApi(Dio dio, {String baseUrl}) = _MatricaApi;
 
   @POST("/oauth2/token")
-  // Content-Type: application/x-www-form-urlencoded
-  Future<TokenResponse> fetchOauth2Token({
+  Future<AccessTokenResponse> fetchAccessToken({
     @Header("Content-Type") String contentType = 'application/x-www-form-urlencoded',
     @Field("grant_type") String grantType = 'authorization_code',
     @Field("code") required String code,
@@ -18,14 +17,15 @@ abstract class MatricaApi {
     @Field("client_id") required String clientId,
     @Field("client_secret") required String clientSecret,
     @Field("code_verifier") required String codeVerifier,
-    /*
-grant_type : Must be set to authorization_code
-code : The code that you received.
-redirect_uri : The callback redirect URI originally requested.
-client_id : Your application ID.
-client_secret (optional): Only if your application is set to "Private".
-code_verifier : PKCE code verifier.
-      * */
+  });
+
+  @POST("/oauth2/token")
+  Future<AccessTokenResponse> refreshAccessToken({
+    @Header("Content-Type") String contentType = 'application/x-www-form-urlencoded',
+    @Field("grant_type") String grantType = 'refresh_token',
+    @Field("refresh_token") required String refreshToken,
+    @Field("client_id") required String clientId,
+    @Field("client_secret") required String clientSecret,
   });
 
 }

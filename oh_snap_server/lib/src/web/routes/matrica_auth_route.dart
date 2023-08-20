@@ -49,13 +49,23 @@ class MatricaAuthRoute extends WidgetRoute {
     session.log('Matrical callback state: $state');
 
     final matrica = MatricaApi(dio);
-    matrica.fetchOauth2Token(
+    final accessTokenResult = await matrica.fetchAccessToken(
       code: code2,
       redirectUri: 'https://app.ohsnap.app/auth/callback',
       clientId: clientId2,
       clientSecret: clientSecret2,
       codeVerifier: codeVerifier2,
     );
+
+    session.log('fetchAccessToken result: $accessTokenResult');
+
+    final refreshedToken = await matrica.refreshAccessToken(
+      refreshToken: accessTokenResult.refresh_token,
+      clientId: clientId2,
+      clientSecret: clientSecret2,
+    );
+
+    session.log('refreshAccessToken result: $refreshedToken');
 
     final widget = WidgetJson(
       object: {

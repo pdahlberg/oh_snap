@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'token_response.g.dart';
+part 'access_token_response.g.dart';
 
 /*
 {
@@ -13,14 +13,14 @@ part 'token_response.g.dart';
  */
 
 @JsonSerializable()
-class TokenResponse {
+class AccessTokenResponse {
   final String access_token;
   final String token_type;
   final String refresh_token;
   final int expires_in;
   final String scope;
 
-  TokenResponse({
+  AccessTokenResponse({
     required this.access_token,
     required this.token_type,
     required this.refresh_token,
@@ -28,8 +28,14 @@ class TokenResponse {
     required this.scope,
   });
 
-  factory TokenResponse.fromJson(Map<String, dynamic> json) => _$TokenResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$TokenResponseToJson(this);
+  factory AccessTokenResponse.fromJson(Map<String, dynamic> json) => _$AccessTokenResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$AccessTokenResponseToJson(this);
+
+  @override
+  String toString() {
+    return 'AccessTokenResponse{access_token: $access_token, token_type: $token_type, refresh_token: $refresh_token, expires_in: $expires_in, scope: $scope}';
+  }
+
 }
 
 

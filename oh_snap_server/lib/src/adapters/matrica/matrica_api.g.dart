@@ -21,7 +21,7 @@ class _MatricaApi implements MatricaApi {
   String? baseUrl;
 
   @override
-  Future<TokenResponse> fetchOauth2Token({
+  Future<AccessTokenResponse> fetchAccessToken({
     String contentType = 'application/x-www-form-urlencoded',
     String grantType = 'authorization_code',
     required String code,
@@ -42,8 +42,8 @@ class _MatricaApi implements MatricaApi {
       'client_secret': clientSecret,
       'code_verifier': codeVerifier,
     };
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<TokenResponse>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<AccessTokenResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -60,7 +60,47 @@ class _MatricaApi implements MatricaApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = TokenResponse.fromJson(_result.data!);
+    final value = AccessTokenResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<AccessTokenResponse> refreshAccessToken({
+    String contentType = 'application/x-www-form-urlencoded',
+    String grantType = 'refresh_token',
+    required String refreshToken,
+    required String clientId,
+    required String clientSecret,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Content-Type': contentType};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = {
+      'grant_type': grantType,
+      'refresh_token': refreshToken,
+      'client_id': clientId,
+      'client_secret': clientSecret,
+    };
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<AccessTokenResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: contentType,
+    )
+            .compose(
+              _dio.options,
+              '/oauth2/token',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = AccessTokenResponse.fromJson(_result.data!);
     return value;
   }
 
