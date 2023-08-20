@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dotenv/dotenv.dart';
 import 'package:oh_snap_server/src/adapters/matrica/matrica_api.dart';
 import 'package:oh_snap_server/src/domain/service/time_service.dart';
 import 'package:pkce/pkce.dart';
@@ -59,13 +58,14 @@ class MatricaAuthRoute extends WidgetRoute {
 
     session.log('fetchAccessToken result: $accessTokenResult');
 
-    final refreshedToken = await matrica.refreshAccessToken(
+    /*final refreshedToken = await matrica.refreshAccessToken(
       refreshToken: accessTokenResult.refresh_token,
       clientId: clientId2,
       clientSecret: clientSecret2,
     );
 
     session.log('refreshAccessToken result: $refreshedToken');
+    */
 
     final widget = WidgetJson(
       object: {
