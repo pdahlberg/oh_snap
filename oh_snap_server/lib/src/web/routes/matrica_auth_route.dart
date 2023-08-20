@@ -11,12 +11,10 @@ class MatricaAuthRoute extends WidgetRoute {
 
   // Move to DI, will Provider work on Server as well?
   final dio = Dio()..interceptors.add(LogInterceptor(responseBody: true)); // Provide a dio instance
-  final dotenv = DotEnv(includePlatformEnvironment: true)..load();
   final TimeService _timeService = TimeService();
 
   @override
   Future<WidgetJson> build(Session session, HttpRequest request) async {
-    dotenv.load();
     session.log('MatricaAuthRoute called: ${request.uri}, shared pw: ${session.passwords['mySharedPassword']}');
 
     final pkcePair = PkcePair.generate();
@@ -25,8 +23,8 @@ class MatricaAuthRoute extends WidgetRoute {
     var codeChallenge = pkcePair.codeChallenge;
     session.log('codeChallenge: $codeChallenge');
 
-    final clientId = dotenv['matrica_client_id'];
-    final clientSecret = dotenv['matrica_client_secret'];
+    final clientId = session.passwords['matricaClientId'];
+    final clientSecret = session.passwords['matricaClientSecret'];
     final code = request.uri.queryParameters['code'];
     final state = request.uri.queryParameters['state'];
 
