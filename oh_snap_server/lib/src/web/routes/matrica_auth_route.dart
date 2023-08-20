@@ -29,9 +29,10 @@ class MatricaAuthRoute extends WidgetRoute {
     final test = session.passwords['test'];
     final code = request.uri.queryParameters['code'];
     final state = request.uri.queryParameters['state'];
+    final dog = session.passwords['underdogApikey'];
 
     session.log('clientId: $clientId, clientSecret: $clientSecret, code: $code, '
-        'codeVerifier: $codeVerifier, database: $database, test value: $test, 2');
+        'codeVerifier: $codeVerifier, database: $database, test value: $test, 2, dog: $dog');
 
     assert(clientId != null, 'Matrica client ID is null');
     var clientId2 = clientId!;
@@ -58,14 +59,14 @@ class MatricaAuthRoute extends WidgetRoute {
 
     session.log('fetchAccessToken result: $accessTokenResult');
 
-    final refreshedToken = await matrica.refreshAccessToken(
+    /*final refreshedToken = await matrica.refreshAccessToken(
       refreshToken: accessTokenResult.refresh_token,
       clientId: clientId2,
       clientSecret: clientSecret2,
     );
 
     session.log('refreshAccessToken result: $refreshedToken');
-    
+    */
 
     final widget = WidgetJson(
       object: {
