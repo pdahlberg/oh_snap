@@ -29,6 +29,8 @@ class MatricaAuthRoute extends WidgetRoute {
     final code = request.uri.queryParameters['code'];
     final state = request.uri.queryParameters['state'];
 
+    session.log('clientId: $clientId, clientSecret: $clientSecret, code: $code, codeVerifier: $codeVerifier');
+
     assert(clientId != null, 'Matrica client ID is null');
     var clientId2 = clientId!;
 
