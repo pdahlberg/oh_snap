@@ -65,7 +65,7 @@ class QueryService {
     var captureUrlClause = captureUrl?.let((value) => " AND t.captureurl = '$value'") ?? '';
     var typeClause = type?.let((value) => ' AND t.type = $value') ?? '';
     var statusClause = status?.let((value) => ' AND t.status = $value') ?? '';
-    var matricaIdClause = matricaId?.let((value) => ' AND t.matricaId = $value') ?? '';
+    var matricaIdClause = matricaId?.let((value) => " AND t.matricaId = '$value'") ?? '';
 
     var query = '''
         SELECT * FROM $table t
