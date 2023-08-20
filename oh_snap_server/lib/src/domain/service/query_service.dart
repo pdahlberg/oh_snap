@@ -65,7 +65,7 @@ class QueryService {
     var captureUrlClause = captureUrl?.let((value) => " AND t.captureurl = '$value'") ?? '';
     var typeClause = type?.let((value) => ' AND t.type = $value') ?? '';
     var statusClause = status?.let((value) => ' AND t.status = $value') ?? '';
-    var matricaIdClause = matricaId?.let((value) => " AND t.matricaId = '$value'") ?? '';
+    var matricaIdClause = matricaId?.let((value) => " AND t.matricaid = '$value'") ?? '';
 
     var query = '''
         SELECT * FROM $table t
@@ -125,7 +125,7 @@ class QueryService {
     return User(
       id: row[column++] as int,
       username: row[column++] as String,
-      matricaId: row[column++] as String,
+      matricaid: row[column++] as String,
       matricaAccessToken: row[column++] as String,
       matricaRefreshToken: row[column++] as String,
       createdAt: row[column++] as DateTime,

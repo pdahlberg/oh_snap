@@ -12,7 +12,7 @@ class User extends _i1.TableRow {
   User({
     int? id,
     required this.username,
-    required this.matricaId,
+    required this.matricaid,
     required this.matricaAccessToken,
     required this.matricaRefreshToken,
     required this.createdAt,
@@ -27,8 +27,8 @@ class User extends _i1.TableRow {
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
       username: serializationManager
           .deserialize<String>(jsonSerialization['username']),
-      matricaId: serializationManager
-          .deserialize<String>(jsonSerialization['matricaId']),
+      matricaid: serializationManager
+          .deserialize<String>(jsonSerialization['matricaid']),
       matricaAccessToken: serializationManager
           .deserialize<String>(jsonSerialization['matricaAccessToken']),
       matricaRefreshToken: serializationManager
@@ -44,7 +44,7 @@ class User extends _i1.TableRow {
 
   String username;
 
-  String matricaId;
+  String matricaid;
 
   String matricaAccessToken;
 
@@ -61,7 +61,7 @@ class User extends _i1.TableRow {
     return {
       'id': id,
       'username': username,
-      'matricaId': matricaId,
+      'matricaid': matricaid,
       'matricaAccessToken': matricaAccessToken,
       'matricaRefreshToken': matricaRefreshToken,
       'createdAt': createdAt,
@@ -74,7 +74,7 @@ class User extends _i1.TableRow {
     return {
       'id': id,
       'username': username,
-      'matricaId': matricaId,
+      'matricaid': matricaid,
       'matricaAccessToken': matricaAccessToken,
       'matricaRefreshToken': matricaRefreshToken,
       'createdAt': createdAt,
@@ -87,7 +87,7 @@ class User extends _i1.TableRow {
     return {
       'id': id,
       'username': username,
-      'matricaId': matricaId,
+      'matricaid': matricaid,
       'matricaAccessToken': matricaAccessToken,
       'matricaRefreshToken': matricaRefreshToken,
       'createdAt': createdAt,
@@ -107,8 +107,8 @@ class User extends _i1.TableRow {
       case 'username':
         username = value;
         return;
-      case 'matricaId':
-        matricaId = value;
+      case 'matricaid':
+        matricaid = value;
         return;
       case 'matricaAccessToken':
         matricaAccessToken = value;
@@ -248,7 +248,7 @@ class UserTable extends _i1.Table {
 
   final username = _i1.ColumnString('username');
 
-  final matricaId = _i1.ColumnString('matricaId');
+  final matricaid = _i1.ColumnString('matricaid');
 
   final matricaAccessToken = _i1.ColumnString('matricaAccessToken');
 
@@ -262,7 +262,7 @@ class UserTable extends _i1.Table {
   List<_i1.Column> get columns => [
         id,
         username,
-        matricaId,
+        matricaid,
         matricaAccessToken,
         matricaRefreshToken,
         createdAt,

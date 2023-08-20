@@ -67,7 +67,7 @@ class MatricaAuthRoute extends WidgetRoute {
     if(user == null) {
       user = User(
         username: userResponse.username,
-        matricaId: matricaId,
+        matricaid: matricaId,
         matricaAccessToken: accessTokenResult.access_token,
         matricaRefreshToken: accessTokenResult.refresh_token,
         modifiedAt: _timeService.now(),
