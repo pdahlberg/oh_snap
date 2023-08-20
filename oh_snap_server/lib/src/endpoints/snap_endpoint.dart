@@ -28,6 +28,7 @@ import 'package:http/http.dart' as http;
 // `serverpod generate` to update the server and client code.
 class SnapEndpoint extends Endpoint {
 
+  // Move to DI, will Provider work on Server as well?
   final dio = Dio()..interceptors.add(LogInterceptor(responseBody: true)); // Provide a dio instance
   final dotenv = DotEnv(includePlatformEnvironment: true)..load();
   final TimeService _timeService = TimeService();

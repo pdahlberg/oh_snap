@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:oh_snap_client/oh_snap_client.dart';
 import 'package:oh_snap_flutter/domain/service/time_service.dart';
 import 'package:oh_snap_flutter/features/annotate/state/annotate_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:oh_snap_flutter/features/capture/state/snap_form_bloc.dart';
 import 'package:oh_snap_flutter/features/mint/state/mint_bloc.dart';
 import 'package:oh_snap_flutter/infra/app_router.dart';
 import 'package:provider/provider.dart';
+import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 class Dependencies {
@@ -15,6 +17,12 @@ class Dependencies {
     //Provider<Client>(create: (_) => Client('https://api.ohsnap.app/')..connectivityMonitor = FlutterConnectivityMonitor()),
     Provider<Client>(create: (_) => Client('http://localhost:8080/')..connectivityMonitor = FlutterConnectivityMonitor()),
     Provider<AppRouter>(create: AppRouter.of),
+  ];
+
+  static List<ProxyProvider> commonWithDependency() => [
+    ProxyProvider<Client, SessionManager>(update: (_, client, instance) => SessionManager(
+      caller: client.modules.auth,
+    )..initialize()),
   ];
 
   static List<BlocProvider> blocs() => [
