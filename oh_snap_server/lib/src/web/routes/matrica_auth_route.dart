@@ -17,7 +17,7 @@ class MatricaAuthRoute extends WidgetRoute {
   @override
   Future<WidgetJson> build(Session session, HttpRequest request) async {
     dotenv.load();
-    session.log('MatricaAuthRoute called: ${request.uri}, runmode: ${dotenv['runmode']}, PROJECT_NAME: ${dotenv['PROJECT_NAME']}');
+    session.log('MatricaAuthRoute called: ${request.uri}, shared pw: ${session.passwords['mySharedPassword']}');
 
     final pkcePair = PkcePair.generate();
     var codeVerifier = pkcePair.codeVerifier;
