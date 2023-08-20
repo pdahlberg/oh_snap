@@ -15,6 +15,8 @@ class User extends _i1.SerializableEntity {
     required this.matricaId,
     required this.matricaAccessToken,
     required this.matricaRefreshToken,
+    required this.createdAt,
+    required this.modifiedAt,
   });
 
   factory User.fromJson(
@@ -31,6 +33,10 @@ class User extends _i1.SerializableEntity {
           .deserialize<String>(jsonSerialization['matricaAccessToken']),
       matricaRefreshToken: serializationManager
           .deserialize<String>(jsonSerialization['matricaRefreshToken']),
+      createdAt: serializationManager
+          .deserialize<DateTime>(jsonSerialization['createdAt']),
+      modifiedAt: serializationManager
+          .deserialize<DateTime>(jsonSerialization['modifiedAt']),
     );
   }
 
@@ -47,6 +53,10 @@ class User extends _i1.SerializableEntity {
 
   String matricaRefreshToken;
 
+  DateTime createdAt;
+
+  DateTime modifiedAt;
+
   @override
   Map<String, dynamic> toJson() {
     return {
@@ -55,6 +65,8 @@ class User extends _i1.SerializableEntity {
       'matricaId': matricaId,
       'matricaAccessToken': matricaAccessToken,
       'matricaRefreshToken': matricaRefreshToken,
+      'createdAt': createdAt,
+      'modifiedAt': modifiedAt,
     };
   }
 }
