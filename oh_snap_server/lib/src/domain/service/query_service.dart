@@ -128,6 +128,7 @@ class QueryService {
       matricaid: row[column++] as String,
       matricaAccessToken: row[column++] as String,
       matricaRefreshToken: row[column++] as String,
+      credits: row[column++] as int,
       createdAt: row[column++] as DateTime,
       modifiedAt: row[column++] as DateTime,
     );

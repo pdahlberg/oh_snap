@@ -70,6 +70,7 @@ class MatricaAuthRoute extends WidgetRoute {
         matricaid: matricaId,
         matricaAccessToken: accessTokenResult.access_token,
         matricaRefreshToken: accessTokenResult.refresh_token,
+        credits: 0,
         modifiedAt: _timeService.now(),
         createdAt: _timeService.now(),
       );

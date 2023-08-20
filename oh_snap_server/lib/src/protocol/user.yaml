@@ -15,6 +15,7 @@ fields:
   matricaid: String,
   matricaAccessToken: String,
   matricaRefreshToken: String,
+  credits: int,
   createdAt: DateTime,
   modifiedAt: DateTime,
 

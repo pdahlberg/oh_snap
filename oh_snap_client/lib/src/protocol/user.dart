@@ -12,9 +12,10 @@ class User extends _i1.SerializableEntity {
   User({
     this.id,
     required this.username,
-    required this.matricaId,
+    required this.matricaid,
     required this.matricaAccessToken,
     required this.matricaRefreshToken,
+    required this.credits,
     required this.createdAt,
     required this.modifiedAt,
   });
@@ -27,12 +28,14 @@ class User extends _i1.SerializableEntity {
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
       username: serializationManager
           .deserialize<String>(jsonSerialization['username']),
-      matricaId: serializationManager
-          .deserialize<String>(jsonSerialization['matricaId']),
+      matricaid: serializationManager
+          .deserialize<String>(jsonSerialization['matricaid']),
       matricaAccessToken: serializationManager
           .deserialize<String>(jsonSerialization['matricaAccessToken']),
       matricaRefreshToken: serializationManager
           .deserialize<String>(jsonSerialization['matricaRefreshToken']),
+      credits:
+          serializationManager.deserialize<int>(jsonSerialization['credits']),
       createdAt: serializationManager
           .deserialize<DateTime>(jsonSerialization['createdAt']),
       modifiedAt: serializationManager
@@ -47,11 +50,13 @@ class User extends _i1.SerializableEntity {
 
   String username;
 
-  String matricaId;
+  String matricaid;
 
   String matricaAccessToken;
 
   String matricaRefreshToken;
+
+  int credits;
 
   DateTime createdAt;
 
@@ -62,9 +67,10 @@ class User extends _i1.SerializableEntity {
     return {
       'id': id,
       'username': username,
-      'matricaId': matricaId,
+      'matricaid': matricaid,
       'matricaAccessToken': matricaAccessToken,
       'matricaRefreshToken': matricaRefreshToken,
+      'credits': credits,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };

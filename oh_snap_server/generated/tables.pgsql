@@ -8,6 +8,7 @@ CREATE TABLE "app_user" (
   "matricaid" text NOT NULL,
   "matricaAccessToken" text NOT NULL,
   "matricaRefreshToken" text NOT NULL,
+  "credits" integer NOT NULL,
   "createdAt" timestamp without time zone NOT NULL,
   "modifiedAt" timestamp without time zone NOT NULL
 );
