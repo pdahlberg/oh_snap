@@ -58,14 +58,14 @@ class MatricaAuthRoute extends WidgetRoute {
 
     session.log('fetchAccessToken result: $accessTokenResult');
 
-    /*final refreshedToken = await matrica.refreshAccessToken(
+    final refreshedToken = await matrica.refreshAccessToken(
       refreshToken: accessTokenResult.refresh_token,
       clientId: clientId2,
       clientSecret: clientSecret2,
     );
 
     session.log('refreshAccessToken result: $refreshedToken');
-    */
+    
 
     final widget = WidgetJson(
       object: {

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:oh_snap_server/src/adapters/matrica/access_token_response.dart';
+import 'package:oh_snap_server/src/adapters/matrica/refresh_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'matrica_api.g.dart';
@@ -20,7 +21,7 @@ abstract class MatricaApi {
   });
 
   @POST("/oauth2/token")
-  Future<AccessTokenResponse> refreshAccessToken({
+  Future<RefreshResponse> refreshAccessToken({
     @Header("Content-Type") String contentType = 'application/x-www-form-urlencoded',
     @Field("grant_type") String grantType = 'refresh_token',
     @Field("refresh_token") required String refreshToken,

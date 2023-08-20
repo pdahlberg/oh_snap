@@ -65,7 +65,7 @@ class _MatricaApi implements MatricaApi {
   }
 
   @override
-  Future<AccessTokenResponse> refreshAccessToken({
+  Future<RefreshResponse> refreshAccessToken({
     String contentType = 'application/x-www-form-urlencoded',
     String grantType = 'refresh_token',
     required String refreshToken,
@@ -82,8 +82,8 @@ class _MatricaApi implements MatricaApi {
       'client_id': clientId,
       'client_secret': clientSecret,
     };
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<AccessTokenResponse>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<RefreshResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -100,7 +100,7 @@ class _MatricaApi implements MatricaApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = AccessTokenResponse.fromJson(_result.data!);
+    final value = RefreshResponse.fromJson(_result.data!);
     return value;
   }
 
