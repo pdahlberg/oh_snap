@@ -15,16 +15,17 @@ class MatricaAuthRoute extends WidgetRoute {
 
   @override
   Future<WidgetJson> build(Session session, HttpRequest request) async {
-    session.log('MatricaAuthRoute called: ${request.uri}, shared pw: ${session.passwords['mySharedPassword']}');
+    session.log('MatricaAuthRoute called: ${request.uri}');
 
-    final pkcePair = PkcePair.generate();
+    /*final pkcePair = PkcePair.generate();
     var codeVerifier = pkcePair.codeVerifier;
     session.log('codeVerifier: $codeVerifier');
     var codeChallenge = pkcePair.codeChallenge;
     session.log('codeChallenge: $codeChallenge');
-
+*/
     final clientId = session.passwords['matricaClientId'];
     final clientSecret = session.passwords['matricaClientSecret'];
+    final codeVerifier = session.passwords['matricaCodeVerifier'];
     final code = request.uri.queryParameters['code'];
     final state = request.uri.queryParameters['state'];
 
@@ -39,7 +40,7 @@ class MatricaAuthRoute extends WidgetRoute {
       redirectUri: 'https://app.ohsnap.app/auth/callback',
       clientId: clientId!,
       clientSecret: clientSecret!,
-      codeVerifier: 'QQ1ZmWjQdUFtCXZfc1SqxMJrPbCx0MztjjWtX6Glm8M',
+      codeVerifier: codeVerifier!,
     );
 
     final widget = WidgetJson(
