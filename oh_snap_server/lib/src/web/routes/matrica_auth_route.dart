@@ -30,17 +30,26 @@ class MatricaAuthRoute extends WidgetRoute {
     final state = request.uri.queryParameters['state'];
 
     assert(clientId != null, 'Matrica client ID is null');
+    var clientId2 = clientId!;
+
     assert(clientSecret != null, 'Matrica client secret is null');
+    var clientSecret2 = clientSecret!;
+
     assert(code != null, 'Code is null');
+    var code2 = code!;
+
+    assert(codeVerifier != null, 'Code verifier is null');
+    var codeVerifier2 = codeVerifier!;
+
     session.log('Matrical callback state: $state');
 
     final matrica = MatricaApi(dio);
     matrica.fetchOauth2Token(
-      code: code!,
+      code: code2,
       redirectUri: 'https://app.ohsnap.app/auth/callback',
-      clientId: clientId!,
-      clientSecret: clientSecret!,
-      codeVerifier: codeVerifier!,
+      clientId: clientId2,
+      clientSecret: clientSecret2,
+      codeVerifier: codeVerifier2,
     );
 
     final widget = WidgetJson(
