@@ -48,7 +48,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Future<void> _onSyncUser(SyncUser event, Emitter<LoginState> emit) async {
-    final user = await _authService.fetchUser();
+    final user = await _authService.fetchUserWithState();
 
     emit(state.copyWith(
       user: user,

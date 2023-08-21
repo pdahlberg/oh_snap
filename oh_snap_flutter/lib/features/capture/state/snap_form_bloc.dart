@@ -37,7 +37,7 @@ class SnapFormBloc extends FormBloc<String, String> {
       final user = await _authService.fetchUser(); // This should be in an event instead
       var result = await _client.snap.create(user.id, url.value, 'Ufw2M6ojcXDcaFhU3zWXbsGEUYYADoqEz3wLQpc6dFh', false);
       await _client.snap.processTasks();
-      //debugPrint('result: ${result.id}');
+      debugPrint('result: ${result}');
       emitSuccess();
       _appRouter.router.push(MintPage.path, );
     } on Exception catch (e) {

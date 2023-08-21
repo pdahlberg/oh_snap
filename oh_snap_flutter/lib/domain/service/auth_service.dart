@@ -39,7 +39,7 @@ class AuthService {
     return false;
   }
 
-  Future<User> fetchUser() async {
+  Future<User> fetchUserWithState() async {
     User? user = await _client.auth.fetchUserWithState(_someState!);
     debugPrint('Fetched user: $user');
     // Errors... who has time for that with a few minutes left...
@@ -48,6 +48,18 @@ class AuthService {
       final login = Login.fromUser(user);
       await _loginRepository.save(login);
     }
+
+    return user!;
+  }
+
+  Future<User> fetchUser() async {
+    final login = await _loginRepository.load();
+    if(login == null) {
+      throw Exception('Not logged in');
+    }
+    User? user = await _client.auth.fetchUser(login.matricaId, login.accessToken);
+    debugPrint('Fetched user: $user');
+    // Errors... who has time for that with a few minutes left...
 
     return user!;
   }
