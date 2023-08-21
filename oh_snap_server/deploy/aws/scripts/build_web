@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Makes sure we break the script on any error.
+set -e
+
+# Build the web app.
+cd oh_snap_flutter
+flutter build web --release --web-renderer canvaskit
+cd ..
+
+# Copy the build files into the web/app directory.
+rm -rf oh_snap_server/web/app
+cp -r oh_snap_flutter/build/web oh_snap_server/web/app
+
+# Move the index.html file into the templates directory.
+mkdir -p oh_snap_server/web/templates
+mv oh_snap_server/web/app/index.html oh_snap_server/web/templates/index.html
