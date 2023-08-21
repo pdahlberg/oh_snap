@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:oh_snap_client/oh_snap_client.dart';
 import 'package:oh_snap_flutter/domain/service/time_service.dart';
 import 'package:oh_snap_flutter/features/annotate/state/annotate_bloc.dart';
@@ -20,9 +19,9 @@ class Dependencies {
   ];
 
   static List<ProxyProvider> commonWithDependency() => [
-    ProxyProvider<Client, SessionManager>(update: (_, client, instance) => SessionManager(
+    /*ProxyProvider<Client, SessionManager>(update: (_, client, instance) => SessionManager(
       caller: client.modules.auth,
-    )..initialize()),
+    )..initialize()),*/
   ];
 
   static List<BlocProvider> blocs() => [
