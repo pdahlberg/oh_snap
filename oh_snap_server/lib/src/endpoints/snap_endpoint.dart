@@ -31,14 +31,8 @@ class SnapEndpoint extends Endpoint {
   final dio = Dio()..interceptors.add(LogInterceptor(responseBody: true)); // Provide a dio instance
   final TimeService _timeService = TimeService();
 
-  // You create methods in your endpoint which are accessible from the client by
-  // creating a public method with `Session` as its first parameter. Supported
-  // parameter types are `bool`, `int`, `double`, `String`, `DateTime`, and any
-  // objects that are generated from your `protocol` directory. The methods
-  // should return a typed future; the same types as for the parameters are
-  // supported. The `session` object provides access to the database, logging,
-  // passwords, and information about the request being made to the server.
-  Future<Post> create(Session session, User user, String url, String walletAddress, bool removeButtons) async {
+  // Simply sending in userId to make the connection for now... 
+  Future<Post> create(Session session, int userId, String url, String walletAddress, bool removeButtons) async {
     session.log('Snap the $url and send it to $walletAddress');
 
     var now = _timeService.now();
@@ -55,7 +49,7 @@ class SnapEndpoint extends Endpoint {
         .replaceAll('https://twitter.com/', 'twitter_')
         .replaceAll('/', '_');
 
-    var post = Post(userId: user.id, filename: filename, captureurl: url, createdAt: now, modifiedAt: now);
+    var post = Post(userId: userId, filename: filename, captureurl: url, createdAt: now, modifiedAt: now);
     await session.db.insert(post);
 
     final captureTask = Task(
