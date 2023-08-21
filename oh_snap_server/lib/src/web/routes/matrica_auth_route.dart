@@ -77,9 +77,6 @@ class MatricaAuthRoute extends WidgetRoute {
       );
 
       await session.db.insert(user);
-      authState.matricaid = user.matricaid;
-      authState.modifiedAt = _timeService.now();
-      await session.db.update(authState);
     } else {
       var changed = false;
 
@@ -103,6 +100,10 @@ class MatricaAuthRoute extends WidgetRoute {
         session.db.update(user);
       }
     }
+
+    authState.matricaid = matricaId;
+    authState.modifiedAt = _timeService.now();
+    await session.db.update(authState);
 
     /*final refreshedToken = await matrica.refreshAccessToken(
       refreshToken: accessTokenResult.refresh_token,
