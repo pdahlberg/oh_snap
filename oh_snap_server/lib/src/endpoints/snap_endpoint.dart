@@ -31,7 +31,7 @@ class SnapEndpoint extends Endpoint {
   final dio = Dio()..interceptors.add(LogInterceptor(responseBody: true)); // Provide a dio instance
   final TimeService _timeService = TimeService();
 
-  // Simply sending in userId to make the connection for now... 
+  // Simply sending in userId to make the connection for now...
   Future<Post> create(Session session, int userId, String url, String walletAddress, bool removeButtons) async {
     session.log('Snap the $url and send it to $walletAddress');
 
