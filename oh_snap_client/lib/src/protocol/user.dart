@@ -10,11 +10,10 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 
 class User extends _i1.SerializableEntity {
   User({
-    this.id,
+    required this.id,
     required this.username,
-    required this.matricaid,
-    required this.matricaaccesstoken,
-    required this.matricaRefreshToken,
+    required this.matricaId,
+    required this.matricaAccessToken,
     required this.credits,
     required this.createdAt,
     required this.modifiedAt,
@@ -25,15 +24,13 @@ class User extends _i1.SerializableEntity {
     _i1.SerializationManager serializationManager,
   ) {
     return User(
-      id: serializationManager.deserialize<int?>(jsonSerialization['id']),
+      id: serializationManager.deserialize<int>(jsonSerialization['id']),
       username: serializationManager
           .deserialize<String>(jsonSerialization['username']),
-      matricaid: serializationManager
-          .deserialize<String>(jsonSerialization['matricaid']),
-      matricaaccesstoken: serializationManager
-          .deserialize<String>(jsonSerialization['matricaaccesstoken']),
-      matricaRefreshToken: serializationManager
-          .deserialize<String>(jsonSerialization['matricaRefreshToken']),
+      matricaId: serializationManager
+          .deserialize<String>(jsonSerialization['matricaId']),
+      matricaAccessToken: serializationManager
+          .deserialize<String>(jsonSerialization['matricaAccessToken']),
       credits:
           serializationManager.deserialize<int>(jsonSerialization['credits']),
       createdAt: serializationManager
@@ -43,18 +40,13 @@ class User extends _i1.SerializableEntity {
     );
   }
 
-  /// The database id, set if the object has been inserted into the
-  /// database or if it has been fetched from the database. Otherwise,
-  /// the id will be null.
-  int? id;
+  int id;
 
   String username;
 
-  String matricaid;
+  String matricaId;
 
-  String matricaaccesstoken;
-
-  String matricaRefreshToken;
+  String matricaAccessToken;
 
   int credits;
 
@@ -67,9 +59,8 @@ class User extends _i1.SerializableEntity {
     return {
       'id': id,
       'username': username,
-      'matricaid': matricaid,
-      'matricaaccesstoken': matricaaccesstoken,
-      'matricaRefreshToken': matricaRefreshToken,
+      'matricaId': matricaId,
+      'matricaAccessToken': matricaAccessToken,
       'credits': credits,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,

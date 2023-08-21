@@ -18,14 +18,14 @@ class QueryService {
     ).then((value) => value.map((item) => _authStateFromRow(item)).firstOrNull);
   }
 
-  Future<User?> findUserByMatricaId(String matricaId, { String? accessToken }) async {
+  Future<BackendUser?> findUserByMatricaId(String matricaId, { String? accessToken }) async {
     return _findEntityBy(
       session: session,
-      table: 'app_user',
+      table: 'backend_user',
       matricaId: matricaId,
       accessToken: accessToken,
       logQuery: false,
-    ).then((value) => value.map((item) => _userFromRow(item)).firstOrNull);
+    ).then((value) => value.map((item) => _backendUserFromRow(item)).firstOrNull);
   }
 
   Future<Post?> findPostById(int postId) async {
@@ -106,6 +106,7 @@ class QueryService {
     int column = 0;
     return Post(
       id: row[column++] as int,
+      userId: row[column++] as int,
       title: row[column++] as String?,
       text: row[column++] as String?,
       imageUrl: row[column++] as String?,
@@ -136,9 +137,9 @@ class QueryService {
     );
   }
 
-  User _userFromRow(List<dynamic> row) {
+  BackendUser _backendUserFromRow(List<dynamic> row) {
     int column = 0;
-    return User(
+    return BackendUser(
       id: row[column++] as int,
       username: row[column++] as String,
       matricaid: row[column++] as String,
@@ -161,6 +162,19 @@ class QueryService {
       matricaid: row[column++] as String?,
       createdAt: row[column++] as DateTime,
       modifiedAt: row[column++] as DateTime,
+    );
+  }
+
+  // todo: move to a sensible place
+  User backendUserToUser(BackendUser backendUser) {
+    return User(
+      id: backendUser.id!,
+      username: backendUser.username,
+      matricaId: backendUser.matricaid,
+      matricaAccessToken: backendUser.matricaaccesstoken,
+      credits: backendUser.credits,
+      createdAt: backendUser.createdAt,
+      modifiedAt: backendUser.modifiedAt,
     );
   }
 

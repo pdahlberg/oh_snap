@@ -69,6 +69,7 @@ class _EndpointSnap extends _i1.EndpointRef {
   String get name => 'snap';
 
   _i2.Future<_i5.Post> create(
+    _i4.User user,
     String url,
     String walletAddress,
     bool removeButtons,
@@ -77,6 +78,7 @@ class _EndpointSnap extends _i1.EndpointRef {
         'snap',
         'create',
         {
+          'user': user,
           'url': url,
           'walletAddress': walletAddress,
           'removeButtons': removeButtons,

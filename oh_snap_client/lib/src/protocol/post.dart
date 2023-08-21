@@ -12,6 +12,7 @@ import 'protocol.dart' as _i2;
 class Post extends _i1.SerializableEntity {
   Post({
     this.id,
+    required this.userId,
     this.title,
     this.text,
     this.imageUrl,
@@ -32,6 +33,8 @@ class Post extends _i1.SerializableEntity {
   ) {
     return Post(
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
+      userId:
+          serializationManager.deserialize<int>(jsonSerialization['userId']),
       title:
           serializationManager.deserialize<String?>(jsonSerialization['title']),
       text:
@@ -64,6 +67,8 @@ class Post extends _i1.SerializableEntity {
   /// the id will be null.
   int? id;
 
+  int userId;
+
   String? title;
 
   String? text;
@@ -92,6 +97,7 @@ class Post extends _i1.SerializableEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'userId': userId,
       'title': title,
       'text': text,
       'imageUrl': imageUrl,

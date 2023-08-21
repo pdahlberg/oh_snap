@@ -64,9 +64,9 @@ class MatricaAuthRoute extends WidgetRoute {
 
     session.log('fetchUserProfile result: $userResponse');
 
-    var user = await QueryService(session).findUserByMatricaId(matricaId);
-    if(user == null) {
-      user = User(
+    var backendUser = await QueryService(session).findUserByMatricaId(matricaId);
+    if(backendUser == null) {
+      backendUser = BackendUser(
         username: userResponse.username,
         matricaid: matricaId,
         matricaaccesstoken: accessTokenResult.access_token,
@@ -76,28 +76,28 @@ class MatricaAuthRoute extends WidgetRoute {
         createdAt: _timeService.now(),
       );
 
-      await session.db.insert(user);
+      await session.db.insert(backendUser);
     } else {
       var changed = false;
 
-      if(user.username != userResponse.username) {
-        user.username = userResponse.username;
+      if(backendUser.username != userResponse.username) {
+        backendUser.username = userResponse.username;
         changed = true;
       }
 
-      if(user.matricaaccesstoken != accessTokenResult.access_token) {
-        user.matricaaccesstoken = accessTokenResult.access_token;
+      if(backendUser.matricaaccesstoken != accessTokenResult.access_token) {
+        backendUser.matricaaccesstoken = accessTokenResult.access_token;
         changed = true;
       }
 
-      if(user.matricaRefreshToken != accessTokenResult.refresh_token) {
-        user.matricaRefreshToken = accessTokenResult.refresh_token;
+      if(backendUser.matricaRefreshToken != accessTokenResult.refresh_token) {
+        backendUser.matricaRefreshToken = accessTokenResult.refresh_token;
         changed = true;
       }
 
       if(changed) {
-        user.modifiedAt = _timeService.now();
-        session.db.update(user);
+        backendUser.modifiedAt = _timeService.now();
+        session.db.update(backendUser);
       }
     }
 
@@ -116,7 +116,7 @@ class MatricaAuthRoute extends WidgetRoute {
 
     final widget = WidgetJson(
       object: {
-        'message': 'Welcome ${user.username}!',
+        'message': 'Welcome ${backendUser.username}!',
       },
     );
 

@@ -12,6 +12,7 @@ import 'protocol.dart' as _i2;
 class Post extends _i1.TableRow {
   Post({
     int? id,
+    required this.userId,
     this.title,
     this.text,
     this.imageUrl,
@@ -32,6 +33,8 @@ class Post extends _i1.TableRow {
   ) {
     return Post(
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
+      userId:
+          serializationManager.deserialize<int>(jsonSerialization['userId']),
       title:
           serializationManager.deserialize<String?>(jsonSerialization['title']),
       text:
@@ -60,6 +63,8 @@ class Post extends _i1.TableRow {
   }
 
   static final t = PostTable();
+
+  int userId;
 
   String? title;
 
@@ -91,6 +96,7 @@ class Post extends _i1.TableRow {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'userId': userId,
       'title': title,
       'text': text,
       'imageUrl': imageUrl,
@@ -110,6 +116,7 @@ class Post extends _i1.TableRow {
   Map<String, dynamic> toJsonForDatabase() {
     return {
       'id': id,
+      'userId': userId,
       'title': title,
       'text': text,
       'imageUrl': imageUrl,
@@ -128,6 +135,7 @@ class Post extends _i1.TableRow {
   Map<String, dynamic> allToJson() {
     return {
       'id': id,
+      'userId': userId,
       'title': title,
       'text': text,
       'imageUrl': imageUrl,
@@ -151,6 +159,9 @@ class Post extends _i1.TableRow {
     switch (columnName) {
       case 'id':
         id = value;
+        return;
+      case 'userId':
+        userId = value;
         return;
       case 'title':
         title = value;
@@ -309,6 +320,8 @@ class PostTable extends _i1.Table {
   /// the id will be null.
   final id = _i1.ColumnInt('id');
 
+  final userId = _i1.ColumnInt('userId');
+
   final title = _i1.ColumnString('title');
 
   final text = _i1.ColumnString('text');
@@ -334,6 +347,7 @@ class PostTable extends _i1.Table {
   @override
   List<_i1.Column> get columns => [
         id,
+        userId,
         title,
         text,
         imageUrl,

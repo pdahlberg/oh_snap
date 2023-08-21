@@ -9,7 +9,7 @@ class Login {
   Login(this.matricaId, this.accessToken);
 
   Login.fromUser(User user) :
-    matricaId = user.matricaid,
-    accessToken = user.matricaaccesstoken;
+    matricaId = user.matricaId,
+    accessToken = user.matricaAccessToken;
 
 }

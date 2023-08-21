@@ -38,7 +38,7 @@ class SnapEndpoint extends Endpoint {
   // should return a typed future; the same types as for the parameters are
   // supported. The `session` object provides access to the database, logging,
   // passwords, and information about the request being made to the server.
-  Future<Post> create(Session session, String url, String walletAddress, bool removeButtons) async {
+  Future<Post> create(Session session, User user, String url, String walletAddress, bool removeButtons) async {
     session.log('Snap the $url and send it to $walletAddress');
 
     var now = _timeService.now();
@@ -55,7 +55,7 @@ class SnapEndpoint extends Endpoint {
         .replaceAll('https://twitter.com/', 'twitter_')
         .replaceAll('/', '_');
 
-    var post = Post(filename: filename, captureurl: url, createdAt: now, modifiedAt: now);
+    var post = Post(userId: user.id, filename: filename, captureurl: url, createdAt: now, modifiedAt: now);
     await session.db.insert(post);
 
     final captureTask = Task(

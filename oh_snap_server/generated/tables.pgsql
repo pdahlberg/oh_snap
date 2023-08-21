@@ -1,23 +1,4 @@
 --
--- Class User as table app_user
---
-
-CREATE TABLE "app_user" (
-  "id" serial,
-  "username" text NOT NULL,
-  "matricaid" text NOT NULL,
-  "matricaaccesstoken" text NOT NULL,
-  "matricaRefreshToken" text NOT NULL,
-  "credits" integer NOT NULL,
-  "createdAt" timestamp without time zone NOT NULL,
-  "modifiedAt" timestamp without time zone NOT NULL
-);
-
-ALTER TABLE ONLY "app_user"
-  ADD CONSTRAINT app_user_pkey PRIMARY KEY (id);
-
-
---
 -- Class AuthState as table auth_state
 --
 
@@ -37,11 +18,31 @@ ALTER TABLE ONLY "auth_state"
 
 
 --
+-- Class BackendUser as table backend_user
+--
+
+CREATE TABLE "backend_user" (
+  "id" serial,
+  "username" text NOT NULL,
+  "matricaid" text NOT NULL,
+  "matricaaccesstoken" text NOT NULL,
+  "matricaRefreshToken" text NOT NULL,
+  "credits" integer NOT NULL,
+  "createdAt" timestamp without time zone NOT NULL,
+  "modifiedAt" timestamp without time zone NOT NULL
+);
+
+ALTER TABLE ONLY "backend_user"
+  ADD CONSTRAINT backend_user_pkey PRIMARY KEY (id);
+
+
+--
 -- Class Post as table post
 --
 
 CREATE TABLE "post" (
   "id" serial,
+  "userId" integer NOT NULL,
   "title" text,
   "text" text,
   "imageUrl" text,
@@ -58,6 +59,11 @@ CREATE TABLE "post" (
 ALTER TABLE ONLY "post"
   ADD CONSTRAINT post_pkey PRIMARY KEY (id);
 
+ALTER TABLE ONLY "post"
+  ADD CONSTRAINT post_fk_0
+    FOREIGN KEY("userId")
+      REFERENCES backend_user(id)
+        ON DELETE CASCADE;
 
 --
 -- Class Task as table task

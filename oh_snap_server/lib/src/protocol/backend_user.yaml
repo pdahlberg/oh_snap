@@ -1,0 +1,12 @@
+class: BackendUser
+table: backend_user
+serverOnly: true
+fields:
+  username: String,
+  matricaid: String,
+  matricaaccesstoken: String,
+  matricaRefreshToken: String,
+  credits: int,
+  createdAt: DateTime,
+  modifiedAt: DateTime,
+

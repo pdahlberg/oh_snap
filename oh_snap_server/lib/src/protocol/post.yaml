@@ -1,6 +1,7 @@
 class: Post
 table: post
 fields:
+  userId: int, parent=backend_user
   title: String?,
   text: String?,
   imageUrl: String?,

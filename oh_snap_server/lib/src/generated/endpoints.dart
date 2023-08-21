@@ -10,6 +10,7 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/annotate_endpoint.dart' as _i2;
 import '../endpoints/auth_endpoint.dart' as _i3;
 import '../endpoints/snap_endpoint.dart' as _i4;
+import 'package:oh_snap_server/src/generated/user.dart' as _i5;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -131,6 +132,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'create': _i1.MethodConnector(
           name: 'create',
           params: {
+            'user': _i1.ParameterDescription(
+              name: 'user',
+              type: _i1.getType<_i5.User>(),
+              nullable: false,
+            ),
             'url': _i1.ParameterDescription(
               name: 'url',
               type: _i1.getType<String>(),
@@ -153,6 +159,7 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['snap'] as _i4.SnapEndpoint).create(
             session,
+            params['user'],
             params['url'],
             params['walletAddress'],
             params['removeButtons'],
