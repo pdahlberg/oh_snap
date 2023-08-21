@@ -37,12 +37,6 @@ class AppRouter {
       debugPrint('Requested path: ${state.path}');
       if(await authService.isLoggedIn()) {
         debugPrint('Logged in with path: ${state.path}');
-        /*if(state.path == MainPage.path || state.path == null) {
-          return UserAssetListPage.path;
-        } else {
-          debugPrint('Navigating to ${state.path}');
-          return state.path;
-        }*/
         return null;
       } else {
         return LoginPage.path;

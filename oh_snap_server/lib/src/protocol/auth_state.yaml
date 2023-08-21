@@ -1,5 +1,6 @@
 class: AuthState
 table: auth_state
+serverOnly: true
 fields:
   state: String,
   codeverifier: String,

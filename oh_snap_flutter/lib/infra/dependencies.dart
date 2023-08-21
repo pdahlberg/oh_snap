@@ -1,5 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oh_snap_client/oh_snap_client.dart';
+import 'package:oh_snap_flutter/adapters/hive/login_repository_impl.dart';
+import 'package:oh_snap_flutter/adapters/hive/persistence.dart';
+import 'package:oh_snap_flutter/domain/persistence/login_repository.dart';
 import 'package:oh_snap_flutter/domain/service/auth_service.dart';
 import 'package:oh_snap_flutter/domain/service/time_service.dart';
 import 'package:oh_snap_flutter/features/annotate/state/annotate_bloc.dart';
@@ -17,7 +20,9 @@ class Dependencies {
 
   static List<Provider> common() => [
     Provider<TimeService>(create: (_) => TimeService()),
+    Provider<PersistenceImpl>(create: (_) => PersistenceImpl()..init()),
     Provider<Client>(create: (_) => Client(baseUrl)..connectivityMonitor = FlutterConnectivityMonitor()),
+    Provider<LoginRepository>(create: LoginRepositoryImpl.of),
     Provider<AuthService>(create: AuthService.of),
     Provider<AppRouter>(create: AppRouter.of),
   ];

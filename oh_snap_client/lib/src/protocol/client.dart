@@ -41,11 +41,24 @@ class _EndpointAuth extends _i1.EndpointRef {
         {'clientGeneratedSecret': clientGeneratedSecret},
       );
 
-  _i2.Future<_i4.User?> fetchUser(String clientGeneratedSecret) =>
+  _i2.Future<_i4.User?> fetchUserWithState(String clientGeneratedSecret) =>
+      caller.callServerEndpoint<_i4.User?>(
+        'auth',
+        'fetchUserWithState',
+        {'clientGeneratedSecret': clientGeneratedSecret},
+      );
+
+  _i2.Future<_i4.User?> fetchUser(
+    String matricaId,
+    String accessToken,
+  ) =>
       caller.callServerEndpoint<_i4.User?>(
         'auth',
         'fetchUser',
-        {'clientGeneratedSecret': clientGeneratedSecret},
+        {
+          'matricaId': matricaId,
+          'accessToken': accessToken,
+        },
       );
 }
 

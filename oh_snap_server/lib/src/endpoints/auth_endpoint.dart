@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:oh_snap_server/src/adapters/matrica/matrica_api.dart';
 import 'package:oh_snap_server/src/domain/service/query_service.dart';
 import 'package:oh_snap_server/src/domain/service/time_service.dart';
 import 'package:oh_snap_server/src/generated/auth_state.dart';
@@ -48,7 +49,7 @@ class AuthEndpoint extends Endpoint {
     return encoded;
   }
 
-  Future<User?> fetchUser(Session session, String clientGeneratedSecret) async {
+  Future<User?> fetchUserWithState(Session session, String clientGeneratedSecret) async {
     var queryService = QueryService(session);
     final authStateResult = await queryService.findAuthStateByState(clientGeneratedSecret);
     if(authStateResult == null) {
@@ -61,6 +62,17 @@ class AuthEndpoint extends Endpoint {
     return user;
   }
 
-
+  // todo: should separate user and backend_user
+  Future<User?> fetchUser(Session session, String matricaId, String accessToken) async {
+    var queryService = QueryService(session);
+    final user = queryService.findUserByMatricaId(matricaId, accessToken: accessToken);
+    if(user != null) {
+      final userResponse = await MatricaApi(dio).fetchUserProfile(authorization: 'Bearer $accessToken');
+      // todo: validate access token with call to Matrica, if fail throw exception
+    }
+    return user;
   }
+
+
+}
 

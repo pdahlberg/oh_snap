@@ -1,0 +1,2 @@
+
+const typeIdLogin = 1;

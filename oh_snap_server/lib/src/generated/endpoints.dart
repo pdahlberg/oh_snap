@@ -80,8 +80,8 @@ class Endpoints extends _i1.EndpointDispatch {
             params['clientGeneratedSecret'],
           ),
         ),
-        'fetchUser': _i1.MethodConnector(
-          name: 'fetchUser',
+        'fetchUserWithState': _i1.MethodConnector(
+          name: 'fetchUserWithState',
           params: {
             'clientGeneratedSecret': _i1.ParameterDescription(
               name: 'clientGeneratedSecret',
@@ -93,9 +93,33 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['auth'] as _i3.AuthEndpoint).fetchUser(
+              (endpoints['auth'] as _i3.AuthEndpoint).fetchUserWithState(
             session,
             params['clientGeneratedSecret'],
+          ),
+        ),
+        'fetchUser': _i1.MethodConnector(
+          name: 'fetchUser',
+          params: {
+            'matricaId': _i1.ParameterDescription(
+              name: 'matricaId',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'accessToken': _i1.ParameterDescription(
+              name: 'accessToken',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['auth'] as _i3.AuthEndpoint).fetchUser(
+            session,
+            params['matricaId'],
+            params['accessToken'],
           ),
         ),
       },

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oh_snap_client/oh_snap_client.dart';
 import 'package:oh_snap_flutter/domain/service/auth_service.dart';
+import 'package:oh_snap_flutter/features/capture/view/snap_page.dart';
 import 'package:oh_snap_flutter/features/login/state/login_events.dart';
 import 'package:oh_snap_flutter/features/login/state/login_state.dart';
 import 'package:oh_snap_flutter/infra/app_router.dart';
@@ -43,6 +44,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(
       user: user,
     ));
+
+    _appRouter.router.go(SnapPage.path);
   }
 
 }

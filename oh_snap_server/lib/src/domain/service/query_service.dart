@@ -18,11 +18,12 @@ class QueryService {
     ).then((value) => value.map((item) => _authStateFromRow(item)).firstOrNull);
   }
 
-  Future<User?> findUserByMatricaId(String matricaId) async {
+  Future<User?> findUserByMatricaId(String matricaId, { String? accessToken }) async {
     return _findEntityBy(
       session: session,
       table: 'app_user',
       matricaId: matricaId,
+      accessToken: accessToken,
       logQuery: false,
     ).then((value) => value.map((item) => _userFromRow(item)).firstOrNull);
   }
@@ -69,6 +70,7 @@ class QueryService {
     int? status,
     String? matricaId,
     String? state,
+    String? accessToken,
     bool logQuery = false,
   }) async {
     var idClause = id?.let((value) => ' AND t.id = $value') ?? '';
@@ -77,6 +79,7 @@ class QueryService {
     var statusClause = status?.let((value) => ' AND t.status = $value') ?? '';
     var matricaIdClause = matricaId?.let((value) => " AND t.matricaid = '$value'") ?? '';
     var stateClause = state?.let((value) => " AND t.state = '$value'") ?? '';
+    var accessTokenClause = accessToken?.let((value) => " AND t.accessToken = '$value'") ?? '';
 
     var query = '''
         SELECT * FROM $table t
@@ -87,6 +90,7 @@ class QueryService {
         $statusClause
         $matricaIdClause
         $stateClause
+        $accessTokenClause
       ''';
 
     if(logQuery) {

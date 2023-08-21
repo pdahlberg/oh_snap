@@ -3,19 +3,23 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oh_snap_client/oh_snap_client.dart';
+import 'package:oh_snap_flutter/domain/model/login.dart';
+import 'package:oh_snap_flutter/domain/persistence/login_repository.dart';
 
 class AuthService {
 
   final Client _client;
+  final LoginRepository _loginRepository;
   final Random _rng = Random.secure(); // Good enough
-  User? _user;
-  String? _someState;
+  String? _someState; // Put in login entity
 
   AuthService(
-      this._client,
+    this._client,
+    this._loginRepository,
   );
 
   AuthService.of(BuildContext context) : this(
+    context.read(),
     context.read(),
   );
 
@@ -26,13 +30,25 @@ class AuthService {
   }
 
   Future<bool> isLoggedIn() async {
-    return _user != null;
+    final login = await _loginRepository.load();
+    if(login != null) {
+      // Don't need this all the time
+      final user = await _client.auth.fetchUser(login.matricaId, login.accessToken);
+      return user != null;
+    }
+    return false;
   }
 
   Future<User> fetchUser() async {
-    final user = await _client.auth.fetchUser(_someState!);
+    User? user = await _client.auth.fetchUserWithState(_someState!);
     debugPrint('Fetched user: $user');
     // Errors... who has time for that with a few minutes left...
+
+    if(user != null) {
+      final login = Login.fromUser(user);
+      await _loginRepository.save(login);
+    }
+
     return user!;
   }
 
