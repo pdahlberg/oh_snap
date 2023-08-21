@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oh_snap_client/oh_snap_client.dart';
@@ -5,6 +7,7 @@ import 'package:oh_snap_client/oh_snap_client.dart';
 class AuthService {
 
   final Client _client;
+  final Random _rng = Random.secure(); // Good enough
   User? _user;
   String? _someState;
 
@@ -17,8 +20,7 @@ class AuthService {
   );
 
   Future<Uri> authUrl() async {
-    // generate random code for state
-    _someState = DateTime.now().microsecondsSinceEpoch.toString();
+    _someState = _rng.nextInt(99999999).toString();
     final urlString = await _client.auth.authLink(_someState!);
     return Uri.parse(urlString);
   }
@@ -29,6 +31,7 @@ class AuthService {
 
   Future<User> fetchUser() async {
     final user = await _client.auth.fetchUser(_someState!);
+    debugPrint('Fetched user: $user');
     // Errors... who has time for that with a few minutes left...
     return user!;
   }

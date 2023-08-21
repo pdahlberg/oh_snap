@@ -78,6 +78,7 @@ class MatricaAuthRoute extends WidgetRoute {
 
       await session.db.insert(user);
       authState.matricaid = user.matricaid;
+      authState.modifiedAt = _timeService.now();
       await session.db.update(authState);
     } else {
       var changed = false;

@@ -19,6 +19,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     this._authService,
   ) : super(const LoginState()) {
     on<FetchAuthUrl>(_onFetchAuthUrl);
+    on<SyncUser>(_onSyncUser);
   }
 
   LoginBloc.of(BuildContext context) : this(
@@ -33,6 +34,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     emit(state.copyWith(
       authUrl: url,
+    ));
+  }
+
+  Future<void> _onSyncUser(SyncUser event, Emitter<LoginState> emit) async {
+    final user = await _authService.fetchUser();
+
+    emit(state.copyWith(
+      user: user,
     ));
   }
 

@@ -154,6 +154,7 @@ class QueryService {
       codeverifier: row[column++] as String,
       codechallenge: row[column++] as String,
       url: row[column++] as String,
+      matricaid: row[column++] as String?,
       createdAt: row[column++] as DateTime,
       modifiedAt: row[column++] as DateTime,
     );

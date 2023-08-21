@@ -53,6 +53,9 @@ class AuthEndpoint extends Endpoint {
     final authStateResult = await queryService.findAuthStateByState(clientGeneratedSecret);
     if(authStateResult == null) {
       throw Exception('User not found for this value');
+    } else if(authStateResult.modifiedAt.difference(_timeService.now()).inMinutes > 10) {
+      session.log('Access denied because AuthState(${authStateResult.id}) has expired');
+      throw Exception('User not found for this value');
     }
     final user = queryService.findUserByMatricaId(authStateResult.matricaid!);
     return user;
