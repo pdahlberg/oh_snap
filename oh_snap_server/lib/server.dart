@@ -23,22 +23,11 @@ void run(List<String> args) async {
 
   // Setup a default page at the web root.
   pod.webServer.addRoute(RouteRoot(), '/');
-  //pod.webServer.addRoute(RouteRoot(), '/test.html');
-
+  pod.webServer.addRoute(RouteRoot(), '/index.html');
   // Serve all files in the /static directory.
   pod.webServer.addRoute(
     RouteStaticDirectory(serverDirectory: 'static', basePath: '/'),
-    '/static/*',
-  );
-
-  pod.webServer.addRoute(
-    RouteStaticDirectory(serverDirectory: 'app', basePath: '/'),
-    '/app/*',
-  );
-
-  pod.webServer.addRoute(
-    RouteStaticDirectory(serverDirectory: 'templates', basePath: '/'),
-    '/templates/*',
+    '/*',
   );
 
   pod.webServer.addRoute(MatricaAuthRoute(), '/auth/callback');
