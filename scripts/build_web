@@ -13,5 +13,5 @@ rm -rf oh_snap_server/web/app
 cp -r oh_snap_flutter/build/web oh_snap_server/web/app
 
 # Move the index.html file into the templates directory.
-mkdir -p oh_snap_server/web/templates
-mv oh_snap_server/web/app/index.html oh_snap_server/web/templates/index.html
+# mkdir -p oh_snap_server/web/templates
+# mv oh_snap_server/web/app/index.html oh_snap_server/web/templates/index.html
