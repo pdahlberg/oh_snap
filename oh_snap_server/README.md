@@ -19,6 +19,8 @@
 - The build in query builder doesn't seem to work. 
 - Select statements seems to have their columns forced to lowercase which makes generated tables in combination with manual queries quite annoying. 
 - For now... not at all production ready on the server side. Having to build way too many primitive things myself.
+- Columns seems to be forced to lower case, which in turn breaks it's own queries.
+- Updating passwords in the passwords.yaml file doesn't seem to propogate to the server unless one deletes the full serverpod directory from the EC2 instance.
 
 ## Todos
 - Probably change QueryService to be a bunch of extensions on session or session.db.

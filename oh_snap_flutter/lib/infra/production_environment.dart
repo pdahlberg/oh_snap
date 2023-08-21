@@ -13,6 +13,7 @@ class ProductionEnvironment extends StatelessWidget {
     return MultiProvider(
       providers: [
         ...Dependencies.common(),
+        ...Dependencies.commonWithDependency(),
       ],
       child: MultiBlocProvider(
         providers: [

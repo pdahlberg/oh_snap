@@ -17,7 +17,8 @@ import 'snap_info.dart' as _i7;
 import 'task.dart' as _i8;
 import 'task_status.dart' as _i9;
 import 'task_type.dart' as _i10;
-import 'protocol.dart' as _i11;
+import 'user.dart' as _i11;
+import 'protocol.dart' as _i12;
 export 'nft.dart';
 export 'nft_list.dart';
 export 'payment_requirement.dart';
@@ -26,6 +27,7 @@ export 'snap_info.dart';
 export 'task.dart';
 export 'task_status.dart';
 export 'task_type.dart';
+export 'user.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -234,6 +236,78 @@ class Protocol extends _i1.SerializationManagerServer {
       ],
       managed: true,
     ),
+    _i2.TableDefinition(
+      name: 'app_user',
+      schema: 'public',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.integer,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'app_user_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'username',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'matricaid',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'matricaAccessToken',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'matricaRefreshToken',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'credits',
+          columnType: _i2.ColumnType.integer,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _i2.ColumnDefinition(
+          name: 'modifiedAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'app_user_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
     ..._i2.Protocol.targetDatabaseDefinition.tables,
   ]);
 
@@ -270,6 +344,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i10.TaskType) {
       return _i10.TaskType.fromJson(data) as T;
     }
+    if (t == _i11.User) {
+      return _i11.User.fromJson(data, this) as T;
+    }
     if (t == _i1.getType<_i3.Nft?>()) {
       return (data != null ? _i3.Nft.fromJson(data, this) : null) as T;
     }
@@ -294,13 +371,16 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i10.TaskType?>()) {
       return (data != null ? _i10.TaskType.fromJson(data) : null) as T;
     }
-    if (t == List<_i11.Nft>) {
-      return (data as List).map((e) => deserialize<_i11.Nft>(e)).toList()
+    if (t == _i1.getType<_i11.User?>()) {
+      return (data != null ? _i11.User.fromJson(data, this) : null) as T;
+    }
+    if (t == List<_i12.Nft>) {
+      return (data as List).map((e) => deserialize<_i12.Nft>(e)).toList()
           as dynamic;
     }
-    if (t == _i1.getType<List<_i11.Task>?>()) {
+    if (t == _i1.getType<List<_i12.Task>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i11.Task>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i12.Task>(e)).toList()
           : null) as dynamic;
     }
     try {
@@ -335,6 +415,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i10.TaskType) {
       return 'TaskType';
     }
+    if (data is _i11.User) {
+      return 'User';
+    }
     return super.getClassNameForObject(data);
   }
 
@@ -364,6 +447,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data['className'] == 'TaskType') {
       return deserialize<_i10.TaskType>(data['data']);
     }
+    if (data['className'] == 'User') {
+      return deserialize<_i11.User>(data['data']);
+    }
     return super.deserializeByClassName(data);
   }
 
@@ -380,6 +466,8 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i6.Post.t;
       case _i8.Task:
         return _i8.Task.t;
+      case _i11.User:
+        return _i11.User.t;
     }
     return null;
   }

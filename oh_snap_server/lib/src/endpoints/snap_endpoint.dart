@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dotenv/dotenv.dart';
 import 'package:file/memory.dart';
 import 'package:oh_snap_server/src/adapters/sdrive/sdrive_api.dart';
 import 'package:oh_snap_server/src/adapters/sdrive/summarize_request.dart';
@@ -28,8 +27,8 @@ import 'package:http/http.dart' as http;
 // `serverpod generate` to update the server and client code.
 class SnapEndpoint extends Endpoint {
 
+  // Move to DI, will Provider work on Server as well?
   final dio = Dio()..interceptors.add(LogInterceptor(responseBody: true)); // Provide a dio instance
-  final dotenv = DotEnv(includePlatformEnvironment: true)..load();
   final TimeService _timeService = TimeService();
 
   // You create methods in your endpoint which are accessible from the client by
@@ -366,8 +365,8 @@ class SnapEndpoint extends Endpoint {
   }
 
   Future<String?> _summarize(Session session, String text, { int maxCharacters = 60 }) async {
-    final username = dotenv['sdrive_username'];
-    final apikey = dotenv['sdrive_apikey'];
+    final username = session.passwords['sdriveUsername'];
+    final apikey = session.passwords['sdriveApikey'];
 
     final sdrive = SDriveApi(dio);
     final result = await sdrive.summarize(SummarizeRequest(
@@ -386,8 +385,8 @@ class SnapEndpoint extends Endpoint {
   }
 
   Future<(String, String)> _upload(Session session, List<int> bytes, String suffix, String contentType, String filename) async {
-    final username = dotenv['sdrive_username']!;
-    final apikey = dotenv['sdrive_apikey']!;
+    final username = session.passwords['sdriveUsername']!;
+    final apikey = session.passwords['sdriveApikey']!;
 
     final sdrive = SDriveApi(dio);
     final result = await sdrive.dioUpload(
@@ -411,7 +410,7 @@ class SnapEndpoint extends Endpoint {
     required String shareAltUrl,
     required String content,
   }) async {
-    final apikey = dotenv['underdog_apikey']!;
+    final apikey = session.passwords['underdogApikey']!;
     final captureTimestamp = _timeService.nowMillis();
 
     final underdog = UnderdogApi(dio);

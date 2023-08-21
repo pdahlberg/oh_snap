@@ -193,14 +193,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.3.2"
-  dotenv:
-    dependency: "direct main"
-    description:
-      name: dotenv
-      sha256: e169b516bc7b88801919e1c508772bcb8e3d0d1776a43f74ab692c57e741cd8a
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.1.0"
   executor:
     dependency: transitive
     description:
@@ -385,6 +377,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.0"
+  pkce:
+    dependency: "direct main"
+    description:
+      name: pkce
+      sha256: "5af8f4598aeaf033da4c87cb28bc9046262ddcbc0ba8d185d34d07e1aeb8c504"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0+1"
   pointycastle:
     dependency: transitive
     description:

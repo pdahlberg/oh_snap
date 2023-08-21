@@ -31,6 +31,7 @@ class SnapFormBloc extends FormBloc<String, String> {
   @override
   Future<void> onSubmitting() async {
     try {
+      _client.auth
       var result = await _client.snap.create(url.value, 'Ufw2M6ojcXDcaFhU3zWXbsGEUYYADoqEz3wLQpc6dFh', false);
       await _client.snap.processTasks();
       //debugPrint('result: ${result.id}');

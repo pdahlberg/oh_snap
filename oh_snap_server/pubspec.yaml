@@ -12,8 +12,8 @@ dependencies:
   retrofit: ^4.0.1
   json_annotation: any
   serverpod: ^1.1.1
-  dotenv: ^4.1.0
   file: ^7.0.0
+  pkce: ^1.1.0+1
 
 dev_dependencies:
   lints: ^2.0.1
