@@ -27,6 +27,7 @@ CREATE TABLE "auth_state" (
   "codeverifier" text NOT NULL,
   "codechallenge" text NOT NULL,
   "url" text NOT NULL,
+  "matricaid" text,
   "createdAt" timestamp without time zone NOT NULL,
   "modifiedAt" timestamp without time zone NOT NULL
 );

@@ -79,7 +79,25 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             params['clientGeneratedSecret'],
           ),
-        )
+        ),
+        'fetchUser': _i1.MethodConnector(
+          name: 'fetchUser',
+          params: {
+            'clientGeneratedSecret': _i1.ParameterDescription(
+              name: 'clientGeneratedSecret',
+              type: _i1.getType<String>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['auth'] as _i3.AuthEndpoint).fetchUser(
+            session,
+            params['clientGeneratedSecret'],
+          ),
+        ),
       },
     );
     connectors['snap'] = _i1.EndpointConnector(

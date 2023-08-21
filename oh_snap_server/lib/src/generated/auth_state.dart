@@ -15,6 +15,7 @@ class AuthState extends _i1.TableRow {
     required this.codeverifier,
     required this.codechallenge,
     required this.url,
+    this.matricaid,
     required this.createdAt,
     required this.modifiedAt,
   }) : super(id);
@@ -32,6 +33,8 @@ class AuthState extends _i1.TableRow {
       codechallenge: serializationManager
           .deserialize<String>(jsonSerialization['codechallenge']),
       url: serializationManager.deserialize<String>(jsonSerialization['url']),
+      matricaid: serializationManager
+          .deserialize<String?>(jsonSerialization['matricaid']),
       createdAt: serializationManager
           .deserialize<DateTime>(jsonSerialization['createdAt']),
       modifiedAt: serializationManager
@@ -49,6 +52,8 @@ class AuthState extends _i1.TableRow {
 
   String url;
 
+  String? matricaid;
+
   DateTime createdAt;
 
   DateTime modifiedAt;
@@ -63,6 +68,7 @@ class AuthState extends _i1.TableRow {
       'codeverifier': codeverifier,
       'codechallenge': codechallenge,
       'url': url,
+      'matricaid': matricaid,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -76,6 +82,7 @@ class AuthState extends _i1.TableRow {
       'codeverifier': codeverifier,
       'codechallenge': codechallenge,
       'url': url,
+      'matricaid': matricaid,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -89,6 +96,7 @@ class AuthState extends _i1.TableRow {
       'codeverifier': codeverifier,
       'codechallenge': codechallenge,
       'url': url,
+      'matricaid': matricaid,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -114,6 +122,9 @@ class AuthState extends _i1.TableRow {
         return;
       case 'url':
         url = value;
+        return;
+      case 'matricaid':
+        matricaid = value;
         return;
       case 'createdAt':
         createdAt = value;
@@ -253,6 +264,8 @@ class AuthStateTable extends _i1.Table {
 
   final url = _i1.ColumnString('url');
 
+  final matricaid = _i1.ColumnString('matricaid');
+
   final createdAt = _i1.ColumnDateTime('createdAt');
 
   final modifiedAt = _i1.ColumnDateTime('modifiedAt');
@@ -264,6 +277,7 @@ class AuthStateTable extends _i1.Table {
         codeverifier,
         codechallenge,
         url,
+        matricaid,
         createdAt,
         modifiedAt,
       ];

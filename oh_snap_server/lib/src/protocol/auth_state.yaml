@@ -5,6 +5,7 @@ fields:
   codeverifier: String,
   codechallenge: String,
   url: String,
+  matricaid: String?,
   createdAt: DateTime,
   modifiedAt: DateTime,
 

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:oh_snap_server/src/domain/service/query_service.dart';
 import 'package:oh_snap_server/src/domain/service/time_service.dart';
 import 'package:oh_snap_server/src/generated/auth_state.dart';
+import 'package:oh_snap_server/src/generated/protocol.dart';
 import 'package:pkce/pkce.dart';
 import 'package:serverpod/serverpod.dart';
 
@@ -46,6 +48,16 @@ class AuthEndpoint extends Endpoint {
     return encoded;
   }
 
+  Future<User?> fetchUser(Session session, String clientGeneratedSecret) async {
+    var queryService = QueryService(session);
+    final authStateResult = await queryService.findAuthStateByState(clientGeneratedSecret);
+    if(authStateResult == null) {
+      throw Exception('User not found for this value');
+    }
+    final user = queryService.findUserByMatricaId(authStateResult.matricaid!);
+    return user;
+  }
 
-}
+
+  }
 
