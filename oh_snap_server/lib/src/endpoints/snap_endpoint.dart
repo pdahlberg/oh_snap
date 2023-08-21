@@ -136,8 +136,10 @@ class SnapEndpoint extends Endpoint {
       msg: 'post.captureurl is null',
     );
 
+    session.log('Post(${post.id})/Task(${task.id}): Capture screenshot');
     final (screenshot, textContent) = await _takeScreenshot(session, post.captureurl!, false);
     //String filename = '${_textToFilename(post.title!)}.png';
+    session.log('Post(${post.id})/Task(${task.id}): Uploading screenshot');
     final (screenshotPermalinkUrl, screenshotSdriveUrl) = await _upload(session, screenshot, 'png', 'image/png', post.filename);
     post.imageUrl = screenshotPermalinkUrl;
     post.text = textContent;
