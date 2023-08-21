@@ -7,6 +7,7 @@ abstract class LoginEvent extends Equatable {
 }
 
 class FetchAuthUrl extends LoginEvent {}
+class SyncUser extends LoginEvent {}
 
 
 

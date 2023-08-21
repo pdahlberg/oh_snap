@@ -32,14 +32,13 @@ class LoginPage extends StatelessWidget {
                 onPressed: hasUrl ? null : () {
                   context.loginBloc.add(FetchAuthUrl());
                 },
-                child: Text('Fetch Auth Url'),
+                child: Text('Generate Matrica URL'),
               ),
               ElevatedButton(
                 onPressed: hasUrl ? () async {
-                  await _launchUrl(state.authUrl!);
-                  //router.router.pop();
+                  context.loginBloc.add(SyncUser());
                 } : null,
-                child: Text('Matrica'),
+                child: Text('Check auth result'),
               ),
             ],
           );

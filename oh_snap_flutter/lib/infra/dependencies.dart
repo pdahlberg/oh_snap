@@ -12,8 +12,8 @@ import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 class Dependencies {
 
-  //static const baseUrl = 'https://api.ohsnap.app/';
-  static const baseUrl = 'http://localhost:8080/';
+  static const baseUrl = 'https://api.ohsnap.app/';
+  //static const baseUrl = 'http://localhost:8080/';
 
   static List<Provider> common() => [
     Provider<TimeService>(create: (_) => TimeService()),

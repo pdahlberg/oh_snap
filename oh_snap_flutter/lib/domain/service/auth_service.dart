@@ -6,6 +6,7 @@ class AuthService {
 
   final Client _client;
   User? _user;
+  String? _someState;
 
   AuthService(
       this._client,
@@ -17,7 +18,8 @@ class AuthService {
 
   Future<Uri> authUrl() async {
     // generate random code for state
-    final urlString = await _client.auth.authLink('todo_random_state_code');
+    _someState = DateTime.now().microsecondsSinceEpoch.toString();
+    final urlString = await _client.auth.authLink(_someState!);
     return Uri.parse(urlString);
   }
 
@@ -25,12 +27,10 @@ class AuthService {
     return _user != null;
   }
 
-  /*Future<Login> getLogin() async {
-    var value = await _loginRepository
-        .findAll()
-        .then((value) => value.firstOrNull);
-
-    return value ?? await login('login');
-  }*/
+  Future<User> fetchUser() async {
+    final user = await _client.auth.fetchUser(_someState!);
+    // Errors... who has time for that with a few minutes left...
+    return user!;
+  }
 
 }

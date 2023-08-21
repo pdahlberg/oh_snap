@@ -15,6 +15,7 @@ class AuthState extends _i1.SerializableEntity {
     required this.codeverifier,
     required this.codechallenge,
     required this.url,
+    this.matricaid,
     required this.createdAt,
     required this.modifiedAt,
   });
@@ -32,6 +33,8 @@ class AuthState extends _i1.SerializableEntity {
       codechallenge: serializationManager
           .deserialize<String>(jsonSerialization['codechallenge']),
       url: serializationManager.deserialize<String>(jsonSerialization['url']),
+      matricaid: serializationManager
+          .deserialize<String?>(jsonSerialization['matricaid']),
       createdAt: serializationManager
           .deserialize<DateTime>(jsonSerialization['createdAt']),
       modifiedAt: serializationManager
@@ -52,6 +55,8 @@ class AuthState extends _i1.SerializableEntity {
 
   String url;
 
+  String? matricaid;
+
   DateTime createdAt;
 
   DateTime modifiedAt;
@@ -64,6 +69,7 @@ class AuthState extends _i1.SerializableEntity {
       'codeverifier': codeverifier,
       'codechallenge': codechallenge,
       'url': url,
+      'matricaid': matricaid,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
