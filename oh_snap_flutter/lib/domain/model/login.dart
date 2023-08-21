@@ -10,6 +10,6 @@ class Login {
 
   Login.fromUser(User user) :
     matricaId = user.matricaid,
-    accessToken = user.matricaAccessToken;
+    accessToken = user.matricaaccesstoken;
 
 }
