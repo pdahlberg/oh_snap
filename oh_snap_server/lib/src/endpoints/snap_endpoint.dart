@@ -322,13 +322,19 @@ class SnapEndpoint extends Endpoint {
   }*/
 
   Future<(List<int>, String)> _takeScreenshot(Session session, String url, bool removeButtons) async {
+    session.log('Taking screenshot 1');
     var browser = await puppeteer.launch();
+    session.log('Taking screenshot 2');
     var page = await browser.newPage();
-    
+    session.log('Taking screenshot 3');
+
     // Navigate the page to a URL
     await page.goto(url, wait: Until.networkIdle);
+    session.log('Taking screenshot 4');
     var devTools = page.devTools;
+    session.log('Taking screenshot 5');
     await devTools.client.send('Emulation.setEmulatedMedia', {'features': [{'name': 'prefers-color-scheme', 'value': 'dark'}]});
+    session.log('Taking screenshot 6');
     // todo: PR to fix the upstream spelling error
     //await page.emulateMediaFeatures([MediaFeature.prefersColorsScheme('dark')]);
     //await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'dark' }]);
@@ -343,8 +349,11 @@ class SnapEndpoint extends Endpoint {
     
     // sel0 =      '#react-root > div > div > div.css-1dbjc4n.r-18u37iz.r-13qz1uu.r-417010 > main > div > div > div > div > div > section > div > div > div > div > div:nth-child(1) > div > div > article > div';
     var selector = '#react-root > div > div > div.css-1dbjc4n.r-18u37iz.r-13qz1uu.r-417010 > main > div > div > div > div > div > section > div > div > div > div > div:nth-child(1) > div > div';
+    session.log('Taking screenshot 7');
     await page.waitForSelector(selector, timeout: Duration(seconds: 10));
+    session.log('Taking screenshot 8');
     var element = await page.$(selector);
+    session.log('Taking screenshot 9');
 
     var something = await page.evaluate<List>(r'''resultsSelector => {
   const anchors = Array.from(document.querySelectorAll(resultsSelector));
@@ -352,10 +361,12 @@ class SnapEndpoint extends Endpoint {
     return anchor.textContent;
   });
 }''', args: [selector]);
+    session.log('Taking screenshot 10');
 
     String str = something.join('\n');
 
     var screenshot = await element.screenshot();
+    session.log('Taking screenshot 11');
     await browser.close();
     return (screenshot, str);
   }
