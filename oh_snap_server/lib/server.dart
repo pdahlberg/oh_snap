@@ -32,7 +32,7 @@ void run(List<String> args) async {
 
   pod.webServer.addRoute(
     RouteStaticDirectory(serverDirectory: 'templates', basePath: '/templates'),
-    '/*',
+    '/templates/*',
   );
 
   pod.webServer.addRoute(MatricaAuthRoute(), '/auth/callback');
