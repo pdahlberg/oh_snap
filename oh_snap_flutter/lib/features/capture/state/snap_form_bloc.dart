@@ -35,7 +35,7 @@ class SnapFormBloc extends FormBloc<String, String> {
   Future<void> onSubmitting() async {
     try {
       final user = await _authService.fetchUser(); // This should be in an event instead
-      var result = await _client.snap.create(user, url.value, 'Ufw2M6ojcXDcaFhU3zWXbsGEUYYADoqEz3wLQpc6dFh', false);
+      var result = await _client.snap.create(user.id, url.value, 'Ufw2M6ojcXDcaFhU3zWXbsGEUYYADoqEz3wLQpc6dFh', false);
       await _client.snap.processTasks();
       //debugPrint('result: ${result.id}');
       emitSuccess();
