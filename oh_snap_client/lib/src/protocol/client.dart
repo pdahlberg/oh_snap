@@ -27,6 +27,20 @@ class _EndpointAnnotate extends _i1.EndpointRef {
       );
 }
 
+class _EndpointAuth extends _i1.EndpointRef {
+  _EndpointAuth(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'auth';
+
+  _i2.Future<String> authLink(String clientGeneratedSecret) =>
+      caller.callServerEndpoint<String>(
+        'auth',
+        'authLink',
+        {'clientGeneratedSecret': clientGeneratedSecret},
+      );
+}
+
 class _EndpointSnap extends _i1.EndpointRef {
   _EndpointSnap(_i1.EndpointCaller caller) : super(caller);
 
@@ -67,16 +81,20 @@ class Client extends _i1.ServerpodClient {
           authenticationKeyManager: authenticationKeyManager,
         ) {
     annotate = _EndpointAnnotate(this);
+    auth = _EndpointAuth(this);
     snap = _EndpointSnap(this);
   }
 
   late final _EndpointAnnotate annotate;
+
+  late final _EndpointAuth auth;
 
   late final _EndpointSnap snap;
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'annotate': annotate,
+        'auth': auth,
         'snap': snap,
       };
   @override

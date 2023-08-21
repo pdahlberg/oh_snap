@@ -1,0 +1,10 @@
+class: AuthState
+table: auth_state
+fields:
+  state: String,
+  codeverifier: String,
+  codechallenge: String,
+  url: String,
+  createdAt: DateTime,
+  modifiedAt: DateTime,
+

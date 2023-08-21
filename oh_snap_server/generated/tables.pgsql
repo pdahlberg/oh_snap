@@ -18,6 +18,24 @@ ALTER TABLE ONLY "app_user"
 
 
 --
+-- Class AuthState as table auth_state
+--
+
+CREATE TABLE "auth_state" (
+  "id" serial,
+  "state" text NOT NULL,
+  "codeverifier" text NOT NULL,
+  "codechallenge" text NOT NULL,
+  "url" text NOT NULL,
+  "createdAt" timestamp without time zone NOT NULL,
+  "modifiedAt" timestamp without time zone NOT NULL
+);
+
+ALTER TABLE ONLY "auth_state"
+  ADD CONSTRAINT auth_state_pkey PRIMARY KEY (id);
+
+
+--
 -- Class Post as table post
 --
 

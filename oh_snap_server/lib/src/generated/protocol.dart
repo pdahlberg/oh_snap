@@ -9,16 +9,18 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
-import 'nft.dart' as _i3;
-import 'nft_list.dart' as _i4;
-import 'payment_requirement.dart' as _i5;
-import 'post.dart' as _i6;
-import 'snap_info.dart' as _i7;
-import 'task.dart' as _i8;
-import 'task_status.dart' as _i9;
-import 'task_type.dart' as _i10;
-import 'user.dart' as _i11;
-import 'protocol.dart' as _i12;
+import 'auth_state.dart' as _i3;
+import 'nft.dart' as _i4;
+import 'nft_list.dart' as _i5;
+import 'payment_requirement.dart' as _i6;
+import 'post.dart' as _i7;
+import 'snap_info.dart' as _i8;
+import 'task.dart' as _i9;
+import 'task_status.dart' as _i10;
+import 'task_type.dart' as _i11;
+import 'user.dart' as _i12;
+import 'protocol.dart' as _i13;
+export 'auth_state.dart';
 export 'nft.dart';
 export 'nft_list.dart';
 export 'payment_requirement.dart';
@@ -39,6 +41,72 @@ class Protocol extends _i1.SerializationManagerServer {
   static final Protocol _instance = Protocol._();
 
   static final targetDatabaseDefinition = _i2.DatabaseDefinition(tables: [
+    _i2.TableDefinition(
+      name: 'auth_state',
+      schema: 'public',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.integer,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'auth_state_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'state',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'codeverifier',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'codechallenge',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'url',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+        _i2.ColumnDefinition(
+          name: 'modifiedAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'auth_state_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
     _i2.TableDefinition(
       name: 'post',
       schema: 'public',
@@ -320,67 +388,73 @@ class Protocol extends _i1.SerializationManagerServer {
     if (customConstructors.containsKey(t)) {
       return customConstructors[t]!(data, this) as T;
     }
-    if (t == _i3.Nft) {
-      return _i3.Nft.fromJson(data, this) as T;
+    if (t == _i3.AuthState) {
+      return _i3.AuthState.fromJson(data, this) as T;
     }
-    if (t == _i4.NftList) {
-      return _i4.NftList.fromJson(data, this) as T;
+    if (t == _i4.Nft) {
+      return _i4.Nft.fromJson(data, this) as T;
     }
-    if (t == _i5.PaymentRequirement) {
-      return _i5.PaymentRequirement.fromJson(data) as T;
+    if (t == _i5.NftList) {
+      return _i5.NftList.fromJson(data, this) as T;
     }
-    if (t == _i6.Post) {
-      return _i6.Post.fromJson(data, this) as T;
+    if (t == _i6.PaymentRequirement) {
+      return _i6.PaymentRequirement.fromJson(data) as T;
     }
-    if (t == _i7.SnapInfo) {
-      return _i7.SnapInfo.fromJson(data, this) as T;
+    if (t == _i7.Post) {
+      return _i7.Post.fromJson(data, this) as T;
     }
-    if (t == _i8.Task) {
-      return _i8.Task.fromJson(data, this) as T;
+    if (t == _i8.SnapInfo) {
+      return _i8.SnapInfo.fromJson(data, this) as T;
     }
-    if (t == _i9.TaskStatus) {
-      return _i9.TaskStatus.fromJson(data) as T;
+    if (t == _i9.Task) {
+      return _i9.Task.fromJson(data, this) as T;
     }
-    if (t == _i10.TaskType) {
-      return _i10.TaskType.fromJson(data) as T;
+    if (t == _i10.TaskStatus) {
+      return _i10.TaskStatus.fromJson(data) as T;
     }
-    if (t == _i11.User) {
-      return _i11.User.fromJson(data, this) as T;
+    if (t == _i11.TaskType) {
+      return _i11.TaskType.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i3.Nft?>()) {
-      return (data != null ? _i3.Nft.fromJson(data, this) : null) as T;
+    if (t == _i12.User) {
+      return _i12.User.fromJson(data, this) as T;
     }
-    if (t == _i1.getType<_i4.NftList?>()) {
-      return (data != null ? _i4.NftList.fromJson(data, this) : null) as T;
+    if (t == _i1.getType<_i3.AuthState?>()) {
+      return (data != null ? _i3.AuthState.fromJson(data, this) : null) as T;
     }
-    if (t == _i1.getType<_i5.PaymentRequirement?>()) {
-      return (data != null ? _i5.PaymentRequirement.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.Nft?>()) {
+      return (data != null ? _i4.Nft.fromJson(data, this) : null) as T;
     }
-    if (t == _i1.getType<_i6.Post?>()) {
-      return (data != null ? _i6.Post.fromJson(data, this) : null) as T;
+    if (t == _i1.getType<_i5.NftList?>()) {
+      return (data != null ? _i5.NftList.fromJson(data, this) : null) as T;
     }
-    if (t == _i1.getType<_i7.SnapInfo?>()) {
-      return (data != null ? _i7.SnapInfo.fromJson(data, this) : null) as T;
+    if (t == _i1.getType<_i6.PaymentRequirement?>()) {
+      return (data != null ? _i6.PaymentRequirement.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.Task?>()) {
-      return (data != null ? _i8.Task.fromJson(data, this) : null) as T;
+    if (t == _i1.getType<_i7.Post?>()) {
+      return (data != null ? _i7.Post.fromJson(data, this) : null) as T;
     }
-    if (t == _i1.getType<_i9.TaskStatus?>()) {
-      return (data != null ? _i9.TaskStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i8.SnapInfo?>()) {
+      return (data != null ? _i8.SnapInfo.fromJson(data, this) : null) as T;
     }
-    if (t == _i1.getType<_i10.TaskType?>()) {
-      return (data != null ? _i10.TaskType.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i9.Task?>()) {
+      return (data != null ? _i9.Task.fromJson(data, this) : null) as T;
     }
-    if (t == _i1.getType<_i11.User?>()) {
-      return (data != null ? _i11.User.fromJson(data, this) : null) as T;
+    if (t == _i1.getType<_i10.TaskStatus?>()) {
+      return (data != null ? _i10.TaskStatus.fromJson(data) : null) as T;
     }
-    if (t == List<_i12.Nft>) {
-      return (data as List).map((e) => deserialize<_i12.Nft>(e)).toList()
+    if (t == _i1.getType<_i11.TaskType?>()) {
+      return (data != null ? _i11.TaskType.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i12.User?>()) {
+      return (data != null ? _i12.User.fromJson(data, this) : null) as T;
+    }
+    if (t == List<_i13.Nft>) {
+      return (data as List).map((e) => deserialize<_i13.Nft>(e)).toList()
           as dynamic;
     }
-    if (t == _i1.getType<List<_i12.Task>?>()) {
+    if (t == _i1.getType<List<_i13.Task>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i12.Task>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i13.Task>(e)).toList()
           : null) as dynamic;
     }
     try {
@@ -391,31 +465,34 @@ class Protocol extends _i1.SerializationManagerServer {
 
   @override
   String? getClassNameForObject(Object data) {
-    if (data is _i3.Nft) {
+    if (data is _i3.AuthState) {
+      return 'AuthState';
+    }
+    if (data is _i4.Nft) {
       return 'Nft';
     }
-    if (data is _i4.NftList) {
+    if (data is _i5.NftList) {
       return 'NftList';
     }
-    if (data is _i5.PaymentRequirement) {
+    if (data is _i6.PaymentRequirement) {
       return 'PaymentRequirement';
     }
-    if (data is _i6.Post) {
+    if (data is _i7.Post) {
       return 'Post';
     }
-    if (data is _i7.SnapInfo) {
+    if (data is _i8.SnapInfo) {
       return 'SnapInfo';
     }
-    if (data is _i8.Task) {
+    if (data is _i9.Task) {
       return 'Task';
     }
-    if (data is _i9.TaskStatus) {
+    if (data is _i10.TaskStatus) {
       return 'TaskStatus';
     }
-    if (data is _i10.TaskType) {
+    if (data is _i11.TaskType) {
       return 'TaskType';
     }
-    if (data is _i11.User) {
+    if (data is _i12.User) {
       return 'User';
     }
     return super.getClassNameForObject(data);
@@ -423,32 +500,35 @@ class Protocol extends _i1.SerializationManagerServer {
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
+    if (data['className'] == 'AuthState') {
+      return deserialize<_i3.AuthState>(data['data']);
+    }
     if (data['className'] == 'Nft') {
-      return deserialize<_i3.Nft>(data['data']);
+      return deserialize<_i4.Nft>(data['data']);
     }
     if (data['className'] == 'NftList') {
-      return deserialize<_i4.NftList>(data['data']);
+      return deserialize<_i5.NftList>(data['data']);
     }
     if (data['className'] == 'PaymentRequirement') {
-      return deserialize<_i5.PaymentRequirement>(data['data']);
+      return deserialize<_i6.PaymentRequirement>(data['data']);
     }
     if (data['className'] == 'Post') {
-      return deserialize<_i6.Post>(data['data']);
+      return deserialize<_i7.Post>(data['data']);
     }
     if (data['className'] == 'SnapInfo') {
-      return deserialize<_i7.SnapInfo>(data['data']);
+      return deserialize<_i8.SnapInfo>(data['data']);
     }
     if (data['className'] == 'Task') {
-      return deserialize<_i8.Task>(data['data']);
+      return deserialize<_i9.Task>(data['data']);
     }
     if (data['className'] == 'TaskStatus') {
-      return deserialize<_i9.TaskStatus>(data['data']);
+      return deserialize<_i10.TaskStatus>(data['data']);
     }
     if (data['className'] == 'TaskType') {
-      return deserialize<_i10.TaskType>(data['data']);
+      return deserialize<_i11.TaskType>(data['data']);
     }
     if (data['className'] == 'User') {
-      return deserialize<_i11.User>(data['data']);
+      return deserialize<_i12.User>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
@@ -462,12 +542,14 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     switch (t) {
-      case _i6.Post:
-        return _i6.Post.t;
-      case _i8.Task:
-        return _i8.Task.t;
-      case _i11.User:
-        return _i11.User.t;
+      case _i3.AuthState:
+        return _i3.AuthState.t;
+      case _i7.Post:
+        return _i7.Post.t;
+      case _i9.Task:
+        return _i9.Task.t;
+      case _i12.User:
+        return _i12.User.t;
     }
     return null;
   }

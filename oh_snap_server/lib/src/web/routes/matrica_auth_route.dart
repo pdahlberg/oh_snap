@@ -18,12 +18,6 @@ class MatricaAuthRoute extends WidgetRoute {
   Future<WidgetJson> build(Session session, HttpRequest request) async {
     session.log('MatricaAuthRoute called: ${request.uri}');
 
-    /*final pkcePair = PkcePair.generate();
-    var codeVerifier = pkcePair.codeVerifier;
-    session.log('codeVerifier: $codeVerifier');
-    var codeChallenge = pkcePair.codeChallenge;
-    session.log('codeChallenge: $codeChallenge');
-*/
     final clientId = session.passwords['matricaClientId'];
     final clientSecret = session.passwords['matricaClientSecret'];
     final codeVerifier = session.passwords['matricaCodeVerifier']; // Obviously not the right way, but for now wtf
@@ -44,6 +38,12 @@ class MatricaAuthRoute extends WidgetRoute {
 
     assert(codeVerifier != null, 'Code verifier is null');
     var codeVerifier2 = codeVerifier!;
+
+    assert(state != null, 'State is null');
+    var state2 = state!;
+
+    final authState = await QueryService(session).findAuthStateByState(state2);
+    assert(authState != null, 'Auth state not found');
 
     session.log('Matrical callback state: $state');
 

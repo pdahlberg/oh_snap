@@ -8,7 +8,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/annotate_endpoint.dart' as _i2;
-import '../endpoints/snap_endpoint.dart' as _i3;
+import '../endpoints/auth_endpoint.dart' as _i3;
+import '../endpoints/snap_endpoint.dart' as _i4;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -20,7 +21,13 @@ class Endpoints extends _i1.EndpointDispatch {
           'annotate',
           null,
         ),
-      'snap': _i3.SnapEndpoint()
+      'auth': _i3.AuthEndpoint()
+        ..initialize(
+          server,
+          'auth',
+          null,
+        ),
+      'snap': _i4.SnapEndpoint()
         ..initialize(
           server,
           'snap',
@@ -47,6 +54,30 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['annotate'] as _i2.AnnotateEndpoint).fetchNfts(
             session,
             params['walletAddress'],
+          ),
+        )
+      },
+    );
+    connectors['auth'] = _i1.EndpointConnector(
+      name: 'auth',
+      endpoint: endpoints['auth']!,
+      methodConnectors: {
+        'authLink': _i1.MethodConnector(
+          name: 'authLink',
+          params: {
+            'clientGeneratedSecret': _i1.ParameterDescription(
+              name: 'clientGeneratedSecret',
+              type: _i1.getType<String>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['auth'] as _i3.AuthEndpoint).authLink(
+            session,
+            params['clientGeneratedSecret'],
           ),
         )
       },
@@ -78,7 +109,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['snap'] as _i3.SnapEndpoint).create(
+              (endpoints['snap'] as _i4.SnapEndpoint).create(
             session,
             params['url'],
             params['walletAddress'],
@@ -92,7 +123,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['snap'] as _i3.SnapEndpoint).processTasks(session),
+              (endpoints['snap'] as _i4.SnapEndpoint).processTasks(session),
         ),
       },
     );
