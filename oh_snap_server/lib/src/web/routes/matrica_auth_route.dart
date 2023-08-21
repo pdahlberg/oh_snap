@@ -20,7 +20,7 @@ class MatricaAuthRoute extends WidgetRoute {
 
     final clientId = session.passwords['matricaClientId'];
     final clientSecret = session.passwords['matricaClientSecret'];
-    final codeVerifier = session.passwords['matricaCodeVerifier']; // Obviously not the right way, but for now wtf
+    //final codeVerifier = session.passwords['matricaCodeVerifier']; // Obviously not the right way, but for now wtf
     final code = request.uri.queryParameters['code'];
     final state = request.uri.queryParameters['state'];
 
@@ -36,14 +36,15 @@ class MatricaAuthRoute extends WidgetRoute {
     assert(code != null, 'Code is null');
     var code2 = code!;
 
-    assert(codeVerifier != null, 'Code verifier is null');
-    var codeVerifier2 = codeVerifier!;
+    //assert(codeVerifier != null, 'Code verifier is null');
+    //var codeVerifier2 = codeVerifier!;
 
     assert(state != null, 'State is null');
     var state2 = state!;
 
-    final authState = await QueryService(session).findAuthStateByState(state2);
-    assert(authState != null, 'Auth state not found');
+    final authStateResult = await QueryService(session).findAuthStateByState(state2);
+    assert(authStateResult != null, 'Auth state not found');
+    final authState = authStateResult!;
 
     session.log('Matrical callback state: $state');
 
@@ -53,7 +54,7 @@ class MatricaAuthRoute extends WidgetRoute {
       redirectUri: 'https://app.ohsnap.app/auth/callback',
       clientId: clientId2,
       clientSecret: clientSecret2,
-      codeVerifier: codeVerifier2,
+      codeVerifier: authState.codeverifier,
     );
 
     session.log('fetchAccessToken result: $accessTokenResult');
