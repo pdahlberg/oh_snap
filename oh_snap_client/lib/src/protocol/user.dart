@@ -13,7 +13,7 @@ class User extends _i1.SerializableEntity {
     this.id,
     required this.username,
     required this.matricaid,
-    required this.matricaAccessToken,
+    required this.matricaaccesstoken,
     required this.matricaRefreshToken,
     required this.credits,
     required this.createdAt,
@@ -30,8 +30,8 @@ class User extends _i1.SerializableEntity {
           .deserialize<String>(jsonSerialization['username']),
       matricaid: serializationManager
           .deserialize<String>(jsonSerialization['matricaid']),
-      matricaAccessToken: serializationManager
-          .deserialize<String>(jsonSerialization['matricaAccessToken']),
+      matricaaccesstoken: serializationManager
+          .deserialize<String>(jsonSerialization['matricaaccesstoken']),
       matricaRefreshToken: serializationManager
           .deserialize<String>(jsonSerialization['matricaRefreshToken']),
       credits:
@@ -52,7 +52,7 @@ class User extends _i1.SerializableEntity {
 
   String matricaid;
 
-  String matricaAccessToken;
+  String matricaaccesstoken;
 
   String matricaRefreshToken;
 
@@ -68,7 +68,7 @@ class User extends _i1.SerializableEntity {
       'id': id,
       'username': username,
       'matricaid': matricaid,
-      'matricaAccessToken': matricaAccessToken,
+      'matricaaccesstoken': matricaaccesstoken,
       'matricaRefreshToken': matricaRefreshToken,
       'credits': credits,
       'createdAt': createdAt,

@@ -6,7 +6,7 @@ CREATE TABLE "app_user" (
   "id" serial,
   "username" text NOT NULL,
   "matricaid" text NOT NULL,
-  "matricaAccessToken" text NOT NULL,
+  "matricaaccesstoken" text NOT NULL,
   "matricaRefreshToken" text NOT NULL,
   "credits" integer NOT NULL,
   "createdAt" timestamp without time zone NOT NULL,

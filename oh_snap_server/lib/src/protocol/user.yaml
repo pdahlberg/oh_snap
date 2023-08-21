@@ -3,7 +3,7 @@ table: app_user
 fields:
   username: String,
   matricaid: String,
-  matricaAccessToken: String,
+  matricaaccesstoken: String,
   matricaRefreshToken: String,
   credits: int,
   createdAt: DateTime,

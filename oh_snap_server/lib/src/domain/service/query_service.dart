@@ -79,7 +79,7 @@ class QueryService {
     var statusClause = status?.let((value) => ' AND t.status = $value') ?? '';
     var matricaIdClause = matricaId?.let((value) => " AND t.matricaid = '$value'") ?? '';
     var stateClause = state?.let((value) => " AND t.state = '$value'") ?? '';
-    var accessTokenClause = accessToken?.let((value) => " AND t.accessToken = '$value'") ?? '';
+    var accessTokenClause = accessToken?.let((value) => " AND t.matricaaccesstoken = '$value'") ?? '';
 
     var query = '''
         SELECT * FROM $table t
@@ -142,7 +142,7 @@ class QueryService {
       id: row[column++] as int,
       username: row[column++] as String,
       matricaid: row[column++] as String,
-      matricaAccessToken: row[column++] as String,
+      matricaaccesstoken: row[column++] as String,
       matricaRefreshToken: row[column++] as String,
       credits: row[column++] as int,
       createdAt: row[column++] as DateTime,

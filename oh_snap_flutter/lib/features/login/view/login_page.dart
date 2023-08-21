@@ -32,13 +32,13 @@ class LoginPage extends StatelessWidget {
                 onPressed: hasUrl ? null : () {
                   context.loginBloc.add(FetchAuthUrl());
                 },
-                child: Text('Generate Matrica URL'),
+                child: Text('Verify with Matrica'), // Should have the Matrica button
               ),
               ElevatedButton(
                 onPressed: hasUrl ? () async {
                   context.loginBloc.add(SyncUser());
                 } : null,
-                child: Text('Check auth result'),
+                child: Text('Sync with Matrica'), // Should not be needed of course, but hey... it's 00:13...
               ),
             ],
           );
@@ -47,11 +47,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Future<void> _launchUrl(Uri url) async {
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
-    }
-  }
 
 }
 

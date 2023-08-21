@@ -7,6 +7,7 @@ import 'package:oh_snap_flutter/features/capture/view/snap_page.dart';
 import 'package:oh_snap_flutter/features/login/state/login_events.dart';
 import 'package:oh_snap_flutter/features/login/state/login_state.dart';
 import 'package:oh_snap_flutter/infra/app_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
@@ -36,6 +37,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(
       authUrl: url,
     ));
+
+    _launchUrl(url);
+  }
+
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   Future<void> _onSyncUser(SyncUser event, Emitter<LoginState> emit) async {
