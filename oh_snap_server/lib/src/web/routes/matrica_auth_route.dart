@@ -69,9 +69,9 @@ class MatricaAuthRoute extends WidgetRoute {
       user = User(
         username: userResponse.username,
         matricaid: matricaId,
-        matricaAccessToken: accessTokenResult.access_token,
+        matricaaccesstoken: accessTokenResult.access_token,
         matricaRefreshToken: accessTokenResult.refresh_token,
-        credits: 0,
+        credits: 50,
         modifiedAt: _timeService.now(),
         createdAt: _timeService.now(),
       );
@@ -85,8 +85,8 @@ class MatricaAuthRoute extends WidgetRoute {
         changed = true;
       }
 
-      if(user.matricaAccessToken != accessTokenResult.access_token) {
-        user.matricaAccessToken = accessTokenResult.access_token;
+      if(user.matricaaccesstoken != accessTokenResult.access_token) {
+        user.matricaaccesstoken = accessTokenResult.access_token;
         changed = true;
       }
 
