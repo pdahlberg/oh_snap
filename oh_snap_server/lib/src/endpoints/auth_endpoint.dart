@@ -23,7 +23,7 @@ class AuthEndpoint extends Endpoint {
     //final codeVerifier = session.passwords['matricaCodeVerifier']; // Obviously not the right way, but for now wtf
     //final codeChallenge = session.passwords['matricaCodeChallenge']; // Obviously not the right way, but for now wtf
     final scope = 'profile';
-    final redirectUri = 'https%3A%2F%2Fapp.ohsnap.app%2Fauth%2Fcallback';
+    final redirectUri = 'https://app.ohsnap.app/auth/callback';
     //final redirectUri = 'https%3A%2F%2Fapp.ohsnap.app%2Fauth%2Fcallback';
     final state = clientGeneratedSecret;
 
