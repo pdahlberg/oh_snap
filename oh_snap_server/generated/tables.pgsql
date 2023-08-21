@@ -6,7 +6,7 @@ CREATE TABLE "app_user" (
   "id" serial,
   "username" text NOT NULL,
   "matricaid" text NOT NULL,
-  "matricaAccessToken" text NOT NULL,
+  "matricaaccesstoken" text NOT NULL,
   "matricaRefreshToken" text NOT NULL,
   "credits" integer NOT NULL,
   "createdAt" timestamp without time zone NOT NULL,
@@ -15,6 +15,25 @@ CREATE TABLE "app_user" (
 
 ALTER TABLE ONLY "app_user"
   ADD CONSTRAINT app_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Class AuthState as table auth_state
+--
+
+CREATE TABLE "auth_state" (
+  "id" serial,
+  "state" text NOT NULL,
+  "codeverifier" text NOT NULL,
+  "codechallenge" text NOT NULL,
+  "url" text NOT NULL,
+  "matricaid" text,
+  "createdAt" timestamp without time zone NOT NULL,
+  "modifiedAt" timestamp without time zone NOT NULL
+);
+
+ALTER TABLE ONLY "auth_state"
+  ADD CONSTRAINT auth_state_pkey PRIMARY KEY (id);
 
 
 --

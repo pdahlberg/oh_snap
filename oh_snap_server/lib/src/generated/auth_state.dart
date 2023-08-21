@@ -8,34 +8,33 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 
-class User extends _i1.TableRow {
-  User({
+class AuthState extends _i1.TableRow {
+  AuthState({
     int? id,
-    required this.username,
-    required this.matricaid,
-    required this.matricaaccesstoken,
-    required this.matricaRefreshToken,
-    required this.credits,
+    required this.state,
+    required this.codeverifier,
+    required this.codechallenge,
+    required this.url,
+    this.matricaid,
     required this.createdAt,
     required this.modifiedAt,
   }) : super(id);
 
-  factory User.fromJson(
+  factory AuthState.fromJson(
     Map<String, dynamic> jsonSerialization,
     _i1.SerializationManager serializationManager,
   ) {
-    return User(
+    return AuthState(
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
-      username: serializationManager
-          .deserialize<String>(jsonSerialization['username']),
+      state:
+          serializationManager.deserialize<String>(jsonSerialization['state']),
+      codeverifier: serializationManager
+          .deserialize<String>(jsonSerialization['codeverifier']),
+      codechallenge: serializationManager
+          .deserialize<String>(jsonSerialization['codechallenge']),
+      url: serializationManager.deserialize<String>(jsonSerialization['url']),
       matricaid: serializationManager
-          .deserialize<String>(jsonSerialization['matricaid']),
-      matricaaccesstoken: serializationManager
-          .deserialize<String>(jsonSerialization['matricaaccesstoken']),
-      matricaRefreshToken: serializationManager
-          .deserialize<String>(jsonSerialization['matricaRefreshToken']),
-      credits:
-          serializationManager.deserialize<int>(jsonSerialization['credits']),
+          .deserialize<String?>(jsonSerialization['matricaid']),
       createdAt: serializationManager
           .deserialize<DateTime>(jsonSerialization['createdAt']),
       modifiedAt: serializationManager
@@ -43,33 +42,33 @@ class User extends _i1.TableRow {
     );
   }
 
-  static final t = UserTable();
+  static final t = AuthStateTable();
 
-  String username;
+  String state;
 
-  String matricaid;
+  String codeverifier;
 
-  String matricaaccesstoken;
+  String codechallenge;
 
-  String matricaRefreshToken;
+  String url;
 
-  int credits;
+  String? matricaid;
 
   DateTime createdAt;
 
   DateTime modifiedAt;
 
   @override
-  String get tableName => 'app_user';
+  String get tableName => 'auth_state';
   @override
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'username': username,
+      'state': state,
+      'codeverifier': codeverifier,
+      'codechallenge': codechallenge,
+      'url': url,
       'matricaid': matricaid,
-      'matricaaccesstoken': matricaaccesstoken,
-      'matricaRefreshToken': matricaRefreshToken,
-      'credits': credits,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -79,11 +78,11 @@ class User extends _i1.TableRow {
   Map<String, dynamic> toJsonForDatabase() {
     return {
       'id': id,
-      'username': username,
+      'state': state,
+      'codeverifier': codeverifier,
+      'codechallenge': codechallenge,
+      'url': url,
       'matricaid': matricaid,
-      'matricaaccesstoken': matricaaccesstoken,
-      'matricaRefreshToken': matricaRefreshToken,
-      'credits': credits,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -93,11 +92,11 @@ class User extends _i1.TableRow {
   Map<String, dynamic> allToJson() {
     return {
       'id': id,
-      'username': username,
+      'state': state,
+      'codeverifier': codeverifier,
+      'codechallenge': codechallenge,
+      'url': url,
       'matricaid': matricaid,
-      'matricaaccesstoken': matricaaccesstoken,
-      'matricaRefreshToken': matricaRefreshToken,
-      'credits': credits,
       'createdAt': createdAt,
       'modifiedAt': modifiedAt,
     };
@@ -112,20 +111,20 @@ class User extends _i1.TableRow {
       case 'id':
         id = value;
         return;
-      case 'username':
-        username = value;
+      case 'state':
+        state = value;
+        return;
+      case 'codeverifier':
+        codeverifier = value;
+        return;
+      case 'codechallenge':
+        codechallenge = value;
+        return;
+      case 'url':
+        url = value;
         return;
       case 'matricaid':
         matricaid = value;
-        return;
-      case 'matricaaccesstoken':
-        matricaaccesstoken = value;
-        return;
-      case 'matricaRefreshToken':
-        matricaRefreshToken = value;
-        return;
-      case 'credits':
-        credits = value;
         return;
       case 'createdAt':
         createdAt = value;
@@ -138,9 +137,9 @@ class User extends _i1.TableRow {
     }
   }
 
-  static Future<List<User>> find(
+  static Future<List<AuthState>> find(
     _i1.Session session, {
-    UserExpressionBuilder? where,
+    AuthStateExpressionBuilder? where,
     int? limit,
     int? offset,
     _i1.Column? orderBy,
@@ -149,8 +148,8 @@ class User extends _i1.TableRow {
     bool useCache = true,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.find<User>(
-      where: where != null ? where(User.t) : null,
+    return session.db.find<AuthState>(
+      where: where != null ? where(AuthState.t) : null,
       limit: limit,
       offset: offset,
       orderBy: orderBy,
@@ -161,17 +160,17 @@ class User extends _i1.TableRow {
     );
   }
 
-  static Future<User?> findSingleRow(
+  static Future<AuthState?> findSingleRow(
     _i1.Session session, {
-    UserExpressionBuilder? where,
+    AuthStateExpressionBuilder? where,
     int? offset,
     _i1.Column? orderBy,
     bool orderDescending = false,
     bool useCache = true,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.findSingleRow<User>(
-      where: where != null ? where(User.t) : null,
+    return session.db.findSingleRow<AuthState>(
+      where: where != null ? where(AuthState.t) : null,
       offset: offset,
       orderBy: orderBy,
       orderDescending: orderDescending,
@@ -180,27 +179,27 @@ class User extends _i1.TableRow {
     );
   }
 
-  static Future<User?> findById(
+  static Future<AuthState?> findById(
     _i1.Session session,
     int id,
   ) async {
-    return session.db.findById<User>(id);
+    return session.db.findById<AuthState>(id);
   }
 
   static Future<int> delete(
     _i1.Session session, {
-    required UserExpressionBuilder where,
+    required AuthStateExpressionBuilder where,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.delete<User>(
-      where: where(User.t),
+    return session.db.delete<AuthState>(
+      where: where(AuthState.t),
       transaction: transaction,
     );
   }
 
   static Future<bool> deleteRow(
     _i1.Session session,
-    User row, {
+    AuthState row, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.deleteRow(
@@ -211,7 +210,7 @@ class User extends _i1.TableRow {
 
   static Future<bool> update(
     _i1.Session session,
-    User row, {
+    AuthState row, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.update(
@@ -222,7 +221,7 @@ class User extends _i1.TableRow {
 
   static Future<void> insert(
     _i1.Session session,
-    User row, {
+    AuthState row, {
     _i1.Transaction? transaction,
   }) async {
     return session.db.insert(
@@ -233,13 +232,13 @@ class User extends _i1.TableRow {
 
   static Future<int> count(
     _i1.Session session, {
-    UserExpressionBuilder? where,
+    AuthStateExpressionBuilder? where,
     int? limit,
     bool useCache = true,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.count<User>(
-      where: where != null ? where(User.t) : null,
+    return session.db.count<AuthState>(
+      where: where != null ? where(AuthState.t) : null,
       limit: limit,
       useCache: useCache,
       transaction: transaction,
@@ -247,25 +246,25 @@ class User extends _i1.TableRow {
   }
 }
 
-typedef UserExpressionBuilder = _i1.Expression Function(UserTable);
+typedef AuthStateExpressionBuilder = _i1.Expression Function(AuthStateTable);
 
-class UserTable extends _i1.Table {
-  UserTable() : super(tableName: 'app_user');
+class AuthStateTable extends _i1.Table {
+  AuthStateTable() : super(tableName: 'auth_state');
 
   /// The database id, set if the object has been inserted into the
   /// database or if it has been fetched from the database. Otherwise,
   /// the id will be null.
   final id = _i1.ColumnInt('id');
 
-  final username = _i1.ColumnString('username');
+  final state = _i1.ColumnString('state');
+
+  final codeverifier = _i1.ColumnString('codeverifier');
+
+  final codechallenge = _i1.ColumnString('codechallenge');
+
+  final url = _i1.ColumnString('url');
 
   final matricaid = _i1.ColumnString('matricaid');
-
-  final matricaaccesstoken = _i1.ColumnString('matricaaccesstoken');
-
-  final matricaRefreshToken = _i1.ColumnString('matricaRefreshToken');
-
-  final credits = _i1.ColumnInt('credits');
 
   final createdAt = _i1.ColumnDateTime('createdAt');
 
@@ -274,15 +273,15 @@ class UserTable extends _i1.Table {
   @override
   List<_i1.Column> get columns => [
         id,
-        username,
+        state,
+        codeverifier,
+        codechallenge,
+        url,
         matricaid,
-        matricaaccesstoken,
-        matricaRefreshToken,
-        credits,
         createdAt,
         modifiedAt,
       ];
 }
 
-@Deprecated('Use UserTable.t instead.')
-UserTable tUser = UserTable();
+@Deprecated('Use AuthStateTable.t instead.')
+AuthStateTable tAuthState = AuthStateTable();

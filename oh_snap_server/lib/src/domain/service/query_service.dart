@@ -9,11 +9,21 @@ class QueryService {
 
   QueryService(this.session);
 
-  Future<User?> findUserByMatricaId(String matricaId) async {
+  Future<AuthState?> findAuthStateByState(String state) async {
+    return _findEntityBy(
+      session: session,
+      table: 'auth_state',
+      state: state,
+      logQuery: false,
+    ).then((value) => value.map((item) => _authStateFromRow(item)).firstOrNull);
+  }
+
+  Future<User?> findUserByMatricaId(String matricaId, { String? accessToken }) async {
     return _findEntityBy(
       session: session,
       table: 'app_user',
       matricaId: matricaId,
+      accessToken: accessToken,
       logQuery: false,
     ).then((value) => value.map((item) => _userFromRow(item)).firstOrNull);
   }
@@ -59,6 +69,8 @@ class QueryService {
     int? type,
     int? status,
     String? matricaId,
+    String? state,
+    String? accessToken,
     bool logQuery = false,
   }) async {
     var idClause = id?.let((value) => ' AND t.id = $value') ?? '';
@@ -66,6 +78,8 @@ class QueryService {
     var typeClause = type?.let((value) => ' AND t.type = $value') ?? '';
     var statusClause = status?.let((value) => ' AND t.status = $value') ?? '';
     var matricaIdClause = matricaId?.let((value) => " AND t.matricaid = '$value'") ?? '';
+    var stateClause = state?.let((value) => " AND t.state = '$value'") ?? '';
+    var accessTokenClause = accessToken?.let((value) => " AND t.matricaaccesstoken = '$value'") ?? '';
 
     var query = '''
         SELECT * FROM $table t
@@ -75,6 +89,8 @@ class QueryService {
         $typeClause
         $statusClause
         $matricaIdClause
+        $stateClause
+        $accessTokenClause
       ''';
 
     if(logQuery) {
@@ -126,9 +142,23 @@ class QueryService {
       id: row[column++] as int,
       username: row[column++] as String,
       matricaid: row[column++] as String,
-      matricaAccessToken: row[column++] as String,
+      matricaaccesstoken: row[column++] as String,
       matricaRefreshToken: row[column++] as String,
       credits: row[column++] as int,
+      createdAt: row[column++] as DateTime,
+      modifiedAt: row[column++] as DateTime,
+    );
+  }
+
+  AuthState _authStateFromRow(List<dynamic> row) {
+    int column = 0;
+    return AuthState(
+      id: row[column++] as int,
+      state: row[column++] as String,
+      codeverifier: row[column++] as String,
+      codechallenge: row[column++] as String,
+      url: row[column++] as String,
+      matricaid: row[column++] as String?,
       createdAt: row[column++] as DateTime,
       modifiedAt: row[column++] as DateTime,
     );

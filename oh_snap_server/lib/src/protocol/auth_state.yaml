@@ -1,0 +1,12 @@
+class: AuthState
+table: auth_state
+serverOnly: true
+fields:
+  state: String,
+  codeverifier: String,
+  codechallenge: String,
+  url: String,
+  matricaid: String?,
+  createdAt: DateTime,
+  modifiedAt: DateTime,
+

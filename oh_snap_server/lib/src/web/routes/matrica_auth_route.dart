@@ -18,15 +18,9 @@ class MatricaAuthRoute extends WidgetRoute {
   Future<WidgetJson> build(Session session, HttpRequest request) async {
     session.log('MatricaAuthRoute called: ${request.uri}');
 
-    /*final pkcePair = PkcePair.generate();
-    var codeVerifier = pkcePair.codeVerifier;
-    session.log('codeVerifier: $codeVerifier');
-    var codeChallenge = pkcePair.codeChallenge;
-    session.log('codeChallenge: $codeChallenge');
-*/
     final clientId = session.passwords['matricaClientId'];
     final clientSecret = session.passwords['matricaClientSecret'];
-    final codeVerifier = session.passwords['matricaCodeVerifier']; // Obviously not the right way, but for now wtf
+    //final codeVerifier = session.passwords['matricaCodeVerifier']; // Obviously not the right way, but for now wtf
     final code = request.uri.queryParameters['code'];
     final state = request.uri.queryParameters['state'];
 
@@ -42,8 +36,15 @@ class MatricaAuthRoute extends WidgetRoute {
     assert(code != null, 'Code is null');
     var code2 = code!;
 
-    assert(codeVerifier != null, 'Code verifier is null');
-    var codeVerifier2 = codeVerifier!;
+    //assert(codeVerifier != null, 'Code verifier is null');
+    //var codeVerifier2 = codeVerifier!;
+
+    assert(state != null, 'State is null');
+    var state2 = state!;
+
+    final authStateResult = await QueryService(session).findAuthStateByState(state2);
+    assert(authStateResult != null, 'Auth state not found');
+    final authState = authStateResult!;
 
     session.log('Matrical callback state: $state');
 
@@ -53,7 +54,7 @@ class MatricaAuthRoute extends WidgetRoute {
       redirectUri: 'https://app.ohsnap.app/auth/callback',
       clientId: clientId2,
       clientSecret: clientSecret2,
-      codeVerifier: codeVerifier2,
+      codeVerifier: authState.codeverifier,
     );
 
     session.log('fetchAccessToken result: $accessTokenResult');
@@ -68,14 +69,14 @@ class MatricaAuthRoute extends WidgetRoute {
       user = User(
         username: userResponse.username,
         matricaid: matricaId,
-        matricaAccessToken: accessTokenResult.access_token,
+        matricaaccesstoken: accessTokenResult.access_token,
         matricaRefreshToken: accessTokenResult.refresh_token,
-        credits: 0,
+        credits: 50,
         modifiedAt: _timeService.now(),
         createdAt: _timeService.now(),
       );
 
-      session.db.insert(user);
+      await session.db.insert(user);
     } else {
       var changed = false;
 
@@ -84,8 +85,8 @@ class MatricaAuthRoute extends WidgetRoute {
         changed = true;
       }
 
-      if(user.matricaAccessToken != accessTokenResult.access_token) {
-        user.matricaAccessToken = accessTokenResult.access_token;
+      if(user.matricaaccesstoken != accessTokenResult.access_token) {
+        user.matricaaccesstoken = accessTokenResult.access_token;
         changed = true;
       }
 
@@ -99,6 +100,10 @@ class MatricaAuthRoute extends WidgetRoute {
         session.db.update(user);
       }
     }
+
+    authState.matricaid = matricaId;
+    authState.modifiedAt = _timeService.now();
+    await session.db.update(authState);
 
     /*final refreshedToken = await matrica.refreshAccessToken(
       refreshToken: accessTokenResult.refresh_token,
